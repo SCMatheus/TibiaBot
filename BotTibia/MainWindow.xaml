@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BotTibia"
         mc:Ignorable="d"
-        Title="MatthewBot" Height="500" Width="275" MinWidth="275" MinHeight="500" MaxWidth="275" MaxHeight="500" Foreground="{x:Null}" Background="{x:Null}" Icon="icone.png">
+        Title="MatthewBot" Height="500" Width="275" MinWidth="275" MinHeight="500" MaxWidth="275" MaxHeight="500" Foreground="{x:Null}" Background="{x:Null}" Icon="favicon.ico">
     <Grid Background="#FF0F0E0E" Margin="1,-2,1,2">
         <Grid.RowDefinitions>
             <RowDefinition Height="0*"/>
