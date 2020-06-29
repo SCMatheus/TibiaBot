@@ -1,4 +1,3 @@
-D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
 D:\GitHub\BotTibia\BotTibia\obj\Debug\MainWindow.g.cs
 D:\GitHub\BotTibia\BotTibia\obj\Debug\App.g.cs
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia_MarkupCompile.cache

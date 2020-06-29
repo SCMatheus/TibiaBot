@@ -22,14 +22,11 @@ namespace BotTibia.Acoes
                 SendKeys.SendWait("{" + vida.HighHeal.Key + "}");
             }
         }
-        public static void HealDeMana(Bitmap tela, ManaBar mana, VidaBar vida)
+        public static void HealDeMana(Bitmap tela, ManaBar mana)
         {
-            if (tela.GetPixel(vida.HighHeal.X, vida.HighHeal.Y) == vida.pixel)
+            if (tela.GetPixel(mana.ManaHeal.X, mana.ManaHeal.Y) != mana.pixel)
             {
-                if (tela.GetPixel(mana.ManaHeal.X, mana.ManaHeal.Y) != mana.pixel)
-                {
-                    SendKeys.SendWait("{" + mana.ManaHeal.Key + "}");
-                }
+                SendKeys.SendWait("{" + mana.ManaHeal.Key + "}");
             }
         }
 
@@ -56,7 +53,7 @@ namespace BotTibia.Acoes
 
                     HealDeVida(tela, vida);
 
-                    HealDeMana(tela, mana, vida);
+                    HealDeMana(tela, mana);
 
                     if (status.ParaStatus)
                     {

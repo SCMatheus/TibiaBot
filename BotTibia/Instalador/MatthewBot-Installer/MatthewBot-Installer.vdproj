@@ -81,14 +81,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_ED05016B844F48B38C57C5C39C8AFC9B"
+        "MsmKey" = "8:_D5AEC5BE047F4CE78E7E4D0283D65297"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_00B3EF37D940B75B9D6751CE1390F823"
+        "MsmKey" = "8:_ED05016B844F48B38C57C5C39C8AFC9B"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -115,6 +115,12 @@
         "OwnerKey" = "8:_9BEDEFAED8DE656BBA4470CCBC96120B"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_00B3EF37D940B75B9D6751CE1390F823"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -133,6 +139,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -149,6 +171,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -362,6 +392,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D5AEC5BE047F4CE78E7E4D0283D65297"
+            {
+            "SourcePath" = "8:..\\..\\bin\\Debug\\favicon-32x32.png"
+            "TargetName" = "8:favicon-32x32.png"
+            "Tag" = "8:"
+            "Folder" = "8:_31C2B22E275147EEB62E0EF803C18F32"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED05016B844F48B38C57C5C39C8AFC9B"
             {
             "SourcePath" = "8:..\\..\\bin\\Debug\\vida.png"
@@ -439,7 +489,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MatthewBot"
         "ProductCode" = "8:{201489F6-9756-4E00-95F2-29597374ED4B}"
-        "PackageCode" = "8:{35968A02-C153-4245-86F1-56D31E651E4E}"
+        "PackageCode" = "8:{AA875E9F-49D5-43DA-AA6A-EB73FA1D645E}"
         "UpgradeCode" = "8:{90C1C175-FBC2-474F-9D1E-9DCB8B5D4014}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

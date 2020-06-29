@@ -26,7 +26,7 @@ namespace BotTibia
             {
                 var retorno = new CoordenadasDeElementos()
                 {
-                    X = matchings[0].Rectangle.X + ((Screen.PrimaryScreen.Bounds.Width / 3) * 2),
+                    X = matchings[0].Rectangle.X + ((Screen.PrimaryScreen.Bounds.Width / 2)),
                     Y = matchings[0].Rectangle.Y,
                     Height = matchings[0].Rectangle.Height,
                     Width = matchings[0].Rectangle.Width,

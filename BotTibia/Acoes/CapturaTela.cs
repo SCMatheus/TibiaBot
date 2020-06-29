@@ -7,20 +7,20 @@ namespace BotTibia.Acoes
 {
     public static class CapturaTela
     {
+        private static Bitmap telaInteira = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format24bppRgb);
         public static Bitmap CapturaDeTela()
         {
             Rectangle bounds = Screen.GetBounds(Point.Empty);
-            Bitmap tela = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format24bppRgb);
-            using (Graphics g = Graphics.FromImage(tela))
+            using (Graphics g = Graphics.FromImage(telaInteira))
             {
                 g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
             }
-            return tela;
+            return telaInteira;
         }
 
         public static Bitmap CortaTela(Bitmap tela)
         {
-            var cropArea = new RectangleF((tela.Width/3)*2, 0, (tela.Width / 3), tela.Height);
+            var cropArea = new RectangleF((tela.Width/2), 0, (tela.Width/2), tela.Height);
             var telaCortada = tela.Clone(cropArea, tela.PixelFormat);
             return telaCortada;
         }

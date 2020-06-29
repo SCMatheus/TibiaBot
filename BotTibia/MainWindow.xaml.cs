@@ -34,7 +34,7 @@ namespace BotTibia
                                         .Where(nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
                                         .Select(nic => nic.GetPhysicalAddress().ToString())
                                         .FirstOrDefault();
-            if(firstMacAddress != "B42E9904CFAA")
+            if(firstMacAddress != "B42E9904CFAA" && firstMacAddress != "40490FFE36E9" && firstMacAddress != "F48E38E15B8F")
             {
                 Environment.Exit(1);
             }
@@ -48,10 +48,11 @@ namespace BotTibia
 
                 //inicialização dos dados
                 Global._vida.HighHeal.Key = PrimeiroHealHotkey.Text;
-                Global._vida.MediumHeal.Key = SegundoHealPercent.Text;
+                Global._vida.MediumHeal.Key = SegundoHealHotkey.Text;
                 Global._vida.LowHeal.Key = TerceiroHealHotkey.Text;
                 Global._mana.ManaHeal.Key = ManaHealHotkey.Text;
-                Global._fireTimer = 300;
+                Global._status.ParaKey = ParalizeHealHotkey.Text;
+                Global._fireTimer = int.Parse(FireTimer.Text);
 
                 Bitmap tela = CapturaTela.CapturaDeTela();
                 this.WindowState = (WindowState)FormWindowState.Minimized;
@@ -73,7 +74,7 @@ namespace BotTibia
 
                     //Captura Dados da mana
                     Global._mana.Coordenadas = PegaElementosDaTela.PegaElementos(corte, "mana");
-                    Global._mana.CalculaPixelsDoHeal(50);
+                    Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
                     Global._mana.pixel = tela.GetPixel(Global._mana.ManaHeal.X, Global._mana.ManaHeal.Y);
 
                     //Captura Dados da mana
@@ -99,54 +100,23 @@ namespace BotTibia
         {
             try
             {
-                if (e.Key >= Key.F1 && e.Key <= Key.F12)
-                {
-                    PrimeiroHealHotkey.Text = e.Key.ToString();
-                    Global._vida.HighHeal.Key = PrimeiroHealHotkey.Text;
-                }
-                else
-                {
-                    PrimeiroHealHotkey.Text = "";
-                    MessageBox.Show("Por favor digite uma Hotkey válida");
-                }
+                Global._vida.HighHeal.Key = SetaHotkey(e.Key, PrimeiroHealHotkey);
             }
             catch (Exception ex)
             {
+                Global._vida.HighHeal.Key = "F1";
                 MessageBox.Show(ex.Message);
             }
         }
 
-        private void SetaPercentPrimeiroHeal(object sender, System.Windows.Input.KeyEventArgs e)
+        private void SetaPercentPrimeiroHeal(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             try
             {
-                if(PrimeiroHealPercent.Text == "")
-                {
-                    return;
-                }
-                int resultado;
-                if (int.TryParse(PrimeiroHealPercent.Text, out resultado))
-                {
-                    if (resultado >= 1 && resultado < 99)
-                        if (int.Parse(PrimeiroHealPercent.Text) >= 1 && int.Parse(PrimeiroHealPercent.Text) <= 99)
-                        {
-                            Global._vida.CalculaPixelsDoHealHigh(resultado);
-                        }
-                        else
-                        {
-                            throw new Exception("Por favor digite um valor valido! \n" +
-                                                    "O valor deve ser um numero entre 1 e 99!");
-                        }
-                }
-                else
-                {
-                    throw new Exception("Por favor digite um valor valido! \n" +
-                                            "O valor deve ser um numero entre 1 e 99!");
-                }
+                SetaValorDePorcentagem(PrimeiroHealPercent, Global._vida.CalculaPixelsDoHealHigh);
             }
             catch (Exception ex)
             {
-                PrimeiroHealPercent.Text = "";
                 MessageBox.Show(ex.Message);
             }
         }
@@ -155,53 +125,23 @@ namespace BotTibia
         {
             try
             {
-                if (e.Key >= Key.F1 && e.Key <= Key.F12)
-                {
-                    SegundoHealHotkey.Text = e.Key.ToString();
-                    Global._vida.MediumHeal.Key = SegundoHealHotkey.Text;
-                }
-                else
-                {
-                    SegundoHealHotkey.Text = "";
-                    MessageBox.Show("Por favor digite uma Hotkey válida");
-                }
+                Global._vida.MediumHeal.Key = SetaHotkey(e.Key, SegundoHealHotkey);
             }
             catch (Exception ex)
             {
+                Global._vida.MediumHeal.Key = "F1";
                 MessageBox.Show(ex.Message);
             }
         }
 
-        private void SetaPercentSegundoHeal(object sender, System.Windows.Input.KeyEventArgs e)
+        private void SetaPercentSegundoHeal(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            try 
+            try
             {
-                if (SegundoHealPercent.Text == "")
-                {
-                    return;
-                }
-                int resultado;
-                if (int.TryParse(SegundoHealPercent.Text, out resultado))
-                {
-                    if (resultado >= 1 && resultado < 99)
-                    {
-                        Global._vida.CalculaPixelsDoHealMedium(resultado);
-                    }
-                    else
-                    {
-                        throw new Exception("Por favor digite um valor valido! \n" +
-                                                "O valor deve ser um numero entre 1 e 99!");
-                    }
-                }
-                else
-                {
-                    throw new Exception("Por favor digite um valor valido! \n" +
-                                            "O valor deve ser um numero entre 1 e 99!");
-                }
+                SetaValorDePorcentagem(SegundoHealPercent, Global._vida.CalculaPixelsDoHealMedium);
             }
             catch (Exception ex)
             {
-                SegundoHealPercent.Text = "";
                 MessageBox.Show(ex.Message);
             }
         }
@@ -210,108 +150,48 @@ namespace BotTibia
         {
             try
             {
-                if (e.Key >= Key.F1 && e.Key <= Key.F12)
-                {
-                    TerceiroHealHotkey.Text = e.Key.ToString();
-                    Global._vida.LowHeal.Key = TerceiroHealHotkey.Text;
-                }
-                else
-                {
-                    TerceiroHealHotkey.Text = "";
-                    MessageBox.Show("Por favor digite uma Hotkey válida");
-                }
+                Global._vida.LowHeal.Key = SetaHotkey(e.Key, TerceiroHealHotkey);
+            }
+            catch (Exception ex)
+            {
+                Global._vida.LowHeal.Key = "F1";
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void SetaPercentTerceiroHeal(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            try
+            {
+                SetaValorDePorcentagem(TerceiroHealPercent, Global._vida.CalculaPixelsDoHealLow);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-
-        private void SetaPercentTerceiroHeal(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            try 
-            {
-                if (TerceiroHealPercent.Text == "")
-                {
-                    return;
-                }
-                int resultado;
-                if (int.TryParse(TerceiroHealPercent.Text, out resultado))
-                {
-                    if (resultado >= 1 && resultado < 99)
-                    {
-                        Global._vida.CalculaPixelsDoHealLow(resultado);
-                    }
-                    else
-                    {
-                        throw new Exception("Por favor digite um valor valido! \n" +
-                                                "O valor deve ser um numero entre 1 e 99!");
-                    }
-                }
-                else
-                {
-                    throw new Exception("Por favor digite um valor valido! \n" +
-                                            "O valor deve ser um numero entre 1 e 99!");
-                }
-            }
-            catch (Exception ex)
-            {
-                TerceiroHealPercent.Text = "";
-                MessageBox.Show(ex.Message);
-            }
-}
 
         private void SetaHotkeyManaHeal(object sender, System.Windows.Input.KeyEventArgs e)
         {
             try
             {
-                if (e.Key >= Key.F1 && e.Key <= Key.F12)
-                {
-                    ManaHealHotkey.Text = e.Key.ToString();
-                    Global._vida.LowHeal.Key = ManaHealHotkey.Text;
-                }
-                else
-                {
-                    ManaHealHotkey.Text = "";
-                    MessageBox.Show("Por favor digite uma Hotkey válida");
-                }
+                Global._mana.ManaHeal.Key = SetaHotkey(e.Key, ManaHealHotkey);
             }
             catch (Exception ex)
             {
+                Global._mana.ManaHeal.Key = "F1";
                 MessageBox.Show(ex.Message);
             }
         }
 
-        private void SetaPercentManaHeal(object sender, System.Windows.Input.KeyEventArgs e)
+        private void SetaPercentManaHeal(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             try
             {
-                if (ManaHealPercent.Text == "")
-                {
-                    return;
-                }
-                int resultado;
-                if (int.TryParse(ManaHealPercent.Text, out resultado))
-                {
-                    if (resultado >= 1 && resultado < 99)
-                    {
-                        Global._mana.CalculaPixelsDoHeal(resultado);
-                    }
-                    else
-                    {
-                        throw new Exception("Por favor digite um valor valido! \n" +
-                                                "O valor deve ser um numero entre 1 e 99!");
-                    }
-                }
-                else
-                {
-                    throw new Exception("Por favor digite um valor valido! \n" +
-                                            "O valor deve ser um numero entre 1 e 99!");
-                }
+                SetaValorDePorcentagem(ManaHealPercent, Global._mana.CalculaPixelsDoHeal);
             }
             catch (Exception ex)
             {
-                ManaHealPercent.Text = "";
                 MessageBox.Show(ex.Message);
             }
         }
@@ -321,6 +201,7 @@ namespace BotTibia
             try
             {
                 Global._threadHeal = new Thread(() => Healer.Healar(Global._vida, Global._mana, Global._status, Global._fireTimer, Global._telaPrincipal));
+                FireTimer.IsEnabled = false;
                 Global._threadHeal.Start();
             }
             catch(Exception ex)
@@ -333,6 +214,7 @@ namespace BotTibia
         {
             try
             {
+                FireTimer.IsEnabled = true;
                 Global._threadHeal.Abort();
             }
             catch (Exception ex)
@@ -362,6 +244,86 @@ namespace BotTibia
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void SetaParalizeManaHeal(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            try
+            {
+                Global._status.ParaKey = SetaHotkey(e.Key, ParalizeHealHotkey);
+            }
+            catch (Exception ex)
+            {
+                Global._status.ParaKey = "F1";
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void FireTimer_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            try { 
+                int resultado;
+                if (int.TryParse(FireTimer.Text, out resultado))
+                {
+                    Global._fireTimer = resultado;
+                }
+                else
+                {
+                    throw new Exception("Por favor digite um valor valido!");
+                }
+            }
+            catch (Exception ex)
+            {
+                FireTimer.Text = "";
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public void SetaValorDePorcentagem(System.Windows.Controls.TextBox textBox, Action<int> CalculoDePixel)
+        {
+
+            if (textBox.Text == "")
+            {
+                return;
+            }
+            else
+            {
+
+                int resultado;
+                if (int.TryParse(textBox.Text, out resultado))
+                {
+                    if (resultado >= 1 && resultado < 100)
+                    {
+                        CalculoDePixel(resultado);
+                    }
+                    else
+                    {
+                        textBox.Text = "";
+                        throw new Exception("Por favor digite um valor valido! \n" +
+                                                "O valor deve ser um numero entre 1 e 99!");
+                    }
+                }
+                else
+                {
+                    textBox.Text = "";
+                    throw new Exception("Por favor digite um valor valido! \n" +
+                                            "O valor deve ser um numero entre 1 e 99!");
+                }
+            }
+        }
+
+        public string SetaHotkey(Key e, System.Windows.Controls.TextBox textBox)
+        {
+            if (e >= Key.F1 && e <= Key.F12)
+            {
+                textBox.Text = e.ToString();
+                return textBox.Text;
+            }
+            else
+            {
+                textBox.Text = "";
+                throw new Exception("Por favor digite uma Hotkey válida");
             }
         }
     }
