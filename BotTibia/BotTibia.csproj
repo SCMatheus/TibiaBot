@@ -64,6 +64,9 @@
     <Reference Include="AForge.Math, Version=2.2.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
       <HintPath>..\packages\AForge.Math.2.2.5\lib\AForge.Math.dll</HintPath>
     </Reference>
+    <Reference Include="sharpAHK, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\sharpAHK.1.0.0.5\lib\net45\sharpAHK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -87,6 +90,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Acoes\CapturaTela.cs" />
+    <Compile Include="Acoes\ClickEvent.cs" />
     <Compile Include="Acoes\Healer.cs" />
     <Compile Include="Acoes\PegaInformacoesDosPixels.cs" />
     <Compile Include="Elementos\CoordenadasDeElementos.cs" />

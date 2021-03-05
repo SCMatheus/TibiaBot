@@ -14,7 +14,13 @@ namespace BotTibia.Elementos
             pixel = new Color();
             Coordenadas = new CoordenadasDeElementos();
         }
-
+        public void SetCoordenadasPorImagemDoRaio(CoordenadasDeElementos coordenadas)
+        {
+            Coordenadas.X = coordenadas.X + coordenadas.Width + 3;
+            Coordenadas.Y = coordenadas.Y;
+            Coordenadas.Width = 89;
+            Coordenadas.Height = coordenadas.Height;
+        }
         public void CalculaPixelsDoHeal(int healPercent)
         {
             //Calcula pixel do heal mais alto

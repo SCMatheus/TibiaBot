@@ -9,6 +9,7 @@ using System;
 using System.Windows.Input;
 using System.Net.NetworkInformation;
 using System.Linq;
+using System.Diagnostics;
 
 namespace BotTibia
 {
@@ -25,19 +26,12 @@ namespace BotTibia
             public static int _fireTimer { get; set; }
             public static Thread _threadHeal { get; set; }
             public static string _telaPrincipal { get; set; }
+            public static Process _tibiaProcess { get; set; }
+            public static string _tibiaProcessName { get; set; }
         }
 
         public MainWindow()
         {
-            String firstMacAddress = NetworkInterface
-                                        .GetAllNetworkInterfaces()
-                                        .Where(nic => nic.OperationalStatus == OperationalStatus.Up && nic.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                                        .Select(nic => nic.GetPhysicalAddress().ToString())
-                                        .FirstOrDefault();
-            if(firstMacAddress != "B42E9904CFAA" && firstMacAddress != "40490FFE36E9" && firstMacAddress != "F48E38E15B8F")
-            {
-                Environment.Exit(1);
-            }
             InitializeComponent();
         }
 
@@ -54,41 +48,40 @@ namespace BotTibia
                 Global._status.ParaKey = ParalizeHealHotkey.Text;
                 Global._fireTimer = int.Parse(FireTimer.Text);
 
-                Bitmap tela = CapturaTela.CapturaDeTela();
+                Process[] processlist = Process.GetProcesses();
+
+                Global._tibiaProcessName = "Tibia - Matthew of Darkness";
+
+                Global._tibiaProcess = processlist.First(proc => proc.MainWindowTitle.Equals("Tibia - Matthew of Darkness"));
+                Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
                 this.WindowState = (WindowState)FormWindowState.Minimized;
-                Thread.Sleep(1000);
-                var telaTibia = false;
-                Global._telaPrincipal = PegaTelaPrincipal.GetActiveWindowTitle();
-                if (Global._telaPrincipal != null) {
-                    telaTibia = Global._telaPrincipal.Contains("Tibia");
-                }
-                if (telaTibia) {
-                    var corte = CapturaTela.CortaTela(tela);
 
-                    //Captura Dados da vida
-                    Global._vida.Coordenadas = PegaElementosDaTela.PegaElementos(corte, "vida");
-                    Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text), 
-                                                        int.Parse(SegundoHealPercent.Text), 
-                                                            int.Parse(PrimeiroHealPercent.Text));
-                    Global._vida.pixel = tela.GetPixel(Global._vida.HighHeal.X, Global._vida.HighHeal.Y);
+                var corte = CapturaTela.CortaTela(tela);
 
-                    //Captura Dados da mana
-                    Global._mana.Coordenadas = PegaElementosDaTela.PegaElementos(corte, "mana");
-                    Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
-                    Global._mana.pixel = tela.GetPixel(Global._mana.ManaHeal.X, Global._mana.ManaHeal.Y);
+                //Captura Dados da vida
+                Global._vida.SetCoordenadasPorImagemDoCoracao(PegaElementosDaTela.PegaElementos(corte, "coracao"));
+                Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text), 
+                                                    int.Parse(SegundoHealPercent.Text), 
+                                                        int.Parse(PrimeiroHealPercent.Text));
+                Global._vida.pixel = tela.GetPixel(Global._vida.LowHeal.X, Global._vida.LowHeal.Y);
 
-                    //Captura Dados da mana
-                    var aux = PegaElementosDaTela.PegaElementos(corte, "statusBar");
-                    Global._status.Coordenadas.X = aux.X - 118;
-                    Global._status.Coordenadas.Y = aux.Y;
-                    Global._status.Coordenadas.Height = aux.Height;
+                //Captura Dados da mana
+                Global._mana.SetCoordenadasPorImagemDoRaio(PegaElementosDaTela.PegaElementos(corte, "raio"));
+                Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
+                Global._mana.pixel = tela.GetPixel(Global._mana.ManaHeal.X, Global._mana.ManaHeal.Y);
+
+                //Captura Dados da mana
+                var aux = PegaElementosDaTela.PegaElementos(corte, "statusBar");
+                Global._status.Coordenadas.X = aux.X - 118;
+                Global._status.Coordenadas.Y = aux.Y;
+                Global._status.Coordenadas.Height = aux.Height;
 
 
-                    this.WindowState = (WindowState)FormWindowState.Maximized;
-                    HealcheckBox.IsEnabled = true;
-                    ParalizecheckBox.IsEnabled = true;
-                    MessageBox.Show("Bot inciado com sucesso!");
-                }
+                this.WindowState = (WindowState)FormWindowState.Maximized;
+                HealcheckBox.IsEnabled = true;
+                ParalizecheckBox.IsEnabled = true;
+                MessageBox.Show("Bot inciado com sucesso!");
+                
             }catch(Exception ex)
             {
                 this.WindowState = (WindowState)FormWindowState.Maximized;
@@ -200,7 +193,7 @@ namespace BotTibia
         {
             try
             {
-                Global._threadHeal = new Thread(() => Healer.Healar(Global._vida, Global._mana, Global._status, Global._fireTimer, Global._telaPrincipal));
+                Global._threadHeal = new Thread(() => Healer.Healar(Global._vida, Global._mana, Global._status, Global._fireTimer, Global._tibiaProcessName));
                 FireTimer.IsEnabled = false;
                 Global._threadHeal.Start();
             }
@@ -215,6 +208,7 @@ namespace BotTibia
             try
             {
                 FireTimer.IsEnabled = true;
+                Global._threadHeal.Interrupt();
                 Global._threadHeal.Abort();
             }
             catch (Exception ex)

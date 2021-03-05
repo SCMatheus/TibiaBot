@@ -19,3 +19,6 @@ D:\GitHub\BotTibia\BotTibia\bin\Debug\AForge.xml
 D:\GitHub\BotTibia\BotTibia\bin\Debug\AForge.Imaging.xml
 D:\GitHub\BotTibia\BotTibia\bin\Debug\AForge.Math.xml
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CopyComplete
+D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
+D:\GitHub\BotTibia\BotTibia\bin\Debug\sharpAHK.dll
+D:\GitHub\BotTibia\BotTibia\bin\Debug\sharpAHK.xml

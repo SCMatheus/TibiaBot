@@ -1,25 +1,33 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using AutoHotkey.Interop;
 using BotTibia.Elementos;
 
 namespace BotTibia.Acoes
 {
     public static class Healer
     {
-        public static void HealDeVida(Bitmap tela, VidaBar vida)
+        public static void HealDeVida(Bitmap tela, VidaBar vida, string processName)
         {
             if (tela.GetPixel(vida.LowHeal.X, vida.LowHeal.Y) != vida.pixel)
             {
-                SendKeys.SendWait("{" + vida.LowHeal.Key + "}");
+                AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                var script = "ControlSend,, {" +vida.LowHeal.Key + "}," + processName;
+                _ahkEngine.ExecRaw(script);
             }
             else if (tela.GetPixel(vida.MediumHeal.X, vida.MediumHeal.Y) != vida.pixel)
             {
-                SendKeys.SendWait("{" + vida.MediumHeal.Key + "}");
+                AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                var script = "ControlSend,, {" + vida.MediumHeal.Key + "}," + processName;
+                _ahkEngine.ExecRaw(script);
             }
             else if (tela.GetPixel(vida.HighHeal.X, vida.HighHeal.Y) != vida.pixel)
             {
-                SendKeys.SendWait("{" + vida.HighHeal.Key + "}");
+                AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                var script = "ControlSend,, {" + vida.HighHeal.Key + "}," + processName;
+                _ahkEngine.ExecRaw(script);
             }
         }
         public static void HealDeMana(Bitmap tela, ManaBar mana)
@@ -38,20 +46,15 @@ namespace BotTibia.Acoes
             }
         }
 
-        public static void Healar(VidaBar vida,  ManaBar mana, PersonagemStatus status, int fireTimer, string personagem)
+        public static void Healar(VidaBar vida,  ManaBar mana, PersonagemStatus status, int fireTimer, string processName)
         {
-            while (true)
+            try
             {
-                var telaTibia = false;
-                var telaEmPrimeiroPlano = PegaTelaPrincipal.GetActiveWindowTitle();
-                if (telaEmPrimeiroPlano != null) {
-                    telaTibia = telaEmPrimeiroPlano.Contains(personagem);
-                }
-                if (telaTibia)
+                while (true)
                 {
-                    var tela = CapturaTela.CapturaDeTela();
+                    var tela = CapturaTela.CaptureWindow(processName);
 
-                    HealDeVida(tela, vida);
+                    HealDeVida(tela, vida, processName);
 
                     HealDeMana(tela, mana);
 
@@ -59,13 +62,11 @@ namespace BotTibia.Acoes
                     {
                         HealPara(tela, status);
                     }
-
                     Thread.Sleep(fireTimer);
+
                 }
-                else
-                {
-                    Thread.Sleep(2000);
-                }
+            }catch{
+
             }
         }
     }

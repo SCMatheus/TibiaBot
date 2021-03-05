@@ -1,5 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BotTibia.Elementos;
 
@@ -7,7 +11,43 @@ namespace BotTibia.Acoes
 {
     public static class CapturaTela
     {
-        private static Bitmap telaInteira = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format24bppRgb);
+        private static Bitmap telaInteira;
+        [DllImport("user32.dll")]
+        public static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, uint nFlags);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetWindowDC(IntPtr hWnd);
+        public static Bitmap CaptureWindow(string processTitle)
+        {
+            Process[] processlist = Process.GetProcesses();
+            var hWnd = processlist.First(proc => proc.MainWindowTitle.Equals(processTitle)).MainWindowHandle;
+            if (telaInteira != null)
+                telaInteira.Dispose();
+
+            Rectangle rctForm = Rectangle.Empty;
+
+            using (Graphics grfx = Graphics.FromHdc(GetWindowDC(hWnd)))
+            {
+                rctForm = Rectangle.Round(grfx.VisibleClipBounds);
+            }
+
+            Bitmap pImage = new Bitmap(rctForm.Width, rctForm.Height, PixelFormat.Format24bppRgb);
+            Graphics graphics = Graphics.FromImage(pImage);
+
+            IntPtr hDC = graphics.GetHdc();
+            //paint control onto graphics using provided options        
+            try
+            {
+                PrintWindow(hWnd, hDC, (uint)0);
+            }
+            finally
+            {
+                graphics.ReleaseHdc(hDC);
+            }
+            telaInteira = pImage;
+            graphics.Dispose();
+            return pImage;
+        }
         public static Bitmap CapturaDeTela()
         {
             Rectangle bounds = Screen.GetBounds(Point.Empty);

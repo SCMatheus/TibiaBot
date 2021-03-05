@@ -20,6 +20,13 @@ namespace BotTibia.Elementos
             Coordenadas = new CoordenadasDeElementos();
         }
 
+        public void SetCoordenadasPorImagemDoCoracao(CoordenadasDeElementos coordenadas)
+        {
+            Coordenadas.X = coordenadas.X + coordenadas.Width + 3;
+            Coordenadas.Y = coordenadas.Y;
+            Coordenadas.Width = 89;
+            Coordenadas.Height = coordenadas.Height;
+        }
         public void CalculaPixelsDoHeal(int low, int medium, int high)
         {
             CalculaPixelsDoHealLow(low);
