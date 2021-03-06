@@ -338,7 +338,7 @@ namespace BotTibia
             Process[] processlist = Process.GetProcesses();
             processlist.ToList().ForEach(process => 
                 { 
-                    if(process.MainWindowTitle.Contains("Tibia -"))
+                    if(process.MainWindowTitle.StartsWith("Tibia - "))
                     {
                         ClientComboBox.Items.Add(process.MainWindowTitle);
                     }
