@@ -70,6 +70,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,6 +94,7 @@
     <Compile Include="Acoes\ClickEvent.cs" />
     <Compile Include="Acoes\Healer.cs" />
     <Compile Include="Acoes\PegaInformacoesDosPixels.cs" />
+    <Compile Include="Classes\Global.cs" />
     <Compile Include="Elementos\CoordenadasDeElementos.cs" />
     <Compile Include="Acoes\PegaElementosDaTela.cs" />
     <Compile Include="Acoes\PegaTelaPrincipal.cs" />

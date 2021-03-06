@@ -10,6 +10,9 @@ using System.Windows.Input;
 using System.Net.NetworkInformation;
 using System.Linq;
 using System.Diagnostics;
+using BotTibia.Classes;
+using System.Management;
+using System.Collections.Generic;
 
 namespace BotTibia
 {
@@ -18,17 +21,6 @@ namespace BotTibia
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static class Global
-        {
-            public static VidaBar _vida = new VidaBar();
-            public static ManaBar _mana = new ManaBar();
-            public static PersonagemStatus _status = new PersonagemStatus();
-            public static int _fireTimer { get; set; }
-            public static Thread _threadHeal { get; set; }
-            public static string _telaPrincipal { get; set; }
-            public static Process _tibiaProcess { get; set; }
-            public static string _tibiaProcessName { get; set; }
-        }
 
         public MainWindow()
         {
@@ -50,9 +42,6 @@ namespace BotTibia
 
                 Process[] processlist = Process.GetProcesses();
 
-                Global._tibiaProcessName = "Tibia - Matthew of Darkness";
-
-                Global._tibiaProcess = processlist.First(proc => proc.MainWindowTitle.Equals("Tibia - Matthew of Darkness"));
                 Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
                 this.WindowState = (WindowState)FormWindowState.Minimized;
 
@@ -319,6 +308,41 @@ namespace BotTibia
                 textBox.Text = "";
                 throw new Exception("Por favor digite uma Hotkey válida");
             }
+        }
+
+        private void EhEk_Checked(object sender, RoutedEventArgs e)
+        {
+            TerceiroHeal.Content = "Potion:";
+            Global._status.EhEk = true;
+        }
+        private void EhEk_Unchecked(object sender, RoutedEventArgs e)
+        {
+            TerceiroHeal.Content = "Terceiro:";
+            Global._status.EhEk = false;
+        }
+        private void ClientComboBox_SelectedIndexChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(ClientComboBox.SelectedItem as string))
+            {
+                Global._tibiaProcessName = ClientComboBox.SelectedItem as string;
+            }
+            else
+            {
+                Global._tibiaProcessName = "";
+            }
+        }
+
+        private void ClientComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            ClientComboBox.Items.Clear();
+            Process[] processlist = Process.GetProcesses();
+            processlist.ToList().ForEach(process => 
+                { 
+                    if(process.MainWindowTitle.Contains("Tibia -"))
+                    {
+                        ClientComboBox.Items.Add(process.MainWindowTitle);
+                    }
+                });
         }
     }
 }

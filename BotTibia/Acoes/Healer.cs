@@ -9,13 +9,25 @@ namespace BotTibia.Acoes
 {
     public static class Healer
     {
-        public static void HealDeVida(Bitmap tela, VidaBar vida, string processName)
+        public static void HealDeVida(Bitmap tela, VidaBar vida, string processName, bool ehEk)
         {
             if (tela.GetPixel(vida.LowHeal.X, vida.LowHeal.Y) != vida.pixel)
             {
-                AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
-                var script = "ControlSend,, {" +vida.LowHeal.Key + "}," + processName;
-                _ahkEngine.ExecRaw(script);
+                if (ehEk)
+                {
+                    AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                    var script = "ControlSend,, {" + vida.LowHeal.Key + "}," + processName;
+                    _ahkEngine.ExecRaw(script);
+                    _ahkEngine.ExecRaw("Sleep 50");
+                    script = "ControlSend,, {" + vida.MediumHeal.Key + "}," + processName;
+                    _ahkEngine.ExecRaw(script);
+                }
+                else
+                {
+                    AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                    var script = "ControlSend,, {" + vida.LowHeal.Key + "}," + processName;
+                    _ahkEngine.ExecRaw(script);
+                }
             }
             else if (tela.GetPixel(vida.MediumHeal.X, vida.MediumHeal.Y) != vida.pixel)
             {
@@ -30,19 +42,37 @@ namespace BotTibia.Acoes
                 _ahkEngine.ExecRaw(script);
             }
         }
-        public static void HealDeMana(Bitmap tela, ManaBar mana)
+        public static void HealDeMana(Bitmap tela, ManaBar mana, VidaBar vida, string processName, bool ehEk)
         {
-            if (tela.GetPixel(mana.ManaHeal.X, mana.ManaHeal.Y) != mana.pixel)
+            if (ehEk)
             {
-                SendKeys.SendWait("{" + mana.ManaHeal.Key + "}");
+                if (tela.GetPixel(vida.LowHeal.X, vida.LowHeal.Y) == vida.pixel) {
+                    if (tela.GetPixel(mana.ManaHeal.X, mana.ManaHeal.Y) != mana.pixel)
+                    {
+                        AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                        var script = "ControlSend,, {" + mana.ManaHeal.Key + "}," + processName;
+                        _ahkEngine.ExecRaw(script);
+                    }
+                }
+            }
+            else
+            {
+                if (tela.GetPixel(mana.ManaHeal.X, mana.ManaHeal.Y) != mana.pixel)
+                {
+                    AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                    var script = "ControlSend,, {" + mana.ManaHeal.Key + "}," + processName;
+                    _ahkEngine.ExecRaw(script);
+                }
             }
         }
 
-        public static void HealPara(Bitmap tela, PersonagemStatus status)
+        public static void HealPara(Bitmap tela, PersonagemStatus status,string processName)
         {
             if (PegaElementosDaTela.PegaParalize(CapturaTela.CortaStatusBar(tela, status)))
             {
-                SendKeys.SendWait("{" + status.ParaKey + "}");
+                AutoHotkeyEngine _ahkEngine = new AutoHotkeyEngine();
+                var script = "ControlSend,, {" + status.ParaKey + "}," + processName;
+                _ahkEngine.ExecRaw(script);
             }
         }
 
@@ -54,13 +84,13 @@ namespace BotTibia.Acoes
                 {
                     var tela = CapturaTela.CaptureWindow(processName);
 
-                    HealDeVida(tela, vida, processName);
+                    HealDeVida(tela, vida, processName, status.EhEk);
 
-                    HealDeMana(tela, mana);
+                    HealDeMana(tela, mana, vida, processName, status.EhEk);
 
                     if (status.ParaStatus)
                     {
-                        HealPara(tela, status);
+                        HealPara(tela, status, processName);
                     }
                     Thread.Sleep(fireTimer);
 
