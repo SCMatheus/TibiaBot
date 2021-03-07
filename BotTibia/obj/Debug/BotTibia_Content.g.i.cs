@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("favicon-32x32.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/statusbar.png")]
 
 

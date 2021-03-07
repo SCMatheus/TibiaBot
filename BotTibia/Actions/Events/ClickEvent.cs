@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using BotTibia.Enum;
 
-namespace BotTibia.Acoes
+namespace BotTibia.Actions.Events
 {
     public static class ClickEvent
     {
@@ -21,19 +23,21 @@ namespace BotTibia.Acoes
 
         public static IntPtr MakeLParam(int x, int y) => (IntPtr)((y << 16) | (x & 0xFFFF));
 
-        public static void PerformRightClick(IntPtr hwnd, Point point)
+        public static void Click(string process, Point point, MouseEvent evento)
         {
+            var hwnd = Process.GetProcesses().ToList().FirstOrDefault(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var pointPtr = MakeLParam(point.X, point.Y);
             SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, pointPtr);
-            SendMessage(hwnd, WM_RBUTTONDOWN, IntPtr.Zero, pointPtr);
-            SendMessage(hwnd, WM_RBUTTONUP, IntPtr.Zero, pointPtr);
-        }
-        public static void PerformLeftClick(IntPtr hwnd, Point point)
-        {
-            var pointPtr = MakeLParam(point.X, point.Y);
-            SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, pointPtr);
-            SendMessage(hwnd, WM_LBUTTONDOWN, IntPtr.Zero, pointPtr);
-            SendMessage(hwnd, WM_LBUTTONUP, IntPtr.Zero, pointPtr);
+            if (MouseEvent.Left == evento)
+            {
+                SendMessage(hwnd, WM_LBUTTONDOWN, IntPtr.Zero, pointPtr);
+                SendMessage(hwnd, WM_LBUTTONUP, IntPtr.Zero, pointPtr);
+            }
+            else if (MouseEvent.Right == evento)
+            {
+                SendMessage(hwnd, WM_RBUTTONDOWN, IntPtr.Zero, pointPtr);
+                SendMessage(hwnd, WM_RBUTTONUP, IntPtr.Zero, pointPtr);
+            }
         }
     }
 }

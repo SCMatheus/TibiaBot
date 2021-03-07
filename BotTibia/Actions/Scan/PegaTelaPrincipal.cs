@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace BotTibia
+namespace BotTibia.Actions.Sacan
 {
     public static class PegaTelaPrincipal
     {

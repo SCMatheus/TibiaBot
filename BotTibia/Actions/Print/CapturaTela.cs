@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using BotTibia.Elementos;
 
-namespace BotTibia.Acoes
+namespace BotTibia.Actions.Print
 {
     public static class CapturaTela
     {

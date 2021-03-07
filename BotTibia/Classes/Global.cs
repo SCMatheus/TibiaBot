@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
+using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using BotTibia.Elementos;
 
 namespace BotTibia.Classes
 {
     public static class Global
     {
-        public static VidaBar _vida = new VidaBar();
-        public static ManaBar _mana = new ManaBar();
+        public static VidaBar _vida = new VidaBar() { pixel = Color.FromArgb(255, 219, 79, 79) };
+        public static ManaBar _mana = new ManaBar() { pixel = Color.FromArgb(255, 83, 80, 218) };
         public static PersonagemStatus _status = new PersonagemStatus();
         public static int _fireTimer { get; set; }
         public static Thread _threadHeal { get; set; }
         public static string _telaPrincipal { get; set; }
         public static string _tibiaProcessName { get; set; }
+        public static CoordenadasDeElementos _tela = new CoordenadasDeElementos();
+        public static CoordenadasDeElementos _mainWindow = new CoordenadasDeElementos();
+        public static string _caminho;
     }
 }

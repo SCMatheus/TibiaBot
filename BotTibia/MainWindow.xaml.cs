@@ -1,18 +1,18 @@
 ﻿using System.Windows;
 using MessageBox = System.Windows.MessageBox;
 using System.Windows.Forms;
-using BotTibia.Elementos;
 using System.Threading;
 using System.Drawing;
-using BotTibia.Acoes;
+using BotTibia.Actions.Print;
+using BotTibia.Actions;
 using System;
 using System.Windows.Input;
-using System.Net.NetworkInformation;
 using System.Linq;
 using System.Diagnostics;
 using BotTibia.Classes;
-using System.Management;
-using System.Collections.Generic;
+using BotTibia.Actions.AHK;
+using BotTibia.Actions.Heal;
+using System.IO;
 
 namespace BotTibia
 {
@@ -24,6 +24,9 @@ namespace BotTibia
 
         public MainWindow()
         {
+            Global._caminho = Environment.CurrentDirectory;
+            var ahk = new AhkFunctions();
+            ahk.LoadScripts();
             InitializeComponent();
         }
 
@@ -43,26 +46,38 @@ namespace BotTibia
                 Process[] processlist = Process.GetProcesses();
 
                 Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
-                this.WindowState = (WindowState)FormWindowState.Minimized;
+                Global._tela.X = 0;
+                Global._tela.Y = 0;
+                Global._tela.Width = tela.Width;
+                Global._tela.Height = tela.Height;
 
-                var corte = CapturaTela.CortaTela(tela);
+                Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X,
+                                                                        Global._tela.Y, Global._tela.Width,
+                                                                        Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\game");            
 
                 //Captura Dados da vida
-                Global._vida.SetCoordenadasPorImagemDoCoracao(PegaElementosDaTela.PegaElementos(corte, "coracao"));
+                Global._vida.SetCoordenadasPorImagemDoCoracao(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X/2,
+                                                                                                    0, Global._tela.Width,
+                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao"));
                 Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text), 
                                                     int.Parse(SegundoHealPercent.Text), 
                                                         int.Parse(PrimeiroHealPercent.Text));
                 Global._vida.pixel = tela.GetPixel(Global._vida.LowHeal.X, Global._vida.LowHeal.Y);
 
                 //Captura Dados da mana
-                Global._mana.SetCoordenadasPorImagemDoRaio(PegaElementosDaTela.PegaElementos(corte, "raio"));
+                Global._mana.SetCoordenadasPorImagemDoRaio(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                                                    0, Global._tela.Width,
+                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio"));
                 Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
                 Global._mana.pixel = tela.GetPixel(Global._mana.ManaHeal.X, Global._mana.ManaHeal.Y);
 
-                //Captura Dados da mana
-                var aux = PegaElementosDaTela.PegaElementos(corte, "statusBar");
-                Global._status.Coordenadas.X = aux.X - 118;
+                //Captura Dados da paralize
+                var aux = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                0, Global._tela.Width,
+                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar");
+                Global._status.Coordenadas.X = aux.X;
                 Global._status.Coordenadas.Y = aux.Y;
+                Global._status.Coordenadas.Height = aux.Width;
                 Global._status.Coordenadas.Height = aux.Height;
 
 
@@ -72,6 +87,68 @@ namespace BotTibia
                 MessageBox.Show("Bot inciado com sucesso!");
                 
             }catch(Exception ex)
+            {
+                this.WindowState = (WindowState)FormWindowState.Maximized;
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ConfigureBot()
+        {
+            try
+            {
+
+                //inicialização dos dados
+                Global._vida.HighHeal.Key = PrimeiroHealHotkey.Text;
+                Global._vida.MediumHeal.Key = SegundoHealHotkey.Text;
+                Global._vida.LowHeal.Key = TerceiroHealHotkey.Text;
+                Global._mana.ManaHeal.Key = ManaHealHotkey.Text;
+                Global._status.ParaKey = ParalizeHealHotkey.Text;
+                Global._fireTimer = int.Parse(FireTimer.Text);
+
+                Process[] processlist = Process.GetProcesses();
+
+                Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
+                Global._tela.X = 0;
+                Global._tela.Y = 0;
+                Global._tela.Width = tela.Width;
+                Global._tela.Height = tela.Height;
+
+                Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X,
+                                                                        Global._tela.Y, Global._tela.Width,
+                                                                        Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\game.png");
+
+                //Captura Dados da vida
+                Global._vida.SetCoordenadasPorImagemDoCoracao(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                                                    0, Global._tela.Width,
+                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png"));
+                Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text),
+                                                    int.Parse(SegundoHealPercent.Text),
+                                                        int.Parse(PrimeiroHealPercent.Text));
+
+                //Captura Dados da mana
+                Global._mana.SetCoordenadasPorImagemDoRaio(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                                                    0, Global._tela.Width,
+                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio.png"));
+                Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
+
+                //Captura Dados da paralize
+                var aux = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                0, Global._tela.Width,
+                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar.png");
+                Global._status.Coordenadas.X = aux.X;
+                Global._status.Coordenadas.Y = aux.Y;
+                Global._status.Coordenadas.Height = aux.Width;
+                Global._status.Coordenadas.Height = aux.Height;
+
+
+                this.WindowState = (WindowState)FormWindowState.Maximized;
+                HealcheckBox.IsEnabled = true;
+                ParalizecheckBox.IsEnabled = true;
+                MessageBox.Show("Bot inciado com sucesso!");
+
+            }
+            catch (Exception ex)
             {
                 this.WindowState = (WindowState)FormWindowState.Maximized;
                 MessageBox.Show(ex.Message);
@@ -325,6 +402,7 @@ namespace BotTibia
             if (!string.IsNullOrWhiteSpace(ClientComboBox.SelectedItem as string))
             {
                 Global._tibiaProcessName = ClientComboBox.SelectedItem as string;
+                ConfigureBot();
             }
             else
             {
