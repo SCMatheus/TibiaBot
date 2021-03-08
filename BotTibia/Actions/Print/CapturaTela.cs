@@ -58,9 +58,9 @@ namespace BotTibia.Actions.Print
             return telaInteira;
         }
 
-        public static Bitmap CortaTela(Bitmap tela)
+        public static Bitmap CortaTela(Bitmap tela, int x, int y, int width, int height)
         {
-            var cropArea = new RectangleF((tela.Width/2), 0, (tela.Width/2), tela.Height);
+            var cropArea = new RectangleF(x, y, width, height);
             var telaCortada = tela.Clone(cropArea, tela.PixelFormat);
             return telaCortada;
         }

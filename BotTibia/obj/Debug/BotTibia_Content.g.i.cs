@@ -8,6 +8,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/characterwindow_0.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-0.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-1.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-10.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-11-map.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-12-map.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-13-map.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-14-map.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-15-map.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-2.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-3.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-4.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-5.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-6.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-7.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-8.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/map/floor-9.png")]
 
 

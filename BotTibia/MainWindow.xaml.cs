@@ -15,6 +15,7 @@ using System.IO;
 using System.Xml.Serialization;
 using BotTibia.Persistencia;
 using System.Collections.Generic;
+using BotTibia.Actions.Cavebot;
 
 namespace BotTibia
 {
@@ -69,10 +70,19 @@ namespace BotTibia
             }
             if(Global._mainWindow == null) 
                 throw new Exception("Não foi possivel identificar a window do personagem.");
+
+            //Captura Dados do mini map
+            Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X,
+                                                        Global._tela.Y, Global._tela.Width,
+                                                        Global._tela.Height, Global._caminho + $"\\Images\\Global\\Configs\\miniMap.png");
+
+            if (Global._miniMap == null)
+                throw new Exception("Não foi possivel identificar o Mini Map do personagem.");
+
             //Captura Dados da vida
             var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
                                                                                                 0, Global._tela.Width,
-                                                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png");
+                                                                                   Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
 
@@ -104,6 +114,10 @@ namespace BotTibia
 
             HealcheckBox.IsEnabled = true;
             ParalizecheckBox.IsEnabled = true;
+
+            var cavebot = new Cavebot();
+            cavebot.Waypoints.Add("Node:32370,32238,7,2,2");
+            cavebot.ExecutaWaypoint(tela,0);
             MessageBox.Show("Bot inciado com sucesso!");
         }
         #endregion
@@ -362,7 +376,7 @@ namespace BotTibia
                     ConfigureBot();
                 }
                 else
-                {
+                {             
                     Global._tibiaProcessName = "";
                 }
             }catch(Exception ex)

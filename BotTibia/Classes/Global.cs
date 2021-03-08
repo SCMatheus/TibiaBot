@@ -14,6 +14,7 @@ namespace BotTibia.Classes
         public static string _tibiaProcessName { get; set; }
         public static CoordenadasDeElementos _tela = new CoordenadasDeElementos();
         public static CoordenadasDeElementos _mainWindow = new CoordenadasDeElementos();
+        public static CoordenadasDeElementos _miniMap = new CoordenadasDeElementos();
         public static string _caminho;
     }
 }
