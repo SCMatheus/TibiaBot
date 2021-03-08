@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AForge.Imaging;
 using AutoHotkey.Interop;
-using BotTibia.Actions.AHK;
+using BotTibia.Classes;
 using Image = System.Drawing.Image;
 
 namespace BotTibia
@@ -34,7 +34,7 @@ namespace BotTibia
             }
             else
             {
-                throw new Exception("Não foi possivel capturar algum dos status! \n Por favor Deixar vida e mana full");
+                return null;
             }
         }
         public static CoordenadasDeElementos PegaElementosAhk(string process,int x, int y, int width, int height, string elemento)
@@ -65,7 +65,7 @@ namespace BotTibia
             }
             else
             {
-                throw new Exception($"Não foi possivel capturar o elemento {elemento}");
+                return null;
             }
         }
 

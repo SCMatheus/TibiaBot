@@ -1,4 +1,4 @@
-﻿namespace BotTibia
+﻿namespace BotTibia.Classes
 {
     public class CoordenadasDeElementos
     {

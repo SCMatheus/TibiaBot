@@ -1,7 +1,5 @@
 ﻿using System.Drawing;
-using System.IO;
 using System.Threading;
-using BotTibia.Elementos;
 
 namespace BotTibia.Classes
 {

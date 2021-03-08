@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/statusbar.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/characterwindow_0.png")]
 
 

@@ -1,4 +1,4 @@
-﻿namespace BotTibia.Elementos
+﻿namespace BotTibia.Classes
 {
     public class PersonagemStatus
     {

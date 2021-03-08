@@ -1,8 +1,10 @@
 ﻿using System.Drawing;
 using System.Threading;
 using AutoHotkey.Interop;
-using BotTibia.Elementos;
 using BotTibia.Actions.Print;
+using System.Diagnostics;
+using System.Linq;
+using BotTibia.Classes;
 
 namespace BotTibia.Actions.Heal
 {
@@ -77,24 +79,25 @@ namespace BotTibia.Actions.Heal
 
         public static void Healar(VidaBar vida,  ManaBar mana, PersonagemStatus status, int fireTimer, string processName)
         {
-            try
+
+            while (true)
             {
-                while (true)
+                if(!Process.GetProcesses().ToList().Any(p => p.MainWindowTitle.Equals(processName)))
                 {
-                    var tela = CapturaTela.CaptureWindow(processName);
-
-                    HealDeVida(tela, vida, processName, status.EhEk);
-
-                    HealDeMana(tela, mana, vida, processName, status.EhEk);
-
-                    if (status.ParaStatus)
-                    {
-                        HealPara(tela, status, processName);
-                    }
-                    Thread.Sleep(fireTimer);
-
+                    Thread.Sleep(1000);
+                    continue;
                 }
-            }catch{
+                var tela = CapturaTela.CaptureWindow(processName);
+
+                HealDeVida(tela, vida, processName, status.EhEk);
+
+                HealDeMana(tela, mana, vida, processName, status.EhEk);
+
+                if (status.ParaStatus)
+                {
+                    HealPara(tela, status, processName);
+                }
+                Thread.Sleep(fireTimer);
 
             }
         }

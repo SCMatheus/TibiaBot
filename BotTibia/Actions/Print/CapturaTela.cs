@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using BotTibia.Elementos;
+using BotTibia.Classes;
 
 namespace BotTibia.Actions.Print
 {

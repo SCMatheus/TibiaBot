@@ -1,10 +1,8 @@
 ﻿using System.Windows;
 using MessageBox = System.Windows.MessageBox;
-using System.Windows.Forms;
 using System.Threading;
 using System.Drawing;
 using BotTibia.Actions.Print;
-using BotTibia.Actions;
 using System;
 using System.Windows.Input;
 using System.Linq;
@@ -12,7 +10,11 @@ using System.Diagnostics;
 using BotTibia.Classes;
 using BotTibia.Actions.AHK;
 using BotTibia.Actions.Heal;
+using System.Windows.Forms;
 using System.IO;
+using System.Xml.Serialization;
+using BotTibia.Persistencia;
+using System.Collections.Generic;
 
 namespace BotTibia
 {
@@ -24,137 +26,88 @@ namespace BotTibia
 
         public MainWindow()
         {
+             
             Global._caminho = Environment.CurrentDirectory;
-            var ahk = new AhkFunctions();
-            ahk.LoadScripts();
+            try
+            {
+                var ahk = new AhkFunctions();
+                ahk.LoadScripts();
+            }catch(Exception e)
+            {
+                MessageBox.Show("Ocorreu um erro ao carregar as funções AHK.\n" +
+                                " Por favor verifique se o AHK está instalado e se as bibliotecas AHK estão na pasta do Bot.");
+                MessageBox.Show("Erro: "+e.Message);
+                Environment.Exit(1);
+            }
             InitializeComponent();
         }
-
-        private void OnClickEvent(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-
-                //inicialização dos dados
-                Global._vida.HighHeal.Key = PrimeiroHealHotkey.Text;
-                Global._vida.MediumHeal.Key = SegundoHealHotkey.Text;
-                Global._vida.LowHeal.Key = TerceiroHealHotkey.Text;
-                Global._mana.ManaHeal.Key = ManaHealHotkey.Text;
-                Global._status.ParaKey = ParalizeHealHotkey.Text;
-                Global._fireTimer = int.Parse(FireTimer.Text);
-
-                Process[] processlist = Process.GetProcesses();
-
-                Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
-                Global._tela.X = 0;
-                Global._tela.Y = 0;
-                Global._tela.Width = tela.Width;
-                Global._tela.Height = tela.Height;
-
-                Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X,
-                                                                        Global._tela.Y, Global._tela.Width,
-                                                                        Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\game");            
-
-                //Captura Dados da vida
-                Global._vida.SetCoordenadasPorImagemDoCoracao(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X/2,
-                                                                                                    0, Global._tela.Width,
-                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao"));
-                Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text), 
-                                                    int.Parse(SegundoHealPercent.Text), 
-                                                        int.Parse(PrimeiroHealPercent.Text));
-                Global._vida.pixel = tela.GetPixel(Global._vida.LowHeal.X, Global._vida.LowHeal.Y);
-
-                //Captura Dados da mana
-                Global._mana.SetCoordenadasPorImagemDoRaio(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
-                                                                                                    0, Global._tela.Width,
-                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio"));
-                Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
-                Global._mana.pixel = tela.GetPixel(Global._mana.ManaHeal.X, Global._mana.ManaHeal.Y);
-
-                //Captura Dados da paralize
-                var aux = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
-                                                                0, Global._tela.Width,
-                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar");
-                Global._status.Coordenadas.X = aux.X;
-                Global._status.Coordenadas.Y = aux.Y;
-                Global._status.Coordenadas.Height = aux.Width;
-                Global._status.Coordenadas.Height = aux.Height;
-
-
-                this.WindowState = (WindowState)FormWindowState.Maximized;
-                HealcheckBox.IsEnabled = true;
-                ParalizecheckBox.IsEnabled = true;
-                MessageBox.Show("Bot inciado com sucesso!");
-                
-            }catch(Exception ex)
-            {
-                this.WindowState = (WindowState)FormWindowState.Maximized;
-                MessageBox.Show(ex.Message);
-            }
-        }
-
+        #region Configuracao na selecao de personagem
         private void ConfigureBot()
         {
-            try
+            HealcheckBox.IsEnabled = false;
+            ParalizecheckBox.IsEnabled = false;
+            //inicialização dos dados
+            AtualizaVariaveisGlobais();
+
+            Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
+            Global._tela.X = 0;
+            Global._tela.Y = 0;
+            Global._tela.Width = tela.Width;
+            Global._tela.Height = tela.Height;
+            Global._mainWindow = null;
+
+            var count = 0;
+            //Captura dados da Character Window
+            while (Global._mainWindow == null)
             {
-
-                //inicialização dos dados
-                Global._vida.HighHeal.Key = PrimeiroHealHotkey.Text;
-                Global._vida.MediumHeal.Key = SegundoHealHotkey.Text;
-                Global._vida.LowHeal.Key = TerceiroHealHotkey.Text;
-                Global._mana.ManaHeal.Key = ManaHealHotkey.Text;
-                Global._status.ParaKey = ParalizeHealHotkey.Text;
-                Global._fireTimer = int.Parse(FireTimer.Text);
-
-                Process[] processlist = Process.GetProcesses();
-
-                Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
-                Global._tela.X = 0;
-                Global._tela.Y = 0;
-                Global._tela.Width = tela.Width;
-                Global._tela.Height = tela.Height;
-
                 Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X,
                                                                         Global._tela.Y, Global._tela.Width,
-                                                                        Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\game.png");
-
-                //Captura Dados da vida
-                Global._vida.SetCoordenadasPorImagemDoCoracao(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
-                                                                                                    0, Global._tela.Width,
-                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png"));
-                Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text),
-                                                    int.Parse(SegundoHealPercent.Text),
-                                                        int.Parse(PrimeiroHealPercent.Text));
-
-                //Captura Dados da mana
-                Global._mana.SetCoordenadasPorImagemDoRaio(PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
-                                                                                                    0, Global._tela.Width,
-                                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio.png"));
-                Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
-
-                //Captura Dados da paralize
-                var aux = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
-                                                                0, Global._tela.Width,
-                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar.png");
-                Global._status.Coordenadas.X = aux.X;
-                Global._status.Coordenadas.Y = aux.Y;
-                Global._status.Coordenadas.Height = aux.Width;
-                Global._status.Coordenadas.Height = aux.Height;
-
-
-                this.WindowState = (WindowState)FormWindowState.Maximized;
-                HealcheckBox.IsEnabled = true;
-                ParalizecheckBox.IsEnabled = true;
-                MessageBox.Show("Bot inciado com sucesso!");
-
+                                                                        Global._tela.Height, Global._caminho + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
+                count++;
+                if (count >= 3)
+                    break;
             }
-            catch (Exception ex)
-            {
-                this.WindowState = (WindowState)FormWindowState.Maximized;
-                MessageBox.Show(ex.Message);
-            }
+            if(Global._mainWindow == null) 
+                throw new Exception("Não foi possivel identificar a window do personagem.");
+            //Captura Dados da vida
+            var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                                                0, Global._tela.Width,
+                                                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png");
+            if (coordenadasCoracao == null)
+                throw new Exception("Não foi possivel identificar a life do personagem.");
+
+            Global._vida.SetCoordenadasPorImagemDoCoracao(coordenadasCoracao);
+            Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text),
+                                                int.Parse(SegundoHealPercent.Text),
+                                                    int.Parse(PrimeiroHealPercent.Text));
+
+            //Captura Dados da mana
+            var coordenadasRaio = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                                                0, Global._tela.Width,
+                                                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio.png");
+            if (coordenadasCoracao == null)
+                throw new Exception("Não foi possivel identificar a life do personagem.");
+
+            Global._mana.SetCoordenadasPorImagemDoRaio(coordenadasRaio);
+            Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
+
+            //Captura Dados da paralize
+            var coordenadasStatusBar = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                            0, Global._tela.Width,
+                                                            Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar.png");
+            if (coordenadasStatusBar == null)
+                throw new Exception("Não foi possivel identificar a status bar do personagem.");
+
+            Global._status.Coordenadas = coordenadasStatusBar;
+
+
+
+            HealcheckBox.IsEnabled = true;
+            ParalizecheckBox.IsEnabled = true;
+            MessageBox.Show("Bot inciado com sucesso!");
         }
-
+        #endregion
+        #region Healling
         private void SetaHotkeyPrimeiroHeal(object sender, System.Windows.Input.KeyEventArgs e)
         {
             try
@@ -397,19 +350,29 @@ namespace BotTibia
             TerceiroHeal.Content = "Terceiro:";
             Global._status.EhEk = false;
         }
+        #endregion
+        #region Select Character
         private void ClientComboBox_SelectedIndexChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(ClientComboBox.SelectedItem as string))
+            try
             {
-                Global._tibiaProcessName = ClientComboBox.SelectedItem as string;
-                ConfigureBot();
-            }
-            else
+                if (!string.IsNullOrWhiteSpace(ClientComboBox.SelectedItem as string))
+                {
+                    Global._tibiaProcessName = ClientComboBox.SelectedItem as string;
+                    ConfigureBot();
+                }
+                else
+                {
+                    Global._tibiaProcessName = "";
+                }
+            }catch(Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 Global._tibiaProcessName = "";
+                ClientComboBox.SelectedValue = "";
             }
         }
-
+        
         private void ClientComboBox_DropDownOpened(object sender, EventArgs e)
         {
             ClientComboBox.Items.Clear();
@@ -422,5 +385,129 @@ namespace BotTibia
                     }
                 });
         }
+        #endregion
+        #region MenuSuperior
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Displays a SaveFileDialog so the user can save the Image
+                // assigned to Button2.
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "*.xml|";
+                saveFileDialog.Title = "Save script";
+
+                if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    // If the file name is not an empty string open it for saving.
+                    if (saveFileDialog.FileName != "")
+                    {
+                        // Saves the Image via a FileStream created by the OpenFile method.
+                        SaveToXml(saveFileDialog.FileName);
+                    }
+                }
+            }catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var openFileDialog = new OpenFileDialog()
+                {
+                    FileName = "Select a text file",
+                    Filter = "Xml files (*.xml)|*.xml",
+                    Title = "Open xml file"
+                };
+
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    // If the file name is not an empty string open it for saving.
+                    if (openFileDialog.FileName != "")
+                    {
+                        LoadByXml(openFileDialog.FileName);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        #endregion
+        #region Save Script
+        public void SaveToXml(string file)
+        {
+            var script = new ConfigScripts()
+            {
+                Primeiro = new Heal() { Percent = PrimeiroHealPercent.Text, Hotkey = PrimeiroHealHotkey.Text },
+                Segundo = new Heal() { Percent = SegundoHealPercent.Text, Hotkey = SegundoHealHotkey.Text },
+                Terceiro = new Heal() { Percent = TerceiroHealPercent.Text, Hotkey = TerceiroHealHotkey.Text },
+                ManaHeal = new Heal() { Percent = ManaHealPercent.Text, Hotkey = ManaHealHotkey.Text },
+                ParaHeal = ParalizeHealHotkey.Text,
+                Firetimer = int.Parse(FireTimer.Text),
+            };
+            // Create a new XmlSerializer instance with the type of the test class
+            XmlSerializer SerializerObj = new XmlSerializer(typeof(ConfigScripts));
+
+            // Create a new file stream to write the serialized object to a file
+            using (TextWriter WriteFileStream = new StreamWriter(@file))
+            {
+                SerializerObj.Serialize(WriteFileStream, script);
+
+                // Cleanup
+                WriteFileStream.Close();
+            }
+        }
+        #endregion
+        #region Load script
+        public void LoadByXml(string file)
+        {
+            XmlSerializer SerializerObj = new XmlSerializer(typeof(ConfigScripts));
+            ConfigScripts LoadedConfigs;
+            // Create a new file stream for reading the XML file
+            using (FileStream ReadFileStream = new FileStream(@file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+
+                // Load the object saved above by using the Deserialize function
+                LoadedConfigs = (ConfigScripts)SerializerObj.Deserialize(ReadFileStream);
+
+                // Cleanup
+                ReadFileStream.Close();
+            }
+            //Life
+            PrimeiroHealPercent.Text = LoadedConfigs.Primeiro.Percent;
+            PrimeiroHealHotkey.Text = LoadedConfigs.Primeiro.Hotkey;
+            SegundoHealPercent.Text = LoadedConfigs.Segundo.Percent;
+            SegundoHealHotkey.Text = LoadedConfigs.Segundo.Hotkey;
+            TerceiroHealPercent.Text = LoadedConfigs.Terceiro.Percent;
+            TerceiroHealHotkey.Text = LoadedConfigs.Terceiro.Hotkey;
+            //Mana
+            ManaHealPercent.Text = LoadedConfigs.ManaHeal.Percent;
+            ManaHealHotkey.Text = LoadedConfigs.ManaHeal.Hotkey;
+            //Para
+            ParalizeHealHotkey.Text = LoadedConfigs.ParaHeal;
+            //Firetimer
+            FireTimer.Text = LoadedConfigs.Firetimer.ToString();
+
+            AtualizaVariaveisGlobais();
+        }
+        #endregion
+        #region Atualizacao de variaveis
+        public void AtualizaVariaveisGlobais()
+        {
+            Global._vida.HighHeal.Key = PrimeiroHealHotkey.Text;
+            Global._vida.MediumHeal.Key = SegundoHealHotkey.Text;
+            Global._vida.LowHeal.Key = TerceiroHealHotkey.Text;
+            Global._mana.ManaHeal.Key = ManaHealHotkey.Text;
+            Global._status.ParaKey = ParalizeHealHotkey.Text;
+            Global._fireTimer = int.Parse(FireTimer.Text);
+        }
+        #endregion
     }
 }

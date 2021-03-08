@@ -3,7 +3,6 @@ D:\GitHub\BotTibia\BotTibia\bin\Debug\sharpAHK.dll
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Actions\AHK\Gdip_All_2.ahk
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\coracao.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\raio.png
-D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\game.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\statusBar.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.exe.config
 D:\GitHub\BotTibia\BotTibia\bin\Debug\AForge.dll
@@ -26,3 +25,6 @@ D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CopyComplete
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.pdb
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.pdb
+D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\miniMap.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\characterWindow_0.png

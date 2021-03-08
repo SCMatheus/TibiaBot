@@ -81,9 +81,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -95,7 +97,7 @@
     <Compile Include="Actions\Events\ClickEvent.cs" />
     <Compile Include="Actions\Heal\Healer.cs" />
     <Compile Include="Classes\Global.cs" />
-    <Compile Include="Elementos\CoordenadasDeElementos.cs" />
+    <Compile Include="Classes\CoordenadasDeElementos.cs" />
     <Compile Include="Actions\FindElements\PegaElementosDaTela.cs" />
     <Compile Include="Actions\Scan\PegaTelaPrincipal.cs" />
     <Page Include="MainWindow.xaml">
@@ -106,10 +108,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Elementos\ManaBar.cs" />
-    <Compile Include="Elementos\PersonagemStatus.cs" />
-    <Compile Include="Elementos\VidaBar.cs" />
-    <Compile Include="Elementos\CoordenadasXeY.cs" />
+    <Compile Include="Classes\ManaBar.cs" />
+    <Compile Include="Classes\PersonagemStatus.cs" />
+    <Compile Include="Classes\VidaBar.cs" />
+    <Compile Include="Classes\CoordenadasXeY.cs" />
     <Compile Include="Enum\MouseEvent.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -117,6 +119,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Persistencia\ConfigScripts.cs" />
+    <Compile Include="Classes\Heal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,6 +137,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Actions\AHK\Gdip_All_2.ahk">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -164,7 +169,11 @@
   <ItemGroup>
     <Resource Include="favicon-32x32.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Images\Global\Configs\characterWindow_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Images\Global\Configs\coracao.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -176,7 +185,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Global\Configs\game.png">
+    <None Include="Images\Global\Configs\miniMap.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -184,6 +193,9 @@
     <None Include="Images\Global\Configs\statusBar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Elementos\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
