@@ -87,7 +87,7 @@
             </TabItem>
             <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="32,-2,-60,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Margin="-5,10,9,0" VerticalAlignment="Top" Height="535" Background="#FF0F0E0E">
-                    <ListView x:Name="listView" Margin="13,34,134,5">
+                    <ListView x:Name="listView" Margin="13,34,134,12">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Waypoint" Width="410" />
