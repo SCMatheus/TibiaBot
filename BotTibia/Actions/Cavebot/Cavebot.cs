@@ -12,9 +12,9 @@ namespace BotTibia.Actions.Cavebot
 {
     public static class Cavebot
     {
-        private static List<string> Waypoints = new List<string>();
+        private static List<Waypoint> Waypoints = new List<Waypoint>();
         private static int Index = 0;
-        public static void AddWaypoint(string waypoint)
+        public static void AddWaypoint(Waypoint waypoint)
         {
             Waypoints.Add(waypoint);
         }
@@ -23,54 +23,53 @@ namespace BotTibia.Actions.Cavebot
             if (!(Waypoints.Count() > Index))
                 Index = 0;
             var waypoint = Waypoints.ElementAt(Index);
-            var actions = waypoint.Split(':');
             bool chegou;
-            switch (actions[0])
+            switch (waypoint.Type)
             {
                 case "Node":
-                    chegou = Node(actions);
+                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
                     if (chegou)
                     {
                         Index++;
                     }
                     break;
                 case "Stand":
-                    chegou = Node(actions);
+                    chegou = Stand(waypoint.Coordenadas);
                     if (chegou)
                     {
                         Index++;
                     }
                     break;
                 case "Walk":
-                    chegou = Node(actions);
+                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
                     if (chegou)
                     {
                         Index++;
                     }
                     break;
                 case "Use":
-                    chegou = Node(actions);
+                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
                     if (chegou)
                     {
                         Index++;
                     }
                     break;
                 case "UseItem":
-                    chegou = Node(actions);
+                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
                     if (chegou)
                     {
                         Index++;
                     }
                     break;
                 case "CheckPos":
-                    chegou = Node(actions);
+                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
                     if (chegou)
                     {
                         Index++;
                     }
                     break;
                 case "CheckSupply":
-                    chegou = Node(actions);
+                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
                     if (chegou)
                     {
                         Index++;
@@ -104,63 +103,49 @@ namespace BotTibia.Actions.Cavebot
                 ExecutaWaypoint();
             }
         }
-        public static bool Node(string[] actions)
+        public static bool Node(Coordenada coordenada, Range range)
         {
-            var coordenadas = actions[1].Split(',');
             var andar = PegaAndarDoMap();
-            var finalCordinates = new Point()
-            {
-                X = int.Parse(coordenadas[0]),
-                Y = int.Parse(coordenadas[1])
-            };
             if (andar == -1)
             {
                 throw new Exception("Não foi possivel encontrar o andar no cavebot");
             }
             var coordenadasAtuais = PegaElementosDaTela.
                                     PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar);
-            var EhcoodenadaFinal = (Math.Abs(finalCordinates.X - coordenadasAtuais.X) + 1
-                                       <= int.Parse(coordenadas[3])) &&
-                                       (Math.Abs(finalCordinates.Y - coordenadasAtuais.Y) + 1
-                                       <= int.Parse(coordenadas[4]));
-            if (!(EhcoodenadaFinal && andar == int.Parse(coordenadas[2])))
+            var EhcoodenadaFinal = (Math.Abs(coordenada.X - coordenadasAtuais.X) + 1
+                                       <= range.X) &&
+                                       (Math.Abs(coordenada.Y - coordenadasAtuais.Y) + 1
+                                       <= range.Y);
+            if (!(EhcoodenadaFinal && andar == coordenada.Z))
             {
                 var click = new Point()
                 {
-                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (finalCordinates.X - coordenadasAtuais.X) - 8,
-                    Y = (Global._miniMap.Y + Global._miniMap.Height / 2 + (finalCordinates.Y - coordenadasAtuais.Y) - 31),
+                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenada.X - coordenadasAtuais.X) - 8,
+                    Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenada.Y - coordenadasAtuais.Y) - 31,
                 };
-                //ClickEvent.Click(Global._tibiaProcessName, new Point() { X = 1812, Y = 48-29}, Enum.MouseEvent.Right);
                 ClickEvent.Click(Global._tibiaProcessName, click, Enum.MouseEvent.Left);
                 return false;
             }
             return true;
         }
-        public static bool Stand(string[] actions)
+        public static bool Stand(Coordenada coordenada)
         {
-            var coordenadas = actions[1].Split(',');
             var andar = PegaAndarDoMap();
-            var finalCordinates = new Point()
-            {
-                X = int.Parse(coordenadas[0]),
-                Y = int.Parse(coordenadas[1])
-            };
             if (andar == -1)
             {
                 throw new Exception("Não foi possivel encontrar o andar no cavebot");
             }
             var coordenadasAtuais = PegaElementosDaTela.
                                     PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar);
-            var EhcoodenadaFinal = (finalCordinates.X == coordenadasAtuais.X) &&
-                                   (finalCordinates.Y == coordenadasAtuais.Y);
-            if (!(EhcoodenadaFinal && andar == int.Parse(coordenadas[2])))
+            var EhcoodenadaFinal = (coordenada.X == coordenadasAtuais.X) &&
+                                    (coordenada.Y == coordenadasAtuais.Y);
+            if (!(EhcoodenadaFinal && andar == coordenada.Z))
             {
                 var click = new Point()
                 {
-                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (finalCordinates.X - coordenadasAtuais.X) - 8,
-                    Y = (Global._miniMap.Y + Global._miniMap.Height / 2 + (finalCordinates.Y - coordenadasAtuais.Y) - 31),
+                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenada.X - coordenadasAtuais.X) - 8,
+                    Y = (Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenada.Y - coordenadasAtuais.Y) - 31),
                 };
-                //ClickEvent.Click(Global._tibiaProcessName, new Point() { X = 1812, Y = 48-29}, Enum.MouseEvent.Right);
                 ClickEvent.Click(Global._tibiaProcessName, click, Enum.MouseEvent.Left);
                 return false;
             }

@@ -97,6 +97,7 @@
     <Compile Include="Actions\Print\CapturaTela.cs" />
     <Compile Include="Actions\Events\ClickEvent.cs" />
     <Compile Include="Actions\Heal\Healer.cs" />
+    <Compile Include="Classes\Coordenada.cs" />
     <Compile Include="Classes\Global.cs" />
     <Compile Include="Classes\CoordenadasDeElementos.cs" />
     <Compile Include="Actions\FindElements\PegaElementosDaTela.cs" />
@@ -111,8 +112,10 @@
     </Compile>
     <Compile Include="Classes\ManaBar.cs" />
     <Compile Include="Classes\PersonagemStatus.cs" />
+    <Compile Include="Classes\Range.cs" />
     <Compile Include="Classes\VidaBar.cs" />
     <Compile Include="Classes\CoordenadasXeY.cs" />
+    <Compile Include="Classes\Waypoint.cs" />
     <Compile Include="Enum\MouseEvent.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -195,9 +198,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Elementos\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Images\Map\floor-0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
