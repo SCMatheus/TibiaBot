@@ -10,11 +10,13 @@ namespace BotTibia.Classes
         public static PersonagemStatus _status = new PersonagemStatus();
         public static int _fireTimer { get; set; }
         public static Thread _threadHeal { get; set; }
+        public static Thread _threadCavebot { get; set; }
         public static string _telaPrincipal { get; set; }
         public static string _tibiaProcessName { get; set; }
         public static CoordenadasDeElementos _tela = new CoordenadasDeElementos();
         public static CoordenadasDeElementos _mainWindow = new CoordenadasDeElementos();
         public static CoordenadasDeElementos _miniMap = new CoordenadasDeElementos();
+        public static CoordenadasDeElementos _andarDoMap = new CoordenadasDeElementos();
         public static string _caminho;
     }
 }

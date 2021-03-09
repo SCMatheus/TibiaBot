@@ -45,6 +45,7 @@ namespace BotTibia
         #region Configuracao na selecao de personagem
         private void ConfigureBot()
         {
+            CavebotCheckBox.IsEnabled = false;
             HealcheckBox.IsEnabled = false;
             ParalizecheckBox.IsEnabled = false;
             //inicialização dos dados
@@ -55,15 +56,30 @@ namespace BotTibia
             Global._tela.Y = 0;
             Global._tela.Width = tela.Width;
             Global._tela.Height = tela.Height;
-            Global._mainWindow = null;
 
+            Global._andarDoMap = null;
             var count = 0;
+            while (count <= 15)
+            {
+                Global._andarDoMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
+                                                                    Global._caminho + "\\Images\\MapAndar\\floor-" +
+                                                                    count.ToString() + ".png");
+                if (Global._andarDoMap != null)
+                {
+                    break;
+                }
+                count++;
+            }
+            if (Global._andarDoMap == null)
+                throw new Exception("Não foi possivel identificar a barra dos andares do personagem.");
+
             //Captura dados da Character Window
+            count = 0;
+            Global._mainWindow = null;
             while (Global._mainWindow == null)
             {
-                Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X,
-                                                                        Global._tela.Y, Global._tela.Width,
-                                                                        Global._tela.Height, Global._caminho + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
+                Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
+                                                                          Global._caminho + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
                 count++;
                 if (count >= 3)
                     break;
@@ -72,13 +88,15 @@ namespace BotTibia
                 throw new Exception("Não foi possivel identificar a window do personagem.");
 
             //Captura Dados do mini map
-            Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X,
-                                                        Global._tela.Y, Global._tela.Width,
-                                                        Global._tela.Height, Global._caminho + $"\\Images\\Global\\Configs\\miniMap.png");
+            Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, 
+                                                                   Global._caminho + $"\\Images\\Global\\Configs\\miniMap.png");
 
             if (Global._miniMap == null)
                 throw new Exception("Não foi possivel identificar o Mini Map do personagem.");
-
+            Global._miniMap.X += 3;
+            Global._miniMap.Y += 3;
+            Global._miniMap.Width -= 7;
+            Global._miniMap.Height -= 7;
             //Captura Dados da vida
             var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
                                                                                                 0, Global._tela.Width,
@@ -111,13 +129,9 @@ namespace BotTibia
             Global._status.Coordenadas = coordenadasStatusBar;
 
 
-
+            CavebotCheckBox.IsEnabled = true;
             HealcheckBox.IsEnabled = true;
             ParalizecheckBox.IsEnabled = true;
-
-            var cavebot = new Cavebot();
-            cavebot.Waypoints.Add("Node:32370,32238,7,2,2");
-            cavebot.ExecutaWaypoint(tela,0);
             MessageBox.Show("Bot inciado com sucesso!");
         }
         #endregion
@@ -523,5 +537,32 @@ namespace BotTibia
             Global._fireTimer = int.Parse(FireTimer.Text);
         }
         #endregion
+
+        private void AtivarCaveBot(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Global._threadCavebot = new Thread(() => Cavebot.Hunting());
+                Global._threadCavebot.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        private void DesativarCaveBot(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Global._threadCavebot.Interrupt();
+                Global._threadCavebot.Abort();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
     }
 }

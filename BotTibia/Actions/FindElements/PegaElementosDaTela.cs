@@ -37,6 +37,37 @@ namespace BotTibia
                 return null;
             }
         }
+        public static CoordenadasDeElementos PegaElementosAhk(string process, CoordenadasDeElementos coordenadas, string elemento)
+        {
+            var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
+            var _ahkEngine = AutoHotkeyEngine.Instance;
+            var retorno = _ahkEngine.ExecFunction("PegaElementosAhk", coordenadas.X.ToString(), coordenadas.Y.ToString(), coordenadas.Width.ToString(),
+                                                  coordenadas.Height.ToString(), elemento, hwnd.ToString());
+            var parametros = retorno.Split(',');
+            _ahkEngine = null;
+            if (parametros[0] == "1")
+            {
+                var elementoX = -1;
+                var elementoY = -1;
+                var elementoWidth = -1;
+                var elementoHeight = -1;
+                int.TryParse(parametros[1], out elementoX);
+                int.TryParse(parametros[2], out elementoY);
+                int.TryParse(parametros[3], out elementoWidth);
+                int.TryParse(parametros[4], out elementoHeight);
+                return new CoordenadasDeElementos()
+                {
+                    X = elementoX,
+                    Y = elementoY,
+                    Height = elementoHeight,
+                    Width = elementoWidth,
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
         public static CoordenadasDeElementos PegaElementosAhk(string process,int x, int y, int width, int height, string elemento)
         {
             var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
@@ -86,35 +117,12 @@ namespace BotTibia
             }
             return false;
         }
-        public static CoordenadasDeElementos PegaCoordenadasDoPersonagem(Bitmap miniMap, int andar)
-        {
-            Bitmap Map = (Bitmap)Image.FromFile(@Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png");
-            Bitmap datagraphic = Map.Clone(new Rectangle(0, 0, Map.Width, Map.Height), PixelFormat.Format24bppRgb);
-            ExhaustiveTemplateMatching tm = new ExhaustiveTemplateMatching(0.9f);
-            // find all matchings with specified above similarity
-            TemplateMatch[] matchings = tm.ProcessImage(datagraphic, miniMap);
-            if (matchings.Length == 1)
-            {
-                var retorno = new CoordenadasDeElementos()
-                {
-                    X = matchings[0].Rectangle.X + (miniMap.Width/2) + 31744,
-                    Y = matchings[0].Rectangle.Y + (miniMap.Height/2) + 30976,
-                    Height = matchings[0].Rectangle.Height,
-                    Width = matchings[0].Rectangle.Width,
-                };
-                return retorno;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public static CoordenadasDeElementos PegaCoordenadasDoPersonagem(string process, int x, int y, int width, int height, int andar)
+        public static Point PegaCoordenadasDoPersonagem(string process, CoordenadasDeElementos coordenadas, int andar)
         {
             var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var _ahkEngine = AutoHotkeyEngine.Instance;
-            var retorno = _ahkEngine.ExecFunction("PegaCoordenadasDoPersonagemAhk", x.ToString(), y.ToString(), width.ToString(),
-                                                  height.ToString(), Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
+            var retorno = _ahkEngine.ExecFunction("PegaCoordenadasDoPersonagemAhk", coordenadas.X.ToString(), coordenadas.Y.ToString(), coordenadas.Width.ToString(),
+                                                  coordenadas.Height.ToString(), Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
             var parametros = retorno.Split(',');
             _ahkEngine = null;
             if (parametros[0] == "1")
@@ -123,7 +131,7 @@ namespace BotTibia
                 var elementoY = -1;
                 int.TryParse(parametros[1], out elementoX);
                 int.TryParse(parametros[2], out elementoY);
-                return new CoordenadasDeElementos()
+                return new Point()
                 {
                     X = elementoX,
                     Y = elementoY,
@@ -131,7 +139,7 @@ namespace BotTibia
             }
             else
             {
-                return null;
+                return Point.Empty;
             }
         }
     }
