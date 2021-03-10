@@ -36,6 +36,8 @@ D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\MapAndar\floor-6.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\MapAndar\floor-7.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\MapAndar\floor-8.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\MapAndar\floor-9.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\characterWindow_1.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\characterWindow_2.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.exe.config
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.pdb
@@ -60,5 +62,3 @@ D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CopyComplete
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.pdb
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
-D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\characterWindow_1.png
-D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\characterWindow_2.png

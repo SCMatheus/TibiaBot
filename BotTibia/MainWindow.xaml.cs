@@ -16,6 +16,7 @@ using System.Xml.Serialization;
 using BotTibia.Persistencia;
 using System.Collections.Generic;
 using BotTibia.Actions.Cavebot;
+using System.Threading.Tasks;
 
 namespace BotTibia
 {
@@ -31,8 +32,7 @@ namespace BotTibia
             Global._caminho = Environment.CurrentDirectory;
             try
             {
-                var ahk = new AhkFunctions();
-                ahk.LoadScripts();
+                AhkFunctions.LoadScripts();
             }catch(Exception e)
             {
                 MessageBox.Show("Ocorreu um erro ao carregar as funções AHK.\n" +
@@ -43,7 +43,7 @@ namespace BotTibia
             InitializeComponent();
         }
         #region Configuracao na selecao de personagem
-        private void ConfigureBot()
+        private void ConfigureBot(IProgress<int> progress)
         {
             CavebotCheckBox.IsEnabled = false;
             HealcheckBox.IsEnabled = false;
@@ -58,41 +58,47 @@ namespace BotTibia
             Global._tela.Height = tela.Height;
 
             Global._andarDoMap = null;
-            var count = 0;
-            while (count <= 15)
+            List<int> andares = new List<int>()
+        {
+            7, 6, 8, 5, 9, 4, 10, 3, 11, 2, 12, 1, 13, 0, 14
+        };
+            foreach (var item in andares)
             {
                 Global._andarDoMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
                                                                     Global._caminho + "\\Images\\MapAndar\\floor-" +
-                                                                    count.ToString() + ".png");
+                                                                    item.ToString() + ".png");
                 if (Global._andarDoMap != null)
                 {
                     break;
                 }
-                count++;
             }
             if (Global._andarDoMap == null)
                 throw new Exception("Não foi possivel identificar a barra dos andares do personagem.");
 
+            progress.Report(10);
             //Captura dados da Character Window
-            count = 0;
+            var count = 0;
             Global._mainWindow = null;
             while (Global._mainWindow == null)
             {
                 Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
-                                                                          Global._caminho + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
+                                                                            Global._caminho + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
                 count++;
                 if (count >= 3)
                     break;
             }
-            if(Global._mainWindow == null) 
+            if (Global._mainWindow == null)
                 throw new Exception("Não foi possivel identificar a window do personagem.");
 
             //Captura Dados do mini map
-            Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, 
-                                                                   Global._caminho + $"\\Images\\Global\\Configs\\miniMap.png");
+            Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
+                                                                    Global._caminho + $"\\Images\\Global\\Configs\\miniMap.png");
 
             if (Global._miniMap == null)
                 throw new Exception("Não foi possivel identificar o Mini Map do personagem.");
+
+            progress.Report(30);
+
             Global._miniMap.X += 3;
             Global._miniMap.Y += 3;
             Global._miniMap.Width -= 7;
@@ -100,10 +106,11 @@ namespace BotTibia
             //Captura Dados da vida
             var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
                                                                                                 0, Global._tela.Width,
-                                                                                   Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png");
+                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
 
+            progress.Report(50);
             Global._vida.SetCoordenadasPorImagemDoCoracao(coordenadasCoracao);
             Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text),
                                                 int.Parse(SegundoHealPercent.Text),
@@ -115,7 +122,7 @@ namespace BotTibia
                                                                                                 Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
-
+            progress.Report(70);
             Global._mana.SetCoordenadasPorImagemDoRaio(coordenadasRaio);
             Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
 
@@ -125,14 +132,16 @@ namespace BotTibia
                                                             Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar.png");
             if (coordenadasStatusBar == null)
                 throw new Exception("Não foi possivel identificar a status bar do personagem.");
-
+            progress.Report(90);
             Global._status.Coordenadas = coordenadasStatusBar;
 
 
             CavebotCheckBox.IsEnabled = true;
             HealcheckBox.IsEnabled = true;
             ParalizecheckBox.IsEnabled = true;
-            MessageBox.Show("Bot inciado com sucesso!");
+            progress.Report(100);
+            //MessageBox.Show("Bot inciado com sucesso!");
+
         }
         #endregion
         #region Healling
@@ -380,17 +389,32 @@ namespace BotTibia
         }
         #endregion
         #region Select Character
-        private void ClientComboBox_SelectedIndexChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+
+        private async void ClientComboBox_SelectedIndexChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             try
             {
+                LabelCalibrado.Content = "";
+                ProgressConfig.Value = 0;
                 if (!string.IsNullOrWhiteSpace(ClientComboBox.SelectedItem as string))
                 {
                     Global._tibiaProcessName = ClientComboBox.SelectedItem as string;
-                    ConfigureBot();
+                    var progress = new Progress<int>(value =>
+                    {
+                        ProgressConfig.Value = value;
+                    });
+
+                    await Task.Run(() => {
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            ConfigureBot(progress);
+                        }));
+                    });
+                    LabelCalibrado.Content = "Calibrado!";
                 }
                 else
-                {             
+                {
+                    LabelCalibrado.Content = "";
                     Global._tibiaProcessName = "";
                 }
             }catch(Exception ex)
@@ -542,6 +566,78 @@ namespace BotTibia
         {
             try
             {
+                var andar = Cavebot.PegaAndarDoMap();
+                Global._ultimaCoordenadaDoPersonagem = PegaElementosDaTela
+                                                       .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
+                                                                                    Global._miniMap, andar);
+                Cavebot.AddWaypoint(new Waypoint()
+                {
+                    Type = "Node",
+                    Action = "",
+                    Coordenadas = new Coordenada()
+                    {
+                        X = 32369,
+                        Y = 32240,
+                        Z = 7,
+                    },
+                    Label = "",
+                    Range = new Range()
+                    {
+                        X = 2,
+                        Y = 2
+                    },
+                });
+                Cavebot.AddWaypoint(new Waypoint()
+                {
+                    Type = "Node",
+                    Action = "",
+                    Coordenadas = new Coordenada()
+                    {
+                        X = 32369,
+                        Y = 32199,
+                        Z = 7,
+                    },
+                    Label = "",
+                    Range = new Range()
+                    {
+                        X = 2,
+                        Y = 2
+                    },
+                });
+                Cavebot.AddWaypoint(new Waypoint()
+                {
+                    Type = "Node",
+                    Action = "",
+                    Coordenadas = new Coordenada()
+                    {
+                        X = 32399,
+                        Y = 32159,
+                        Z = 7,
+                    },
+                    Label = "",
+                    Range = new Range()
+                    {
+                        X = 2,
+                        Y = 2
+                    },
+                });
+                Cavebot.AddWaypoint(new Waypoint()
+                {
+                    Type = "Node",
+                    Action = "",
+                    Coordenadas = new Coordenada()
+                    {
+                        X = 32369,
+                        Y = 32199,
+                        Z = 7,
+                    },
+                    Label = "",
+                    Range = new Range()
+                    {
+                        X = 2,
+                        Y = 2
+                    },
+                });
                 Global._threadCavebot = new Thread(() => Cavebot.Hunting());
                 Global._threadCavebot.Start();
             }
@@ -557,6 +653,7 @@ namespace BotTibia
             {
                 Global._threadCavebot.Interrupt();
                 Global._threadCavebot.Abort();
+                Global._threadCavebot.Join();
             }
             catch (Exception ex)
             {

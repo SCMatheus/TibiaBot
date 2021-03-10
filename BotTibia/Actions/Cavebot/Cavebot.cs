@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BotTibia.Actions.Events;
 using BotTibia.Actions.Print;
@@ -79,49 +80,58 @@ namespace BotTibia.Actions.Cavebot
         }
         public static int PegaAndarDoMap()
         {
-            CoordenadasDeElementos encontrado = null;
-            var count = 0;
-            while (count <= 15)
+            CoordenadasDeElementos encontrado;
+            List<int> andares= new List<int>()
+            {
+                7,6,8,5,9,4,10,3,11,2,12,1,13,0,14
+            };
+            foreach(var item in andares)
             {
                 encontrado = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._andarDoMap, 
-                                                                    Global._caminho + "\\Images\\MapAndar\\floor-" + 
-                                                                    count.ToString() + ".png");
+                                                                    Global._caminho + "\\Images\\MapAndar\\floor-" +
+                                                                    item.ToString() + ".png");
                 if (encontrado != null)
                 {
-                    break;
+                    return item;
                 }
-                count++;
             }
-            count = encontrado == null ? -1 : count;
-            return count;
+            return -1;
         }
 
         public static void Hunting()
         {
-            while (true)
+            try
             {
-                ExecutaWaypoint();
+                while (true)
+                {
+                    ExecutaWaypoint();
+                }
+            }catch(ThreadAbortException ex)
+            {
+
             }
         }
-        public static bool Node(Coordenada coordenada, Range range)
+        public static bool Node(Coordenada coordenadaFinal, Range range)
         {
             var andar = PegaAndarDoMap();
             if (andar == -1)
             {
                 throw new Exception("Não foi possivel encontrar o andar no cavebot");
             }
-            var coordenadasAtuais = PegaElementosDaTela.
-                                    PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar);
-            var EhcoodenadaFinal = (Math.Abs(coordenada.X - coordenadasAtuais.X) + 1
+            var coordenadasAtuais = PegaElementosDaTela.PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar, Global._ultimaCoordenadaDoPersonagem);
+            if (coordenadasAtuais == null)
+                return false;
+            Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
+            var EhcoodenadaFinal = (Math.Abs(coordenadaFinal.X - coordenadasAtuais.X) + 1
                                        <= range.X) &&
-                                       (Math.Abs(coordenada.Y - coordenadasAtuais.Y) + 1
+                                       (Math.Abs(coordenadaFinal.Y - coordenadasAtuais.Y) + 1
                                        <= range.Y);
-            if (!(EhcoodenadaFinal && andar == coordenada.Z))
+            if (!(EhcoodenadaFinal && coordenadasAtuais.Z == coordenadaFinal.Z))
             {
                 var click = new Point()
                 {
-                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenada.X - coordenadasAtuais.X) - 8,
-                    Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenada.Y - coordenadasAtuais.Y) - 31,
+                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X) - 8,
+                    Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y) - 31,
                 };
                 ClickEvent.Click(Global._tibiaProcessName, click, Enum.MouseEvent.Left);
                 return false;
@@ -136,7 +146,7 @@ namespace BotTibia.Actions.Cavebot
                 throw new Exception("Não foi possivel encontrar o andar no cavebot");
             }
             var coordenadasAtuais = PegaElementosDaTela.
-                                    PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar);
+                                    PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar, Global._ultimaCoordenadaDoPersonagem);
             var EhcoodenadaFinal = (coordenada.X == coordenadasAtuais.X) &&
                                     (coordenada.Y == coordenadasAtuais.Y);
             if (!(EhcoodenadaFinal && andar == coordenada.Z))

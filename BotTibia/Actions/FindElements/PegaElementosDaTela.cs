@@ -117,12 +117,12 @@ namespace BotTibia
             }
             return false;
         }
-        public static Point PegaCoordenadasDoPersonagem(string process, CoordenadasDeElementos coordenadas, int andar)
+        public static Coordenada PegaCoordenadasDoPersonagem(string process, CoordenadasDeElementos miniMap, int andar)
         {
             var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var _ahkEngine = AutoHotkeyEngine.Instance;
-            var retorno = _ahkEngine.ExecFunction("PegaCoordenadasDoPersonagemAhk", coordenadas.X.ToString(), coordenadas.Y.ToString(), coordenadas.Width.ToString(),
-                                                  coordenadas.Height.ToString(), Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
+            var retorno = _ahkEngine.ExecFunction("PegaCoordenadasDoPersonagemAhk", miniMap.X.ToString(), miniMap.Y.ToString(), miniMap.Width.ToString(),
+                                                  miniMap.Height.ToString(), Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
             var parametros = retorno.Split(',');
             _ahkEngine = null;
             if (parametros[0] == "1")
@@ -131,15 +131,44 @@ namespace BotTibia
                 var elementoY = -1;
                 int.TryParse(parametros[1], out elementoX);
                 int.TryParse(parametros[2], out elementoY);
-                return new Point()
+                return new Coordenada()
                 {
                     X = elementoX,
                     Y = elementoY,
+                    Z = andar
                 };
             }
             else
             {
-                return Point.Empty;
+                return null;
+            }
+        }
+        public static Coordenada PegaCoordenadasDoPersonagem(string process, CoordenadasDeElementos miniMap, int andar, Coordenada ultimaCoordenadaDoPersonagem)
+        {
+            var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
+            var _ahkEngine = AutoHotkeyEngine.Instance;
+            var retorno = _ahkEngine.ExecFunction("PegaCoordenadasDoPersonagemNoCaveBotAhk", miniMap.X.ToString(), miniMap.Y.ToString(), miniMap.Width.ToString(),
+                                                  miniMap.Height.ToString(),((ultimaCoordenadaDoPersonagem.X - 31744) - 163).ToString(), ((ultimaCoordenadaDoPersonagem.Y - 30976) - 166).ToString(),
+                                                  (miniMap.Width + 263).ToString(), (miniMap.Height + 266).ToString(),
+                                                  Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
+            var parametros = retorno.Split(',');
+            _ahkEngine = null;
+            if (parametros[0] == "1")
+            {
+                var elementoX = -1;
+                var elementoY = -1;
+                int.TryParse(parametros[1], out elementoX);
+                int.TryParse(parametros[2], out elementoY);
+                return new Coordenada()
+                {
+                    X = elementoX + (ultimaCoordenadaDoPersonagem.X - 31744 - 163),
+                    Y = elementoY + (ultimaCoordenadaDoPersonagem.Y - 30976 - 166),
+                    Z = andar
+                };
+            }
+            else
+            {
+                return null;
             }
         }
     }

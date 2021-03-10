@@ -5,6 +5,7 @@ using BotTibia.Actions.Print;
 using System.Diagnostics;
 using System.Linq;
 using BotTibia.Classes;
+using BotTibia.Actions.AHK;
 
 namespace BotTibia.Actions.Heal
 {
@@ -16,31 +17,23 @@ namespace BotTibia.Actions.Heal
             {
                 if (ehEk)
                 {
-                    var _ahkEngine = AutoHotkeyEngine.Instance;
-                    var script = "ControlSend,, {" + vida.LowHeal.Key + "}," + processName;
-                    _ahkEngine.ExecRaw(script);
-                    _ahkEngine.ExecRaw("Sleep 50");
-                    script = "ControlSend,, {" + vida.MediumHeal.Key + "}," + processName;
-                    _ahkEngine.ExecRaw(script);
+                    AhkFunctions.SendKey(vida.LowHeal.Key, processName);
+                    Thread.Sleep(50);
+                    AhkFunctions.SendKey(vida.MediumHeal.Key, processName);
                 }
                 else
                 {
-                    var _ahkEngine = AutoHotkeyEngine.Instance;
-                    var script = "ControlSend,, {" + vida.LowHeal.Key + "}," + processName;
-                    _ahkEngine.ExecRaw(script);
+                    AhkFunctions.SendKey(vida.LowHeal.Key, processName);
+
                 }
             }
             else if (tela.GetPixel(vida.MediumHeal.X, vida.MediumHeal.Y) != vida.pixel)
             {
-                var _ahkEngine = AutoHotkeyEngine.Instance;
-                var script = "ControlSend,, {" + vida.MediumHeal.Key + "}," + processName;
-                _ahkEngine.ExecRaw(script);
+                AhkFunctions.SendKey(vida.MediumHeal.Key, processName);
             }
             else if (tela.GetPixel(vida.HighHeal.X, vida.HighHeal.Y) != vida.pixel)
             {
-                var _ahkEngine = AutoHotkeyEngine.Instance;
-                var script = "ControlSend,, {" + vida.HighHeal.Key + "}," + processName;
-                _ahkEngine.ExecRaw(script);
+                AhkFunctions.SendKey(vida.HighHeal.Key, processName);
             }
         }
         public static void HealDeMana(Bitmap tela, ManaBar mana, VidaBar vida, string processName, bool ehEk)
@@ -50,9 +43,7 @@ namespace BotTibia.Actions.Heal
                 if (tela.GetPixel(vida.LowHeal.X, vida.LowHeal.Y) == vida.pixel) {
                     if (tela.GetPixel(mana.ManaHeal.X, mana.ManaHeal.Y) != mana.pixel)
                     {
-                        var _ahkEngine = AutoHotkeyEngine.Instance;
-                        var script = "ControlSend,, {" + mana.ManaHeal.Key + "}," + processName;
-                        _ahkEngine.ExecRaw(script);
+                        AhkFunctions.SendKey(mana.ManaHeal.Key, processName);
                     }
                 }
             }
@@ -60,9 +51,7 @@ namespace BotTibia.Actions.Heal
             {
                 if (tela.GetPixel(mana.ManaHeal.X, mana.ManaHeal.Y) != mana.pixel)
                 {
-                    var _ahkEngine = AutoHotkeyEngine.Instance;
-                    var script = "ControlSend,, {" + mana.ManaHeal.Key + "}," + processName;
-                    _ahkEngine.ExecRaw(script);
+                    AhkFunctions.SendKey(mana.ManaHeal.Key, processName);
                 }
             }
         }
@@ -71,9 +60,7 @@ namespace BotTibia.Actions.Heal
         {
             if (PegaElementosDaTela.PegaParalize(CapturaTela.CortaStatusBar(tela, status)))
             {
-                var _ahkEngine = AutoHotkeyEngine.Instance;
-                var script = "ControlSend,, {" + status.ParaKey + "}," + processName;
-                _ahkEngine.ExecRaw(script);
+                AhkFunctions.SendKey(status.ParaKey, processName);
             }
         }
 
