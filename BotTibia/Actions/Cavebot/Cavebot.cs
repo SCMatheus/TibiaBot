@@ -13,7 +13,7 @@ namespace BotTibia.Actions.Cavebot
 {
     public static class Cavebot
     {
-        private static List<Waypoint> Waypoints = new List<Waypoint>();
+        public static List<Waypoint> Waypoints = new List<Waypoint>();
         private static int Index = 0;
         public static void AddWaypoint(Waypoint waypoint)
         {
@@ -121,21 +121,25 @@ namespace BotTibia.Actions.Cavebot
             var coordenadasAtuais = PegaElementosDaTela.PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar, Global._ultimaCoordenadaDoPersonagem);
             if (coordenadasAtuais == null)
                 return false;
-            Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
             var EhcoodenadaFinal = (Math.Abs(coordenadaFinal.X - coordenadasAtuais.X) + 1
                                        <= range.X) &&
                                        (Math.Abs(coordenadaFinal.Y - coordenadasAtuais.Y) + 1
                                        <= range.Y);
             if (!(EhcoodenadaFinal && coordenadasAtuais.Z == coordenadaFinal.Z))
             {
-                var click = new Point()
+                if (Global._ultimaCoordenadaDoPersonagem.Equals(coordenadasAtuais))
                 {
-                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X) - 8,
-                    Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y) - 31,
-                };
-                ClickEvent.Click(Global._tibiaProcessName, click, Enum.MouseEvent.Left);
+                    var click = new Point()
+                    {
+                        X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X) - 8,
+                        Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y) - 31,
+                    };
+                    ClickEvent.Click(Global._tibiaProcessName, click, Enum.MouseEvent.Left);
+                }
+                Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
                 return false;
             }
+            Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
             return true;
         }
         public static bool Stand(Coordenada coordenada)

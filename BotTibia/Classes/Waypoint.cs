@@ -9,6 +9,7 @@ namespace BotTibia.Classes
     [Serializable()]
     public class Waypoint
     {
+        public int Index { get; set; }
         public string Type { get; set; }
         public string Label { get; set; }
         public Coordenada Coordenadas { get; set; }

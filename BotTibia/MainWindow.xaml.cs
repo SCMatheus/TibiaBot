@@ -17,6 +17,7 @@ using BotTibia.Persistencia;
 using System.Collections.Generic;
 using BotTibia.Actions.Cavebot;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace BotTibia
 {
@@ -503,6 +504,7 @@ namespace BotTibia
                 ManaHeal = new Heal() { Percent = ManaHealPercent.Text, Hotkey = ManaHealHotkey.Text },
                 ParaHeal = ParalizeHealHotkey.Text,
                 Firetimer = int.Parse(FireTimer.Text),
+                Waypoints = Cavebot.Waypoints
             };
             // Create a new XmlSerializer instance with the type of the test class
             XmlSerializer SerializerObj = new XmlSerializer(typeof(ConfigScripts));
@@ -546,6 +548,9 @@ namespace BotTibia
             ParalizeHealHotkey.Text = LoadedConfigs.ParaHeal;
             //Firetimer
             FireTimer.Text = LoadedConfigs.Firetimer.ToString();
+            //Cavebot
+            Cavebot.Waypoints = LoadedConfigs.Waypoints;
+            listView.ItemsSource = Cavebot.Waypoints;
 
             AtualizaVariaveisGlobais();
         }
@@ -570,74 +575,12 @@ namespace BotTibia
                 Global._ultimaCoordenadaDoPersonagem = PegaElementosDaTela
                                                        .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
                                                                                     Global._miniMap, andar);
-                Cavebot.AddWaypoint(new Waypoint()
+                if(Global._ultimaCoordenadaDoPersonagem == null)
                 {
-                    Type = "Node",
-                    Action = "",
-                    Coordenadas = new Coordenada()
-                    {
-                        X = 32369,
-                        Y = 32240,
-                        Z = 7,
-                    },
-                    Label = "",
-                    Range = new Range()
-                    {
-                        X = 2,
-                        Y = 2
-                    },
-                });
-                Cavebot.AddWaypoint(new Waypoint()
-                {
-                    Type = "Node",
-                    Action = "",
-                    Coordenadas = new Coordenada()
-                    {
-                        X = 32369,
-                        Y = 32199,
-                        Z = 7,
-                    },
-                    Label = "",
-                    Range = new Range()
-                    {
-                        X = 2,
-                        Y = 2
-                    },
-                });
-                Cavebot.AddWaypoint(new Waypoint()
-                {
-                    Type = "Node",
-                    Action = "",
-                    Coordenadas = new Coordenada()
-                    {
-                        X = 32399,
-                        Y = 32159,
-                        Z = 7,
-                    },
-                    Label = "",
-                    Range = new Range()
-                    {
-                        X = 2,
-                        Y = 2
-                    },
-                });
-                Cavebot.AddWaypoint(new Waypoint()
-                {
-                    Type = "Node",
-                    Action = "",
-                    Coordenadas = new Coordenada()
-                    {
-                        X = 32369,
-                        Y = 32199,
-                        Z = 7,
-                    },
-                    Label = "",
-                    Range = new Range()
-                    {
-                        X = 2,
-                        Y = 2
-                    },
-                });
+                    MessageBox.Show("Não foi possível encontrar as coordenadas do personagem");
+                    CavebotCheckBox.IsChecked = false;
+                    return;
+                }
                 Global._threadCavebot = new Thread(() => Cavebot.Hunting());
                 Global._threadCavebot.Start();
             }
@@ -651,15 +594,111 @@ namespace BotTibia
         {
             try
             {
-                Global._threadCavebot.Interrupt();
-                Global._threadCavebot.Abort();
-                Global._threadCavebot.Join();
+                if (Global._threadCavebot != null && Global._threadCavebot.IsAlive)
+                {
+                    Global._threadCavebot.Interrupt();
+                    Global._threadCavebot.Abort();
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
 
+        }
+        #region number input validate
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void SetaValorDoRange(System.Windows.Controls.TextBox textBox)
+        {
+            if (textBox.Text == "")
+            {
+                return;
+            }
+            else
+            {
+
+                int resultado;
+                if (int.TryParse(textBox.Text, out resultado))
+                {
+                    if (!(resultado >= 0 && resultado < 10))
+                    {
+                        textBox.Text = "";
+                        throw new Exception("Por favor digite um valor valido! \n" +
+                                                "O valor deve ser um numero entre 0 e 9!");
+                    }
+                }
+                else
+                {
+                    textBox.Text = "";
+                    throw new Exception("Por favor digite um valor valido! \n" +
+                                            "O valor deve ser um numero entre 0 e 9!");
+                }
+            }
+        }
+
+        private void SetaRangeX(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            try
+            {
+                SetaValorDoRange(textBoxRange1);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SetaRangeY(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            try
+            {
+                SetaValorDoRange(textBoxRange2);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
+
+        private void ButtonNode_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var andar = Cavebot.PegaAndarDoMap();
+                var coordenada = PegaElementosDaTela
+                                       .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
+                                                                    Global._miniMap, andar);
+                if(coordenada == null)
+                {
+                    MessageBox.Show("Não foi possível encontrar a coordenada do personagem");
+                    return;
+                }
+                var waypoint = new Waypoint()
+                {
+                    Index = Cavebot.Waypoints.Count() + 1,
+                    Type = "Node",
+                    Coordenadas = coordenada,
+                    Range = new Range()
+                    {
+                        X = int.Parse(textBoxRange1.Text),
+                        Y = int.Parse(textBoxRange1.Text)
+                    },
+                    Action = "",
+                    Label = ""
+                };
+                Cavebot.AddWaypoint(waypoint);
+                listView.Items.Add(waypoint);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

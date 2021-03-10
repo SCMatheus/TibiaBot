@@ -73,9 +73,9 @@
                     <Label x:Name="Percent_Copy" Content="Percent." HorizontalAlignment="Left" Margin="424,262,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="52" Grid.RowSpan="2"/>
                     <Label x:Name="LabelManaHealPercent" Content="%" HorizontalAlignment="Left" Margin="399,293,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20" Grid.Column="2"/>
                     <Label x:Name="label1" Content="Mana:" HorizontalAlignment="Left" Margin="357,233,0,0" Foreground="#FF000000" Grid.RowSpan="2" VerticalAlignment="Top" Height="23" Width="42" Grid.Column="2"/>
-                    <Label x:Name="PrimeiroHeal" Content="Primeiro:" Margin="273,123,101,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
-                    <Label x:Name="SegundoHeal" Content="Segundo:" Margin="272,154,100,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
-                    <Label x:Name="TerceiroHeal" Content="Terceiro:" Margin="272,185,105,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
+                    <Label x:Name="PrimeiroHeal" Content="Primeiro:" Margin="273,123,423,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
+                    <Label x:Name="SegundoHeal" Content="Segundo:" Margin="272,154,426,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
+                    <Label x:Name="TerceiroHeal" Content="Terceiro:" Margin="272,185,432,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
                     <Label x:Name="Potion" Content="Potion:" Margin="280,291,108,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
                     <Label x:Name="label2" Content="Paralize:" HorizontalAlignment="Left" Margin="354,372,0,0" Grid.RowSpan="2" Foreground="#FF000000" VerticalAlignment="Top" Height="26" Width="53" Grid.Column="2"/>
                     <Label x:Name="Hotkey_Copy1" Content="Hotkey:" HorizontalAlignment="Left" Margin="326,405,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="51" Grid.RowSpan="2"/>
@@ -89,30 +89,35 @@
             </TabItem>
             <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="32,-2,-60,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Margin="-5,10,9,0" VerticalAlignment="Top" Height="535" Background="#FFDADADA">
-                    <ListView x:Name="listView" Margin="13,34,134,12">
+                    <ListView x:Name="listView" Margin="13,34,134,12" ItemsSource="{Binding Waypoint}" >
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Id" Width="40" />
-                                <GridViewColumn Header="Type" Width="70" />
-                                <GridViewColumn Header="Label" Width="100" />
-                                <GridViewColumn Header="Coordenada" Width="150" />
-                                <GridViewColumn Header="Range" Width="50" />
-                                <GridViewColumn Header="Action" Width="200" />
+                                <GridViewColumn Header="Id" Width="40" DisplayMemberBinding="{Binding Index}" />
+                                <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Type}"  />
+                                <GridViewColumn Header="Label" Width="100" DisplayMemberBinding="{Binding Label}" />
+                                <GridViewColumn Header="Coordenada" Width="150" DisplayMemberBinding="{Binding Coordenadas}" />
+                                <GridViewColumn Header="Range" Width="50" DisplayMemberBinding="{Binding Range}" />
+                                <GridViewColumn Header="Action" Width="200" DisplayMemberBinding="{Binding Action}" />
                             </GridView>
                         </ListView.View>
                     </ListView>
 
                     <CheckBox x:Name="CavebotCheckBox" Checked="AtivarCaveBot" Unchecked="DesativarCaveBot" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="13,9,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
                     <Label x:Name="CaveBotLabel" Content="CAVEBOT" HorizontalAlignment="Left" Margin="252,4,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="88"/>
-                    <Grid Margin="397,94,17,235" VerticalAlignment="Center">
+                    <Grid Margin="630,94,17,235" VerticalAlignment="Center">
 
-                        <Button x:Name="ButtonNode" Content="Node" HorizontalAlignment="Left" VerticalAlignment="Top" Width="113" Height="25" RenderTransformOrigin="0.5,0.5" Margin="246,26,-11,0"/>
-                        <Button x:Name="ButtonStand" Content="Stand" HorizontalAlignment="Left" Margin="246,56,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonWalk" Content="Walk" HorizontalAlignment="Left" Margin="246,86,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonUse" Content="Use" HorizontalAlignment="Left" Margin="246,116,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonUseItem" Content="UseItem" HorizontalAlignment="Left" Margin="246,146,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonLabel" Content="Label" HorizontalAlignment="Left" Margin="246,176,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonAction" Content="Action" HorizontalAlignment="Left" Margin="246,206,-11,-26" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonNode" Content="Node" VerticalAlignment="Top" Margin="10,26,-9,0" Click="ButtonNode_Click" Width="113" Height="25"/>
+                        <Button x:Name="ButtonStand" Content="Stand" HorizontalAlignment="Left" Margin="10,56,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonWalk" Content="Walk" HorizontalAlignment="Left" Margin="10,86,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonUse" Content="Use" HorizontalAlignment="Left" Margin="10,116,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonUseItem" Content="UseItem" HorizontalAlignment="Left" Margin="10,146,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonLabel" Content="Label" HorizontalAlignment="Left" Margin="10,176,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonAction" Content="Action" HorizontalAlignment="Left" Margin="10,206,-11,-26" VerticalAlignment="Top" Width="113" Height="25"/>
                     </Grid>
                     <RadioButton x:Name="radioButtonNW" Content="NW" HorizontalAlignment="Left" Margin="640,335,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" Width="41"/>
                     <RadioButton x:Name="radioButtonN" Content="N" HorizontalAlignment="Left" Margin="688,335,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" />
@@ -123,6 +128,10 @@
                     <RadioButton x:Name="radioButtonSW" Content="SW" HorizontalAlignment="Left" Margin="640,377,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  Width="41"/>
                     <RadioButton x:Name="radioButtonS" Content="S" HorizontalAlignment="Left" Margin="688,377,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" />
                     <RadioButton x:Name="radioButtonSE" Content="SE" HorizontalAlignment="Left" Margin="727,378,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  RenderTransformOrigin="0.33,0.561"/>
+                    <TextBox x:Name="textBoxRange1" HorizontalAlignment="Left" Height="23" Margin="664,82,0,0" TextWrapping="Wrap" Text="2" TextAlignment="Center" VerticalAlignment="Top" Width="25" RenderTransformOrigin="0.59,0.934" PreviewTextInput="NumberValidationTextBox" TextChanged="SetaRangeX" />
+                    <TextBox x:Name="textBoxRange2" HorizontalAlignment="Left" Height="23" Margin="707,81,0,0" TextWrapping="Wrap" Text="2" TextAlignment="Center" VerticalAlignment="Top" Width="25" RenderTransformOrigin="0.214,-0.148" PreviewTextInput="NumberValidationTextBox" TextChanged="SetaRangeY"/>
+                    <Label x:Name="labelXRange" Content="X" HorizontalAlignment="Left" Margin="689,80,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.546,0.29"/>
+                    <Label x:Name="labelRange" Content="Range:" HorizontalAlignment="Left" Margin="676,56,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.546,0.29"/>
 
                 </Grid>
             </TabItem>
