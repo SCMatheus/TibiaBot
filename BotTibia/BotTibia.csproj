@@ -117,6 +117,7 @@
     <Compile Include="Classes\VidaBar.cs" />
     <Compile Include="Classes\CoordenadasXeY.cs" />
     <Compile Include="Classes\Waypoint.cs" />
+    <Compile Include="Enum\EnumLabel.cs" />
     <Compile Include="Enum\EnumDirecao.cs" />
     <Compile Include="Enum\EnumWaypoints.cs" />
     <Compile Include="Enum\EnumMouseEvent.cs" />

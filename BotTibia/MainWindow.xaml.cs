@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using BotTibia.Enum;
 using Point = System.Drawing.Point;
 using ListViewItem = System.Windows.Controls.ListViewItem;
+using System.Windows.Controls;
 
 namespace BotTibia
 {
@@ -576,7 +577,7 @@ namespace BotTibia
             FireTimer.Text = LoadedConfigs.Firetimer.ToString();
             //Cavebot
             Cavebot.Waypoints = LoadedConfigs.Waypoints;
-            listView.ItemsSource = Cavebot.Waypoints;
+            GridView.ItemsSource = Cavebot.Waypoints;
 
             AtualizaVariaveisGlobais();
         }
@@ -611,7 +612,7 @@ namespace BotTibia
                 {
                     Hunting();
                 });
-                listView.IsEnabled = false;
+                GridView.IsEnabled = false;
                 Global._threadCavebot.Start();
             }
             catch (Exception ex)
@@ -626,7 +627,7 @@ namespace BotTibia
             {
                 if (Global._threadCavebot != null && Global._threadCavebot.IsAlive)
                 {
-                    listView.IsEnabled = true;
+                    GridView.IsEnabled = true;
                     Global._threadCavebot.Interrupt();
                     Global._threadCavebot.Abort();
                 }
@@ -644,8 +645,8 @@ namespace BotTibia
             {
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    if(listView.HasItems)
-                        ((ListViewItem)listView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
+                    if(GridView.HasItems)
+                        ((ListViewItem)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
                 }));
                 Cavebot.ExecutaWaypoint();
             }
@@ -717,17 +718,17 @@ namespace BotTibia
             {
                 var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Node
                                             , new Range(int.Parse(textBoxRange1.Text), 
-                                            int.Parse(textBoxRange1.Text)), "", "");
+                                            int.Parse(textBoxRange1.Text)), "", EnumLabel.Empty);
                 Cavebot.AddWaypoint(waypoint);
-                listView.ItemsSource = null;
-                listView.ItemsSource = Cavebot.Waypoints;
+                GridView.ItemsSource = null;
+                GridView.ItemsSource = Cavebot.Waypoints;
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-        private Waypoint CriaWaypoint(int index, EnumWaypoints type, Range range, string action, string label)
+        private Waypoint CriaWaypoint(int index, EnumWaypoints type, Range range, string action, EnumLabel label)
         {
             var andar = Cavebot.PegaAndarDoMap();
             var coordenada = PegaElementosDaTela
@@ -760,10 +761,10 @@ namespace BotTibia
         {
             try
             {
-                var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Stand, new Range(1, 1), "", "");
+                var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Stand, new Range(1, 1), "", EnumLabel.Empty);
                 Cavebot.AddWaypoint(waypoint);
-                listView.ItemsSource = null;
-                listView.ItemsSource = Cavebot.Waypoints;
+                GridView.ItemsSource = null;
+                GridView.ItemsSource = Cavebot.Waypoints;
             }
             catch (Exception ex)
             {
@@ -813,25 +814,26 @@ namespace BotTibia
         }
         #endregion
         #region ListView Waypoints
-        private void ListViewItem_MouseDoubleClickEvent(object sender, MouseButtonEventArgs e)
+        private void DataGridItem_MouseClickEvent(object sender, MouseButtonEventArgs e)
         {
-            Cavebot.Index = ((Waypoint)((ListViewItem)sender).Content).Index - 1;
+            Cavebot.Index = ((Waypoint)((DataGridRow)sender).Item).Index - 1;
+            ((DataGridRow)sender).IsSelected = true;
         }
 
         private void DeletaWaypoint(object sender, RoutedEventArgs e)
         {
             try {
 
-                var num = listView.SelectedIndex;
-                listView.ItemsSource = null;
+                var num = GridView.SelectedIndex;
+                GridView.ItemsSource = null;
                 if (Cavebot.Waypoints.Count != 0 && num >= 0)
                 {
-                    this.listView.Items.Clear();
+                    this.GridView.Items.Clear();
                     Cavebot.Waypoints.RemoveAt(num);
                     Cavebot.AtualizaIndex();
                     if (Cavebot.Waypoints.Count > 0)
                     {//Delete the selected line of the listview
-                        listView.ItemsSource = Cavebot.Waypoints;
+                        GridView.ItemsSource = Cavebot.Waypoints;
                     }
                 }
             }
@@ -845,9 +847,9 @@ namespace BotTibia
         {
             try
             {
-                listView.ItemsSource = null;
+                GridView.ItemsSource = null;
                 Cavebot.Waypoints.Clear();
-                this.listView.Items.Clear();
+                this.GridView.Items.Clear();
             }
             catch(Exception ex)
             {

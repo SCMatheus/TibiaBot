@@ -12,7 +12,7 @@ namespace BotTibia.Classes
     {
         public int Index { get; set; }
         public EnumWaypoints Type { get; set; }
-        public string Label { get; set; }
+        public EnumLabel Label { get; set; }
         public Coordenada Coordenada { get; set; }
         public Range Range { get; set; }
         public string Action { get; set; }
