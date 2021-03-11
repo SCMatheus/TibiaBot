@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BotTibia"
         mc:Ignorable="d"
         Title="MatthewBot" Height="630" Width="800" MinWidth="800" MinHeight="630" MaxWidth="800" MaxHeight="630" Foreground="{x:Null}" Background="{x:Null}" Icon="favicon-32x32.png">
     <Grid x:Name="Main" Background="#FFDADADA" Margin="1,-2,0,0" VerticalAlignment="Top" Height="600">
@@ -89,18 +88,25 @@
             </TabItem>
             <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="32,-2,-60,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Margin="-5,10,9,0" VerticalAlignment="Top" Height="535" Background="#FFDADADA">
-                    <ListView x:Name="listView" Margin="13,34,134,12" ItemsSource="{Binding Waypoint}" >
+                    <ListView x:Name="listView" Margin="13,34,134,12" ItemsSource="{Binding Waypoint}" SelectionMode="Single" >
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_MouseDoubleClickEvent" />
                             </Style>
                         </ListView.ItemContainerStyle>
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Click="DeletaWaypoint"/>
+                                <MenuItem Header="Clear" Click="LimpaListaDeWaypoints"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Id" Width="40" DisplayMemberBinding="{Binding Index}" />
                                 <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Type}"  />
                                 <GridViewColumn Header="Label" Width="100" DisplayMemberBinding="{Binding Label}" />
-                                <GridViewColumn Header="Coordenada" Width="150" DisplayMemberBinding="{Binding Coordenadas}" />
+                                <GridViewColumn Header="Coordenada" Width="150" DisplayMemberBinding="{Binding Coordenada}" />
                                 <GridViewColumn Header="Range" Width="50" DisplayMemberBinding="{Binding Range}" />
                                 <GridViewColumn Header="Action" Width="200" DisplayMemberBinding="{Binding Action}" />
                             </GridView>
@@ -111,9 +117,9 @@
                     <Label x:Name="CaveBotLabel" Content="CAVEBOT" HorizontalAlignment="Left" Margin="252,4,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="88"/>
                     <Grid Margin="630,94,17,235" VerticalAlignment="Center">
 
-                        <Button x:Name="ButtonNode" Content="Node" VerticalAlignment="Top" Margin="10,26,-9,0" Click="ButtonNode_Click" Width="113" Height="25"/>
-                        <Button x:Name="ButtonStand" Content="Stand" HorizontalAlignment="Left" Margin="10,56,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonWalk" Content="Walk" HorizontalAlignment="Left" Margin="10,86,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonNode" Content="Node" VerticalAlignment="Top" Margin="10,56,-9,0" Click="ButtonNode_Click" Width="113" Height="25"/>
+                        <Button x:Name="ButtonStand" Content="Stand" HorizontalAlignment="Left" Margin="10,26,-8,0" Click="ButtonStand_Click" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonSay" Content="Say" HorizontalAlignment="Left" Margin="10,86,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
                         <Button x:Name="ButtonUse" Content="Use" HorizontalAlignment="Left" Margin="10,116,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
                         <Button x:Name="ButtonUseItem" Content="UseItem" HorizontalAlignment="Left" Margin="10,146,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
                         <Button x:Name="ButtonLabel" Content="Label" HorizontalAlignment="Left" Margin="10,176,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>

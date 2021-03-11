@@ -23,17 +23,17 @@ namespace BotTibia.Actions.Events
 
         public static IntPtr MakeLParam(int x, int y) => (IntPtr)((y << 16) | (x & 0xFFFF));
 
-        public static void Click(string process, Point point, MouseEvent evento)
+        public static void Click(string process, Point point, EnumMouseEvent evento)
         {
             var hwnd = Process.GetProcesses().ToList().FirstOrDefault(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var pointPtr = MakeLParam(point.X, point.Y);
             SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, pointPtr);
-            if (MouseEvent.Left == evento)
+            if (EnumMouseEvent.Left == evento)
             {
                 SendMessage(hwnd, WM_LBUTTONDOWN, IntPtr.Zero, pointPtr);
                 SendMessage(hwnd, WM_LBUTTONUP, IntPtr.Zero, pointPtr);
             }
-            else if (MouseEvent.Right == evento)
+            else if (EnumMouseEvent.Right == evento)
             {
                 SendMessage(hwnd, WM_RBUTTONDOWN, IntPtr.Zero, pointPtr);
                 SendMessage(hwnd, WM_RBUTTONUP, IntPtr.Zero, pointPtr);

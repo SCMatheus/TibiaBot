@@ -18,6 +18,9 @@ using System.Collections.Generic;
 using BotTibia.Actions.Cavebot;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using BotTibia.Enum;
+using Point = System.Drawing.Point;
+using ListViewItem = System.Windows.Controls.ListViewItem;
 
 namespace BotTibia
 {
@@ -46,11 +49,14 @@ namespace BotTibia
         #region Configuracao na selecao de personagem
         private void ConfigureBot(IProgress<int> progress)
         {
-            CavebotCheckBox.IsEnabled = false;
-            HealcheckBox.IsEnabled = false;
-            ParalizecheckBox.IsEnabled = false;
-            //inicialização dos dados
-            AtualizaVariaveisGlobais();
+            Dispatcher.Invoke((Action)(() =>
+            {
+                CavebotCheckBox.IsEnabled = false;
+                HealcheckBox.IsEnabled = false;
+                ParalizecheckBox.IsEnabled = false;
+                //inicialização dos dados
+                AtualizaVariaveisGlobais();
+            }));
 
             Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
             Global._tela.X = 0;
@@ -75,8 +81,11 @@ namespace BotTibia
             }
             if (Global._andarDoMap == null)
                 throw new Exception("Não foi possivel identificar a barra dos andares do personagem.");
-
-            progress.Report(10);
+            Dispatcher.Invoke((Action)(() =>
+            {
+                progress.Report(10);
+            }));
+            
             //Captura dados da Character Window
             var count = 0;
             Global._mainWindow = null;
@@ -98,7 +107,10 @@ namespace BotTibia
             if (Global._miniMap == null)
                 throw new Exception("Não foi possivel identificar o Mini Map do personagem.");
 
-            progress.Report(30);
+            Dispatcher.Invoke((Action)(() =>
+            {
+                progress.Report(30);
+            }));
 
             Global._miniMap.X += 3;
             Global._miniMap.Y += 3;
@@ -111,11 +123,14 @@ namespace BotTibia
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
 
-            progress.Report(50);
-            Global._vida.SetCoordenadasPorImagemDoCoracao(coordenadasCoracao);
-            Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text),
-                                                int.Parse(SegundoHealPercent.Text),
-                                                    int.Parse(PrimeiroHealPercent.Text));
+            Dispatcher.Invoke((Action)(() =>
+            {
+                progress.Report(50);
+                Global._vida.SetCoordenadasPorImagemDoCoracao(coordenadasCoracao);
+                Global._vida.CalculaPixelsDoHeal(int.Parse(TerceiroHealPercent.Text),
+                                                    int.Parse(SegundoHealPercent.Text),
+                                                        int.Parse(PrimeiroHealPercent.Text));
+            }));
 
             //Captura Dados da mana
             var coordenadasRaio = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
@@ -123,9 +138,15 @@ namespace BotTibia
                                                                                                 Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
-            progress.Report(70);
+            Dispatcher.Invoke((Action)(() =>
+            {
+                progress.Report(70);
+            }));
             Global._mana.SetCoordenadasPorImagemDoRaio(coordenadasRaio);
-            Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
+            Dispatcher.Invoke((Action)(() =>
+            {
+                Global._mana.CalculaPixelsDoHeal(int.Parse(ManaHealPercent.Text));
+            }));
 
             //Captura Dados da paralize
             var coordenadasStatusBar = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
@@ -133,14 +154,20 @@ namespace BotTibia
                                                             Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar.png");
             if (coordenadasStatusBar == null)
                 throw new Exception("Não foi possivel identificar a status bar do personagem.");
-            progress.Report(90);
+            Dispatcher.Invoke((Action)(() =>
+            {
+                progress.Report(90);
+            }));
             Global._status.Coordenadas = coordenadasStatusBar;
 
+            Dispatcher.Invoke((Action)(() =>
+            {
+                CavebotCheckBox.IsEnabled = true;
+                HealcheckBox.IsEnabled = true;
+                ParalizecheckBox.IsEnabled = true;
 
-            CavebotCheckBox.IsEnabled = true;
-            HealcheckBox.IsEnabled = true;
-            ParalizecheckBox.IsEnabled = true;
-            progress.Report(100);
+                progress.Report(100);
+            }));
             //MessageBox.Show("Bot inciado com sucesso!");
 
         }
@@ -406,10 +433,9 @@ namespace BotTibia
                     });
 
                     await Task.Run(() => {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
+
                             ConfigureBot(progress);
-                        }));
+                        
                     });
                     LabelCalibrado.Content = "Calibrado!";
                 }
@@ -566,7 +592,7 @@ namespace BotTibia
             Global._fireTimer = int.Parse(FireTimer.Text);
         }
         #endregion
-
+        #region Cavebot
         private void AtivarCaveBot(object sender, RoutedEventArgs e)
         {
             try
@@ -575,13 +601,17 @@ namespace BotTibia
                 Global._ultimaCoordenadaDoPersonagem = PegaElementosDaTela
                                                        .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
                                                                                     Global._miniMap, andar);
-                if(Global._ultimaCoordenadaDoPersonagem == null)
+                if(Global._ultimaCoordenadaDoPersonagem == null || !(Cavebot.Waypoints.Count > 0))
                 {
-                    MessageBox.Show("Não foi possível encontrar as coordenadas do personagem");
+                    MessageBox.Show("Não foi possível ativar o cavebot!");
                     CavebotCheckBox.IsChecked = false;
                     return;
                 }
-                Global._threadCavebot = new Thread(() => Cavebot.Hunting());
+                Global._threadCavebot = new Thread(() =>
+                {
+                    Hunting();
+                });
+                listView.IsEnabled = false;
                 Global._threadCavebot.Start();
             }
             catch (Exception ex)
@@ -596,6 +626,7 @@ namespace BotTibia
             {
                 if (Global._threadCavebot != null && Global._threadCavebot.IsAlive)
                 {
+                    listView.IsEnabled = true;
                     Global._threadCavebot.Interrupt();
                     Global._threadCavebot.Abort();
                 }
@@ -606,6 +637,20 @@ namespace BotTibia
             }
 
         }
+
+        private void Hunting()
+        {
+            while (true)
+            {
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    if(listView.HasItems)
+                        ((ListViewItem)listView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
+                }));
+                Cavebot.ExecutaWaypoint();
+            }
+        }
+        #endregion
         #region number input validate
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
@@ -665,40 +710,151 @@ namespace BotTibia
         }
 
         #endregion
-
+        #region Button Waypoints
         private void ButtonNode_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var andar = Cavebot.PegaAndarDoMap();
-                var coordenada = PegaElementosDaTela
-                                       .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
-                                                                    Global._miniMap, andar);
-                if(coordenada == null)
-                {
-                    MessageBox.Show("Não foi possível encontrar a coordenada do personagem");
-                    return;
-                }
-                var waypoint = new Waypoint()
-                {
-                    Index = Cavebot.Waypoints.Count() + 1,
-                    Type = "Node",
-                    Coordenadas = coordenada,
-                    Range = new Range()
-                    {
-                        X = int.Parse(textBoxRange1.Text),
-                        Y = int.Parse(textBoxRange1.Text)
-                    },
-                    Action = "",
-                    Label = ""
-                };
+                var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Node
+                                            , new Range(int.Parse(textBoxRange1.Text), 
+                                            int.Parse(textBoxRange1.Text)), "", "");
                 Cavebot.AddWaypoint(waypoint);
-                listView.Items.Add(waypoint);
+                listView.ItemsSource = null;
+                listView.ItemsSource = Cavebot.Waypoints;
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
+        private Waypoint CriaWaypoint(int index, EnumWaypoints type, Range range, string action, string label)
+        {
+            var andar = Cavebot.PegaAndarDoMap();
+            var coordenada = PegaElementosDaTela
+                                   .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
+                                                                Global._miniMap, andar);
+            if (coordenada == null)
+            {
+               throw new Exception("Não foi possível encontrar a coordenada do personagem");
+
+            }
+            var direcao = DirecaoDoWaypoint();
+            var waypoint = new Waypoint()
+            {
+                Index = index,
+                Type = type,
+                Coordenada = new Coordenada()
+                {
+                    X = coordenada.X + direcao.X,
+                    Y = coordenada.Y + direcao.Y,
+                    Z = coordenada.Z
+                },
+                Range = range,
+                Action = action,
+                Label = label
+            };
+            radioButtonC.IsChecked = true;
+            return waypoint;
+        }
+        private void ButtonStand_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Stand, new Range(1, 1), "", "");
+                Cavebot.AddWaypoint(waypoint);
+                listView.ItemsSource = null;
+                listView.ItemsSource = Cavebot.Waypoints;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
+        #region Direção do waypoint
+        private Point DirecaoDoWaypoint()
+        {
+            if (radioButtonC.IsChecked == true)
+            {
+                return new Point(0,0);
+            }else if (radioButtonNW.IsChecked == true)
+            {
+                return new Point(-1, -1);
+            }
+            else if (radioButtonN.IsChecked == true)
+            {
+                return new Point(0, -1);
+            }
+            else if (radioButtonNE.IsChecked == true)
+            {
+                return new Point(1, -1);
+            }
+            else if (radioButtonW.IsChecked == true)
+            {
+                return new Point(-1, 0);
+            }
+            else if (radioButtonE.IsChecked == true)
+            {
+                return new Point(1, 0);
+            }
+            else if (radioButtonSW.IsChecked == true)
+            {
+                return new Point(-1, 1);
+            }
+            else if (radioButtonS.IsChecked == true)
+            {
+                return new Point(0, 1);
+            }
+            else if (radioButtonSE.IsChecked == true)
+            {
+                return new Point(1, 1);
+            }
+            return new Point(0,0);
+        }
+        #endregion
+        #region ListView Waypoints
+        private void ListViewItem_MouseDoubleClickEvent(object sender, MouseButtonEventArgs e)
+        {
+            Cavebot.Index = ((Waypoint)((ListViewItem)sender).Content).Index - 1;
+        }
+
+        private void DeletaWaypoint(object sender, RoutedEventArgs e)
+        {
+            try {
+
+                var num = listView.SelectedIndex;
+                listView.ItemsSource = null;
+                if (Cavebot.Waypoints.Count != 0 && num >= 0)
+                {
+                    this.listView.Items.Clear();
+                    Cavebot.Waypoints.RemoveAt(num);
+                    Cavebot.AtualizaIndex();
+                    if (Cavebot.Waypoints.Count > 0)
+                    {//Delete the selected line of the listview
+                        listView.ItemsSource = Cavebot.Waypoints;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+}
+
+        private void LimpaListaDeWaypoints(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                listView.ItemsSource = null;
+                Cavebot.Waypoints.Clear();
+                this.listView.Items.Clear();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

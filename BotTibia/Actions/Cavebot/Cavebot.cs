@@ -5,75 +5,132 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using BotTibia.Actions.Events;
 using BotTibia.Actions.Print;
 using BotTibia.Classes;
+using BotTibia.Enum;
 
 namespace BotTibia.Actions.Cavebot
 {
     public static class Cavebot
     {
         public static List<Waypoint> Waypoints = new List<Waypoint>();
-        private static int Index = 0;
+        public static int Index = 0;
+        public static void AtualizaIndex()
+        {
+            var count = 1;
+            Waypoints.ForEach(x => {
+                x.Index = count;
+                count++;
+                });
+        }
         public static void AddWaypoint(Waypoint waypoint)
         {
             Waypoints.Add(waypoint);
         }
         public static void ExecutaWaypoint()
         {
-            if (!(Waypoints.Count() > Index))
-                Index = 0;
             var waypoint = Waypoints.ElementAt(Index);
             bool chegou;
             switch (waypoint.Type)
             {
-                case "Node":
-                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
+                case EnumWaypoints.Node:
+                    chegou = Node(waypoint.Coordenada, waypoint.Range);
                     if (chegou)
                     {
-                        Index++;
+                        if (Index >= Waypoints.Count() - 1)
+                        {
+                            Index = 0;
+                        }
+                        else
+                        {
+                            Index++;
+                        }
                     }
                     break;
-                case "Stand":
-                    chegou = Stand(waypoint.Coordenadas);
+                case EnumWaypoints.Stand:
+                    chegou = Stand(waypoint.Coordenada);
                     if (chegou)
                     {
-                        Index++;
+                        if (Index >= Waypoints.Count() - 1)
+                        {
+                            Index = 0;
+                        }
+                        else
+                        {
+                            Index++;
+                        }
                     }
                     break;
-                case "Walk":
-                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
+                case EnumWaypoints.Say:
+                    chegou = Node(waypoint.Coordenada, waypoint.Range);
                     if (chegou)
                     {
-                        Index++;
+                        if (!(Waypoints.Count() > Index))
+                        {
+                            Index = 0;
+                        }
+                        else
+                        {
+                            Index++;
+                        }
                     }
                     break;
-                case "Use":
-                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
+                case EnumWaypoints.Use:
+                    chegou = Node(waypoint.Coordenada, waypoint.Range);
                     if (chegou)
                     {
-                        Index++;
+                        if (!(Waypoints.Count() > Index))
+                        {
+                            Index = 0;
+                        }
+                        else
+                        {
+                            Index++;
+                        }
                     }
                     break;
-                case "UseItem":
-                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
+                case EnumWaypoints.UseItem:
+                    chegou = Node(waypoint.Coordenada, waypoint.Range);
                     if (chegou)
                     {
-                        Index++;
+                        if (!(Waypoints.Count() > Index))
+                        {
+                            Index = 0;
+                        }
+                        else
+                        {
+                            Index++;
+                        }
                     }
                     break;
-                case "CheckPos":
-                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
+                case EnumWaypoints.UseSelf:
+                    chegou = Node(waypoint.Coordenada, waypoint.Range);
                     if (chegou)
                     {
-                        Index++;
+                        if (!(Waypoints.Count() > Index))
+                        {
+                            Index = 0;
+                        }
+                        else
+                        {
+                            Index++;
+                        }
                     }
                     break;
-                case "CheckSupply":
-                    chegou = Node(waypoint.Coordenadas, waypoint.Range);
+                case EnumWaypoints.Action:
+                    chegou = Node(waypoint.Coordenada, waypoint.Range);
                     if (chegou)
                     {
-                        Index++;
+                        if (!(Waypoints.Count() > Index))
+                        {
+                            Index = 0;
+                        }
+                        else
+                        {
+                            Index++;
+                        }
                     }
                     break;
             }
@@ -97,35 +154,39 @@ namespace BotTibia.Actions.Cavebot
             }
             return -1;
         }
-
-        public static void Hunting()
-        {
-            try
-            {
-                while (true)
-                {
-                    ExecutaWaypoint();
-                }
-            }catch(ThreadAbortException ex)
-            {
-
-            }
-        }
+        #region Node
         public static bool Node(Coordenada coordenadaFinal, Range range)
         {
             var andar = PegaAndarDoMap();
             if (andar == -1)
             {
-                throw new Exception("Não foi possivel encontrar o andar no cavebot");
+                Thread.Sleep(10);
+                andar = PegaAndarDoMap();
+                if (andar == -1)
+                {
+                    throw new Exception("Não foi possivel encontrar o andar no cavebot");
+                }
             }
             var coordenadasAtuais = PegaElementosDaTela.PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar, Global._ultimaCoordenadaDoPersonagem);
             if (coordenadasAtuais == null)
                 return false;
-            var EhcoodenadaFinal = (Math.Abs(coordenadaFinal.X - coordenadasAtuais.X) + 1
-                                       <= range.X) &&
+            Boolean EhcoodenadaFinal;
+            if (andar != coordenadaFinal.Z)
+            {
+                EhcoodenadaFinal = (Math.Abs(coordenadaFinal.X - coordenadasAtuais.X) + 1
+                                       <= 3) &&
                                        (Math.Abs(coordenadaFinal.Y - coordenadasAtuais.Y) + 1
-                                       <= range.Y);
-            if (!(EhcoodenadaFinal && coordenadasAtuais.Z == coordenadaFinal.Z))
+                                       <= 3);
+            }
+            else
+            {
+                EhcoodenadaFinal = (Math.Abs(coordenadaFinal.X - coordenadasAtuais.X) + 1
+                                        <= range.X) &&
+                                        (Math.Abs(coordenadaFinal.Y - coordenadasAtuais.Y) + 1
+                                        <= range.Y);
+            }
+
+            if (!EhcoodenadaFinal)
             {
                 if (Global._ultimaCoordenadaDoPersonagem.Equals(coordenadasAtuais))
                 {
@@ -134,7 +195,7 @@ namespace BotTibia.Actions.Cavebot
                         X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X) - 8,
                         Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y) - 31,
                     };
-                    ClickEvent.Click(Global._tibiaProcessName, click, Enum.MouseEvent.Left);
+                    ClickEvent.Click(Global._tibiaProcessName, click, EnumMouseEvent.Left);
                 }
                 Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
                 return false;
@@ -142,28 +203,55 @@ namespace BotTibia.Actions.Cavebot
             Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
             return true;
         }
-        public static bool Stand(Coordenada coordenada)
+        #endregion
+        #region Stand
+        public static bool Stand(Coordenada coordenadaFinal)
         {
             var andar = PegaAndarDoMap();
             if (andar == -1)
             {
-                throw new Exception("Não foi possivel encontrar o andar no cavebot");
-            }
-            var coordenadasAtuais = PegaElementosDaTela.
-                                    PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar, Global._ultimaCoordenadaDoPersonagem);
-            var EhcoodenadaFinal = (coordenada.X == coordenadasAtuais.X) &&
-                                    (coordenada.Y == coordenadasAtuais.Y);
-            if (!(EhcoodenadaFinal && andar == coordenada.Z))
-            {
-                var click = new Point()
+                Thread.Sleep(100);
+                andar = PegaAndarDoMap();
+                if (andar == -1)
                 {
-                    X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenada.X - coordenadasAtuais.X) - 8,
-                    Y = (Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenada.Y - coordenadasAtuais.Y) - 31),
-                };
-                ClickEvent.Click(Global._tibiaProcessName, click, Enum.MouseEvent.Left);
+                    throw new Exception("Não foi possivel encontrar o andar no cavebot");
+                }
+            }
+            var coordenadasAtuais = PegaElementosDaTela.PegaCoordenadasDoPersonagem(Global._tibiaProcessName, Global._miniMap, andar, Global._ultimaCoordenadaDoPersonagem);
+            if (coordenadasAtuais == null)
+                return false;
+            Boolean EhcoodenadaFinal;
+            if (andar != coordenadaFinal.Z)
+            {
+                EhcoodenadaFinal = (Math.Abs(coordenadaFinal.X - coordenadasAtuais.X) + 1
+                                       <= 3) &&
+                                       (Math.Abs(coordenadaFinal.Y - coordenadasAtuais.Y) + 1
+                                       <= 3);
+            }
+            else
+            {
+                EhcoodenadaFinal = (coordenadaFinal.X == coordenadasAtuais.X) &&
+                        (coordenadaFinal.Y == coordenadasAtuais.Y);
+            }
+            if (!EhcoodenadaFinal)
+            {
+                if (Global._ultimaCoordenadaDoPersonagem.Equals(coordenadasAtuais))
+                {
+                    var click = new Point()
+                    {
+                        X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X) - 8,
+                        Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y) - 31,
+                    };
+                    ClickEvent.Click(Global._tibiaProcessName, click, EnumMouseEvent.Left);
+                }
+                Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
                 return false;
             }
+            Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
             return true;
         }
+        #endregion
+        #region Stand
+        #endregion
     }
 }
