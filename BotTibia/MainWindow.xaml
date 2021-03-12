@@ -10,7 +10,7 @@
     <Window.Resources>
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="GetEnumValues">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local:EnumLabel"/>
+                <x:Type TypeName="local:EnumAction"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>
@@ -97,7 +97,7 @@
             </TabItem>
             <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="32,-2,-60,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Margin="-5,10,9,0" VerticalAlignment="Top" Height="535" Background="#FFDADADA">
-                    <DataGrid x:Name="GridView" Margin="13,34,134,12" ItemsSource="{Binding Waypoints}" SelectionMode="Single" AutoGenerateColumns="False" CanUserAddRows="false" >
+                    <DataGrid x:Name="GridView" Margin="13,34,134,12" ItemsSource="{Binding Waypoints}" SelectionMode="Single" AutoGenerateColumns="false" CanUserAddRows="false" >
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -113,10 +113,10 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Width="40" Binding="{Binding Index}" />
                             <DataGridTextColumn Header="Type" Width="70" Binding="{Binding Type}"  />
-                            <DataGridComboBoxColumn Header="Label" Width="100" ItemsSource="{Binding Source={StaticResource GetEnumValues}}" SelectedValueBinding="{Binding Label}"  />
+                            <DataGridComboBoxColumn Header="TypeAction" Width="100" ItemsSource="{Binding Source={StaticResource GetEnumValues}}" SelectedValueBinding="{Binding TypeAction}"  />
                             <DataGridTextColumn Header="Coordenada" Width="150" Binding="{Binding Coordenada}" />
                             <DataGridTextColumn Header="Range" Width="50" Binding="{Binding Range}" />
-                            <DataGridTextColumn Header="Action" Width="200" Binding="{Binding Action}" />
+                            <DataGridTextColumn Header="Parâmetros" Width="200" Binding="{Binding Parametros}" />
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -126,21 +126,19 @@
 
                         <Button x:Name="ButtonNode" Content="Node" VerticalAlignment="Top" Margin="10,56,-9,0" Click="ButtonNode_Click" Width="113" Height="25"/>
                         <Button x:Name="ButtonStand" Content="Stand" HorizontalAlignment="Left" Margin="10,26,-8,0" Click="ButtonStand_Click" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonSay" Content="Say" HorizontalAlignment="Left" Margin="10,86,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonUse" Content="Use" HorizontalAlignment="Left" Margin="10,116,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonUseItem" Content="UseItem" HorizontalAlignment="Left" Margin="10,146,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonLabel" Content="Label" HorizontalAlignment="Left" Margin="10,176,-11,0" VerticalAlignment="Top" Width="113" Height="25"/>
-                        <Button x:Name="ButtonAction" Content="Action" HorizontalAlignment="Left" Margin="10,206,-11,-26" VerticalAlignment="Top" Width="113" Height="25"/>
+                        <Button x:Name="ButtonUp" Content="Up" HorizontalAlignment="Left" Margin="10,191,-8,-45" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonUpListItem_Click"/>
+                        <Button x:Name="ButtonDown" Content="Down" HorizontalAlignment="Left" Margin="10,221,-8,-75" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonDownListItem_Click"/>
+                        <Button x:Name="ButtonAction" Content="Action" HorizontalAlignment="Left" Margin="10,86,-8,0" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonAction_Click"/>
                     </Grid>
-                    <RadioButton x:Name="radioButtonNW" Content="NW" HorizontalAlignment="Left" Margin="640,335,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" Width="41"/>
-                    <RadioButton x:Name="radioButtonN" Content="N" HorizontalAlignment="Left" Margin="688,335,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" />
-                    <RadioButton x:Name="radioButtonNE" Content="NE" HorizontalAlignment="Left" Margin="727,336,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  RenderTransformOrigin="0.33,0.561"/>
-                    <RadioButton x:Name="radioButtonW" Content="W" HorizontalAlignment="Left" Margin="640,357,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  Width="41"/>
-                    <RadioButton x:Name="radioButtonC" Content="C" HorizontalAlignment="Left" Margin="688,357,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  IsChecked="True" />
-                    <RadioButton x:Name="radioButtonE" Content="E" HorizontalAlignment="Left" Margin="727,358,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  RenderTransformOrigin="0.33,0.561"/>
-                    <RadioButton x:Name="radioButtonSW" Content="SW" HorizontalAlignment="Left" Margin="640,377,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  Width="41"/>
-                    <RadioButton x:Name="radioButtonS" Content="S" HorizontalAlignment="Left" Margin="688,377,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" />
-                    <RadioButton x:Name="radioButtonSE" Content="SE" HorizontalAlignment="Left" Margin="727,378,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  RenderTransformOrigin="0.33,0.561"/>
+                    <RadioButton x:Name="radioButtonNW" Content="NW" HorizontalAlignment="Left" Margin="640,234,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" Width="41"/>
+                    <RadioButton x:Name="radioButtonN" Content="N" HorizontalAlignment="Left" Margin="688,234,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" />
+                    <RadioButton x:Name="radioButtonNE" Content="NE" HorizontalAlignment="Left" Margin="727,235,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  RenderTransformOrigin="0.33,0.561"/>
+                    <RadioButton x:Name="radioButtonW" Content="W" HorizontalAlignment="Left" Margin="640,256,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  Width="41"/>
+                    <RadioButton x:Name="radioButtonC" Content="C" HorizontalAlignment="Left" Margin="688,256,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  IsChecked="True" />
+                    <RadioButton x:Name="radioButtonE" Content="E" HorizontalAlignment="Left" Margin="727,257,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  RenderTransformOrigin="0.33,0.561"/>
+                    <RadioButton x:Name="radioButtonSW" Content="SW" HorizontalAlignment="Left" Margin="640,276,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  Width="41"/>
+                    <RadioButton x:Name="radioButtonS" Content="S" HorizontalAlignment="Left" Margin="688,276,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000" />
+                    <RadioButton x:Name="radioButtonSE" Content="SE" HorizontalAlignment="Left" Margin="727,277,0,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="#FF000000" Foreground="#FF000000"  RenderTransformOrigin="0.33,0.561"/>
                     <TextBox x:Name="textBoxRange1" HorizontalAlignment="Left" Height="23" Margin="664,82,0,0" TextWrapping="Wrap" Text="2" TextAlignment="Center" VerticalAlignment="Top" Width="25" RenderTransformOrigin="0.59,0.934" PreviewTextInput="NumberValidationTextBox" TextChanged="SetaRangeX" />
                     <TextBox x:Name="textBoxRange2" HorizontalAlignment="Left" Height="23" Margin="707,81,0,0" TextWrapping="Wrap" Text="2" TextAlignment="Center" VerticalAlignment="Top" Width="25" RenderTransformOrigin="0.214,-0.148" PreviewTextInput="NumberValidationTextBox" TextChanged="SetaRangeY"/>
                     <Label x:Name="labelXRange" Content="X" HorizontalAlignment="Left" Margin="689,80,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.546,0.29"/>

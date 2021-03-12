@@ -2,13 +2,13 @@
 {
     public enum EnumDirecao
     {
-        North,
-        South,
-        East,
-        West,
-        NorthWest,
-        NorthEast,
-        SouthEast,
-        SouthWest,
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST,
+        NORTHWEST,
+        NORTHEAST,
+        SOUTHEAST,
+        SOUTHWEST,
     }
 }

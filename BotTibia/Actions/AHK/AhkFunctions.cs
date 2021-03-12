@@ -6,6 +6,13 @@ namespace BotTibia.Actions.AHK
 {
     public static class AhkFunctions
     {
+        public static void SendMessage(string message, string processName)
+        {
+            var _ahkEngine = AutoHotkeyEngine.Instance;
+            var script = $"ControlSend,, {message}, " + processName;
+            _ahkEngine.ExecRaw(script);
+            
+        }
         public static void SendKey(string key, string processName)
         {
             var _ahkEngine = AutoHotkeyEngine.Instance;
@@ -24,6 +31,8 @@ namespace BotTibia.Actions.AHK
             var _ahkEngine = AutoHotkeyEngine.Instance;
             _ahkEngine.LoadFile(Global._caminho + "\\Actions\\AHK\\Gdip_All_2.ahk");
         }
+
+
         private static void PegaElementosDaTela()
         {
             var _ahkEngine = AutoHotkeyEngine.Instance;
@@ -74,6 +83,8 @@ namespace BotTibia.Actions.AHK
                             + "\r\n Loop 2 {                                                   "
                             + "\r\n     if(A_Index > 1){                  "
                             + "\r\n         Gdip_SetBitmapTransColor(bmpNeedle, 0x999999)                 "
+                            + "\r\n         Gdip_SetBitmapTransColor(bmpNeedle, 0x00CC00)                 "
+                            + "\r\n         Gdip_SetBitmapTransColor(bmpNeedle, 0x336699)                 "
                             + "\r\n     }                 "
                             + "\r\n     RET := Gdip_ImageSearch(bmpHaystack,bmpNeedle, OutputList, 0, 0, 0, 0, 0, 0xff3300)               "
                             + "\r\n     if(RET){                                                                       "
@@ -116,6 +127,8 @@ namespace BotTibia.Actions.AHK
                             + "\r\n Loop 2 {                                                   "
                             + "\r\n     if(A_Index > 1){                  "
                             + "\r\n         Gdip_SetBitmapTransColor(bmpNeedle, 0x999999)                 "
+                            + "\r\n         Gdip_SetBitmapTransColor(bmpNeedle, 0x00CC00)                 "
+                            + "\r\n         Gdip_SetBitmapTransColor(bmpNeedle, 0x336699)                 "
                             + "\r\n     }                 "
                             + "\r\n     RET := Gdip_ImageSearch(bmpHaystack,bmpNeedle, OutputList, 0, 0, 0, 0, 0, 0xff3300)               "
                             + "\r\n     if(RET){                                                                       "

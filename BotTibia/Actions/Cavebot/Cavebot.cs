@@ -39,100 +39,31 @@ namespace BotTibia.Actions.Cavebot
                     chegou = Node(waypoint.Coordenada, waypoint.Range);
                     if (chegou)
                     {
-                        if (Index >= Waypoints.Count() - 1)
-                        {
-                            Index = 0;
-                        }
-                        else
-                        {
-                            Index++;
-                        }
+                        IndexAdd();
                     }
                     break;
                 case EnumWaypoints.Stand:
                     chegou = Stand(waypoint.Coordenada);
                     if (chegou)
                     {
-                        if (Index >= Waypoints.Count() - 1)
-                        {
-                            Index = 0;
-                        }
-                        else
-                        {
-                            Index++;
-                        }
-                    }
-                    break;
-                case EnumWaypoints.Say:
-                    chegou = Node(waypoint.Coordenada, waypoint.Range);
-                    if (chegou)
-                    {
-                        if (!(Waypoints.Count() > Index))
-                        {
-                            Index = 0;
-                        }
-                        else
-                        {
-                            Index++;
-                        }
-                    }
-                    break;
-                case EnumWaypoints.Use:
-                    chegou = Node(waypoint.Coordenada, waypoint.Range);
-                    if (chegou)
-                    {
-                        if (!(Waypoints.Count() > Index))
-                        {
-                            Index = 0;
-                        }
-                        else
-                        {
-                            Index++;
-                        }
-                    }
-                    break;
-                case EnumWaypoints.UseItem:
-                    chegou = Node(waypoint.Coordenada, waypoint.Range);
-                    if (chegou)
-                    {
-                        if (!(Waypoints.Count() > Index))
-                        {
-                            Index = 0;
-                        }
-                        else
-                        {
-                            Index++;
-                        }
-                    }
-                    break;
-                case EnumWaypoints.UseSelf:
-                    chegou = Node(waypoint.Coordenada, waypoint.Range);
-                    if (chegou)
-                    {
-                        if (!(Waypoints.Count() > Index))
-                        {
-                            Index = 0;
-                        }
-                        else
-                        {
-                            Index++;
-                        }
+                        IndexAdd();
                     }
                     break;
                 case EnumWaypoints.Action:
-                    chegou = Node(waypoint.Coordenada, waypoint.Range);
-                    if (chegou)
-                    {
-                        if (!(Waypoints.Count() > Index))
-                        {
-                            Index = 0;
-                        }
-                        else
-                        {
-                            Index++;
-                        }
-                    }
+                    CavebotAction.ExecAction(waypoint.TypeAction, waypoint.Coordenada, waypoint.Parametros);
+                    IndexAdd();
                     break;
+            }
+        }
+        public static void IndexAdd()
+        {
+            if (Index >= Waypoints.Count() - 1)
+            {
+                Index = 0;
+            }
+            else
+            {
+                Index++;
             }
         }
         public static int PegaAndarDoMap()

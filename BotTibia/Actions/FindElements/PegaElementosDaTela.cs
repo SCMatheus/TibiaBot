@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using AForge.Imaging;
 using AutoHotkey.Interop;
 using BotTibia.Classes;
+using BotTibia.Enum;
 using Image = System.Drawing.Image;
 
 namespace BotTibia
@@ -170,6 +171,160 @@ namespace BotTibia
             {
                 return null;
             }
+        }
+        public static Point PegaPosicaoDoPersonagem()
+        {
+            return new Point()
+            {
+                X = Global._mainWindow.X + (Global._mainWindow.Width / 2),
+                Y = Global._mainWindow.Y + (Global._mainWindow.Height / 2)
+            };
+        }
+        public static Point PegaVisinhosDaPosicaoDoPersonagem(EnumDirecao direcao)
+        {
+            var posicaoDoPersonagem = PegaPosicaoDoPersonagem();
+            if (Global._mainWindow.Width > 600)
+            {
+                if(direcao == EnumDirecao.NORTH) 
+                {
+                    posicaoDoPersonagem.Y -= 65;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTH)
+                {
+                    posicaoDoPersonagem.Y += 65;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.WEST)
+                {
+                    posicaoDoPersonagem.X -= 65;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.EAST)
+                {
+                    posicaoDoPersonagem.X += 65;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.NORTHWEST)
+                {
+                    posicaoDoPersonagem.Y -= 65;
+                    posicaoDoPersonagem.X -= 65;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.NORTHEAST)
+                {
+                    posicaoDoPersonagem.Y -= 65;
+                    posicaoDoPersonagem.X += 65;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTHWEST)
+                {
+                    posicaoDoPersonagem.Y += 65;
+                    posicaoDoPersonagem.X -= 65;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTHEAST)
+                {
+                    posicaoDoPersonagem.Y += 65;
+                    posicaoDoPersonagem.X += 65;
+                    return posicaoDoPersonagem;
+                }
+            }
+            else if(Global._mainWindow.Width > 350)
+            {
+                if (direcao == EnumDirecao.NORTH)
+                {
+                    posicaoDoPersonagem.Y -= 35;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTH)
+                {
+                    posicaoDoPersonagem.Y += 35;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.WEST)
+                {
+                    posicaoDoPersonagem.X -= 35;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.EAST)
+                {
+                    posicaoDoPersonagem.X += 35;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.NORTHWEST)
+                {
+                    posicaoDoPersonagem.Y -= 35;
+                    posicaoDoPersonagem.X -= 35;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.NORTHEAST)
+                {
+                    posicaoDoPersonagem.Y -= 35;
+                    posicaoDoPersonagem.X += 35;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTHWEST)
+                {
+                    posicaoDoPersonagem.Y += 35;
+                    posicaoDoPersonagem.X -= 35;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTHEAST)
+                {
+                    posicaoDoPersonagem.Y += 35;
+                    posicaoDoPersonagem.X += 35;
+                    return posicaoDoPersonagem;
+                }
+            }
+            else
+            {
+                if (direcao == EnumDirecao.NORTH)
+                {
+                    posicaoDoPersonagem.Y -= 15;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTH)
+                {
+                    posicaoDoPersonagem.Y += 15;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.WEST)
+                {
+                    posicaoDoPersonagem.X -= 15;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.EAST)
+                {
+                    posicaoDoPersonagem.X += 15;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.NORTHWEST)
+                {
+                    posicaoDoPersonagem.Y -= 15;
+                    posicaoDoPersonagem.X -= 15;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.NORTHEAST)
+                {
+                    posicaoDoPersonagem.Y -= 15;
+                    posicaoDoPersonagem.X += 15;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTHWEST)
+                {
+                    posicaoDoPersonagem.Y += 15;
+                    posicaoDoPersonagem.X -= 15;
+                    return posicaoDoPersonagem;
+                }
+                if (direcao == EnumDirecao.SOUTHEAST)
+                {
+                    posicaoDoPersonagem.Y += 15;
+                    posicaoDoPersonagem.X += 15;
+                    return posicaoDoPersonagem;
+                }
+            }
+            return posicaoDoPersonagem;
         }
     }
 }

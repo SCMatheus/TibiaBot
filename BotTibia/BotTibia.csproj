@@ -73,6 +73,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -94,6 +95,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Actions\AHK\AhkFunctions.cs" />
+    <Compile Include="Actions\Cavebot\CavebotAction.cs" />
     <Compile Include="Actions\Cavebot\Cavebot.cs" />
     <Compile Include="Actions\Print\CapturaTela.cs" />
     <Compile Include="Actions\Events\ClickEvent.cs" />
@@ -117,7 +119,7 @@
     <Compile Include="Classes\VidaBar.cs" />
     <Compile Include="Classes\CoordenadasXeY.cs" />
     <Compile Include="Classes\Waypoint.cs" />
-    <Compile Include="Enum\EnumLabel.cs" />
+    <Compile Include="Enum\EnumAction.cs" />
     <Compile Include="Enum\EnumDirecao.cs" />
     <Compile Include="Enum\EnumWaypoints.cs" />
     <Compile Include="Enum\EnumMouseEvent.cs" />

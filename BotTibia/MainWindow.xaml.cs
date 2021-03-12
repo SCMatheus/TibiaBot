@@ -646,7 +646,7 @@ namespace BotTibia
                 Dispatcher.Invoke((Action)(() =>
                 {
                     if(GridView.HasItems)
-                        ((ListViewItem)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
                 }));
                 Cavebot.ExecutaWaypoint();
             }
@@ -717,8 +717,8 @@ namespace BotTibia
             try
             {
                 var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Node
-                                            , new Range(int.Parse(textBoxRange1.Text), 
-                                            int.Parse(textBoxRange1.Text)), "", EnumLabel.Empty);
+                                            , new Range(){X = int.Parse(textBoxRange1.Text),
+                                            Y = int.Parse(textBoxRange1.Text)}, EnumAction.Empty, "");
                 Cavebot.AddWaypoint(waypoint);
                 GridView.ItemsSource = null;
                 GridView.ItemsSource = Cavebot.Waypoints;
@@ -728,7 +728,7 @@ namespace BotTibia
                 MessageBox.Show(ex.Message);
             }
         }
-        private Waypoint CriaWaypoint(int index, EnumWaypoints type, Range range, string action, EnumLabel label)
+        private Waypoint CriaWaypoint(int index, EnumWaypoints type, Range range, EnumAction typeAction, string parametros)
         {
             var andar = Cavebot.PegaAndarDoMap();
             var coordenada = PegaElementosDaTela
@@ -751,8 +751,8 @@ namespace BotTibia
                     Z = coordenada.Z
                 },
                 Range = range,
-                Action = action,
-                Label = label
+                TypeAction = typeAction,
+                Parametros = parametros
             };
             radioButtonC.IsChecked = true;
             return waypoint;
@@ -761,7 +761,22 @@ namespace BotTibia
         {
             try
             {
-                var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Stand, new Range(1, 1), "", EnumLabel.Empty);
+                var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Stand, new Range() { X=1, Y=1}, EnumAction.Empty, "");
+                Cavebot.AddWaypoint(waypoint);
+                GridView.ItemsSource = null;
+                GridView.ItemsSource = Cavebot.Waypoints;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ButtonAction_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var waypoint = CriaWaypoint(Cavebot.Waypoints.Count() + 1, EnumWaypoints.Action, new Range() { X = 1, Y = 1 }, EnumAction.Empty, "");
                 Cavebot.AddWaypoint(waypoint);
                 GridView.ItemsSource = null;
                 GridView.ItemsSource = Cavebot.Waypoints;
@@ -856,7 +871,59 @@ namespace BotTibia
                 MessageBox.Show(ex.Message);
             }
         }
+        private void ButtonUpListItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (Cavebot.Waypoints.Count > 0)
+                {
+                    var index = (int)((Waypoint)GridView.SelectedItem).Index - 1;
+                    if (index > 0 && GridView.SelectedItem != null)
+                    {
+                        GridView.ItemsSource = null;
+                        var element1 = Cavebot.Waypoints.ElementAt(index);
+                        var element2 = Cavebot.Waypoints.ElementAt(index - 1);
+                        Cavebot.Waypoints[index] = element2;
+                        Cavebot.Waypoints[index - 1] = element1;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index-1)).IsSelected = true;
+                    }
+                }
+            }
 
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void ButtonDownListItem_Click(object sender, RoutedEventArgs e)
+        {
+            try { 
+                if (Cavebot.Waypoints.Count > 0 && GridView.SelectedItem != null)
+                {
+                    var index = (int)((Waypoint)GridView.SelectedItem).Index - 1;
+                    if (index < Cavebot.Waypoints.Count - 1)
+                    {
+                        GridView.ItemsSource = null;
+                        var element1 = Cavebot.Waypoints.ElementAt(index);
+                        var element2 = Cavebot.Waypoints.ElementAt(index + 1);
+                        Cavebot.Waypoints[index] = element2;
+                        Cavebot.Waypoints[index + 1] = element1;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index + 1)).IsSelected = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+}
         #endregion
+
     }
 }

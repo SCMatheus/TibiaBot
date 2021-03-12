@@ -49,10 +49,11 @@ D:\GitHub\BotTibia\BotTibia\bin\Debug\AForge.xml
 D:\GitHub\BotTibia\BotTibia\bin\Debug\AForge.Imaging.xml
 D:\GitHub\BotTibia\BotTibia\bin\Debug\AForge.Math.xml
 D:\GitHub\BotTibia\BotTibia\bin\Debug\sharpAHK.xml
-D:\GitHub\BotTibia\BotTibia\obj\Debug\MainWindow.baml
 D:\GitHub\BotTibia\BotTibia\obj\Debug\MainWindow.g.cs
 D:\GitHub\BotTibia\BotTibia\obj\Debug\App.g.cs
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia_MarkupCompile.cache
+D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia_MarkupCompile.lref
+D:\GitHub\BotTibia\BotTibia\obj\Debug\MainWindow.baml
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.g.resources
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.Properties.Resources.resources
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.GenerateResource.cache
@@ -61,4 +62,3 @@ D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CopyComplete
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.pdb
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
-D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia_MarkupCompile.lref
