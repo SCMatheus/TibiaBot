@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using BotTibia.Actions.AHK;
 using BotTibia.Actions.Events;
 using BotTibia.Classes;
@@ -10,6 +12,7 @@ namespace BotTibia.Actions.Cavebot
     {
         public static void ExecAction(EnumAction action,Coordenada coordenada, string parans)
         {
+            parans = parans.Replace(" ", "");
             var parametros = parans.Split(',');
                 switch (action)
             {
@@ -46,11 +49,43 @@ namespace BotTibia.Actions.Cavebot
                         ClickEvent.Click(Global._tibiaProcessName, coordUse, EnumMouseEvent.Right);
                     break;
                 case EnumAction.UseItem:
-                        AhkFunctions.SendKey(parametros[0].ToUpper(),Global._tibiaProcessName);
+                    string variavel;
+                        if (parametros[0].StartsWith("$"))
+                        {
+                            variavel = PegaVariavelPorChave(parametros[0]);
+                        }
+                        else
+                        {
+                            variavel = parametros[0];
+                        }
+                        AhkFunctions.SendKey(variavel.ToUpper(),Global._tibiaProcessName);
                         var coordUseItem = PegaElementosDaTela.PegaVisinhosDaPosicaoDoPersonagem((EnumDirecao)System.Enum.Parse(typeof(EnumDirecao), parametros[1].ToUpper()));
                         ClickEvent.Click(Global._tibiaProcessName, coordUseItem, EnumMouseEvent.Left);
                     break;
+                case EnumAction.Deposit:
+                        
+                    break;
             }
+        }
+        public static string PegaVariavelPorChave(string chave)
+        {
+            string variavel = chave.Replace("$", "");
+            variavel = Global._variaveisGlobais.FirstOrDefault(x => x.Chave.Equals(variavel.ToLower()))?.Valor;
+            if (string.IsNullOrWhiteSpace(variavel) && variavel == null)
+            {
+                throw new Exception($"Não foi possivel encontrar a variável {chave}");
+            }
+            return variavel;
+        }
+        private static void EncontraEVaiAteDepot()
+        {
+            string variavel = chave.Replace("$", "");
+            variavel = Global._variaveisGlobais.FirstOrDefault(x => x.Chave.Equals(variavel.ToLower()))?.Valor;
+            if (string.IsNullOrWhiteSpace(variavel) && variavel == null)
+            {
+                throw new Exception($"Não foi possivel encontrar a variável {chave}");
+            }
+            return variavel;
         }
     }
 }

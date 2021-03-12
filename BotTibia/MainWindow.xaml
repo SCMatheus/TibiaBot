@@ -113,7 +113,13 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Width="40" Binding="{Binding Index}" />
                             <DataGridTextColumn Header="Type" Width="70" Binding="{Binding Type}"  />
-                            <DataGridComboBoxColumn Header="TypeAction" Width="100" ItemsSource="{Binding Source={StaticResource GetEnumValues}}" SelectedValueBinding="{Binding TypeAction}"  />
+                            <DataGridComboBoxColumn Header="TypeAction" Width="100" ItemsSource="{Binding Source={StaticResource GetEnumValues}}" SelectedValueBinding="{Binding TypeAction}" >
+                            <DataGridComboBoxColumn.EditingElementStyle>
+                                <Style TargetType="{x:Type ComboBox}">
+                                    <EventSetter Event="SelectionChanged" Handler="SomeDataGridComboBoxChanged" />
+                                </Style>
+                            </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
                             <DataGridTextColumn Header="Coordenada" Width="150" Binding="{Binding Coordenada}" />
                             <DataGridTextColumn Header="Range" Width="50" Binding="{Binding Range}" />
                             <DataGridTextColumn Header="Parâmetros" Width="200" Binding="{Binding Parametros}" />

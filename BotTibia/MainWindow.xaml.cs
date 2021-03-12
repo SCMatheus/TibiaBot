@@ -631,6 +631,8 @@ namespace BotTibia
             }
             catch (Exception ex)
             {
+                Global._threadCavebot.Interrupt();
+                Global._threadCavebot.Abort();
                 MessageBox.Show(ex.Message);
             }
 
@@ -655,14 +657,28 @@ namespace BotTibia
 
         private void Hunting()
         {
-            while (true)
+            try
             {
-                Dispatcher.Invoke((Action)(() =>
+                while (true)
                 {
-                    if(GridView.HasItems)
-                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
-                }));
-                Cavebot.ExecutaWaypoint();
+                    Dispatcher.Invoke((Action)(() =>
+                    {
+                        if (GridView.HasItems)
+                            ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
+                    }));
+                    Cavebot.ExecutaWaypoint();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message != "O thread estava sendo anulado.")
+                {
+                    Dispatcher.Invoke((Action)(() =>
+                    {
+                        MessageBox.Show("Ocorreu um erro no cavebot.");
+                        GridView.IsEnabled = true;
+                    }));
+                }
             }
         }
         #endregion
@@ -937,6 +953,83 @@ namespace BotTibia
                 MessageBox.Show(ex.Message);
             }
 }
+        private void SomeDataGridComboBoxChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var index = (int)((Waypoint)GridView.SelectedItem).Index - 1;
+            Waypoint waypoint;
+            if (((Waypoint)GridView.SelectedItem).Type == EnumWaypoints.Action)
+            {
+                switch (System.Enum.Parse(typeof(EnumAction), e.AddedItems[0].ToString()))
+                {
+                    case EnumAction.Label:
+                        GridView.ItemsSource = null;
+                        waypoint = Cavebot.Waypoints.ElementAt(index);
+                        waypoint.Parametros = "Digite o nome da Label";
+                        Cavebot.Waypoints[index] = waypoint;
+                        waypoint.TypeAction = EnumAction.Label;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index)).IsSelected = true;
+                        break;
+                    case EnumAction.Use:
+                        GridView.ItemsSource = null;
+                        waypoint = Cavebot.Waypoints.ElementAt(index);
+                        waypoint.Parametros = "Direção";
+                        waypoint.TypeAction = EnumAction.Use;
+                        Cavebot.Waypoints[index] = waypoint;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index)).IsSelected = true;
+                        break;
+                    case EnumAction.UseItem:
+                        GridView.ItemsSource = null;
+                        waypoint = Cavebot.Waypoints.ElementAt(index);
+                        waypoint.Parametros = "Key,Direção";
+                        waypoint.TypeAction = EnumAction.UseItem;
+                        Cavebot.Waypoints[index] = waypoint;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index)).IsSelected = true;
+                        break;
+                    case EnumAction.Wait:
+                        GridView.ItemsSource = null;
+                        waypoint = Cavebot.Waypoints.ElementAt(index);
+                        waypoint.Parametros = "Tempo em milissegundos";
+                        waypoint.TypeAction = EnumAction.Wait;
+                        Cavebot.Waypoints[index] = waypoint;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index)).IsSelected = true;
+                        break;
+                    case EnumAction.TurnTo:
+                        GridView.ItemsSource = null;
+                        waypoint = Cavebot.Waypoints.ElementAt(index);
+                        waypoint.Parametros = "Direção";
+                        Cavebot.Waypoints[index] = waypoint;
+                        waypoint.TypeAction = EnumAction.TurnTo;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index)).IsSelected = true;
+                        break;
+                    case EnumAction.Say:
+                        GridView.ItemsSource = null;
+                        waypoint = Cavebot.Waypoints.ElementAt(index);
+                        waypoint.Parametros = "Digite o que quiser falar";
+                        waypoint.TypeAction = EnumAction.Say;
+                        Cavebot.Waypoints[index] = waypoint;
+                        Cavebot.AtualizaIndex();
+                        GridView.ItemsSource = Cavebot.Waypoints;
+                        GridView.UpdateLayout();
+                        ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index)).IsSelected = true;
+                        break;
+                }
+            }
+        }
         #endregion
 
         #region Tools

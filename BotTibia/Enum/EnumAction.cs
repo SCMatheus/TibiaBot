@@ -19,5 +19,7 @@ namespace BotTibia.Enum
         Use,
         [XmlEnum(Name = "Wait")]
         Wait,
+        [XmlEnum(Name = "Deposit")]
+        Deposit,
     }
 }
