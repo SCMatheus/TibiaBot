@@ -30,9 +30,9 @@
             </ComboBox.Background>
         </ComboBox>
         <Label x:Name="LabelClient" Content="Personagem:" HorizontalAlignment="Left" Margin="417,24,0,0" Grid.RowSpan="1" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="0" Panel.ZIndex="999" Width="81" RenderTransformOrigin="0.391,0.821"/>
-        <ProgressBar x:Name="ProgressConfig" Margin="694,27,10,553" RenderTransformOrigin="0.55,0.15"/>
-        <Label x:Name="LabelCalibrado" Content="" HorizontalAlignment="Left" Margin="697,41,0,0" Grid.RowSpan="1" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="0" Panel.ZIndex="999" Width="81" RenderTransformOrigin="0.391,0.821"/>
-        <TabControl x:Name="tabControl" Height="576" Margin="17,0,0,-1" Width="772" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="#FFDADADA" RenderTransformOrigin="0.5,0.5" BorderBrush="#FFDADADA" Foreground="#FF000000">
+        <ProgressBar x:Name="ProgressConfig" Margin="694,27,10,553" RenderTransformOrigin="0.55,0.15" Panel.ZIndex="999"/>
+        <Label x:Name="LabelCalibrado" Content="" HorizontalAlignment="Left" Margin="695,43,0,0" Grid.RowSpan="1" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="0" Panel.ZIndex="999" Width="81" RenderTransformOrigin="0.391,0.821"/>
+        <TabControl x:Name="tabControl" Height="576" Margin="7,0,0,9" Width="772" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="#FFDADADA" RenderTransformOrigin="0.5,0.5" BorderBrush="#FFDADADA" Foreground="#FF000000">
             <TabControl.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -148,6 +148,14 @@
             </TabItem>
             <TabItem x:Name="Target" Header="Target" Margin="63,-2,-102,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535"/>
+            </TabItem>
+            <TabItem x:Name="Tools" Header="Tools" Margin="105,-3,-144,1" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
+                <Grid Background="#FFDADADA" Margin="-5,35,1,0" VerticalAlignment="Top" Height="510">
+                    <GroupBox Header="Variáveis Globais" Margin="458,28,4,5" BorderBrush="Black">
+                        <TextBox x:Name="variaveisGlobais" HorizontalAlignment="Left" Height="397" Margin="23,13,0,0" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" VerticalAlignment="Top" Width="253"/>
+                    </GroupBox>
+                    <Button x:Name="buttonSalvarVariaveis" Content="Salvar" HorizontalAlignment="Left" Margin="579,463,0,17" Width="75" Click="AtualizaVariaveisGlobais"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

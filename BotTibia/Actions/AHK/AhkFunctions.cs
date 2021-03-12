@@ -29,7 +29,7 @@ namespace BotTibia.Actions.AHK
         private static void GdipLib()
         {
             var _ahkEngine = AutoHotkeyEngine.Instance;
-            _ahkEngine.LoadFile(Global._caminho + "\\Actions\\AHK\\Gdip_All_2.ahk");
+            _ahkEngine.LoadFile(Global._path + "\\Actions\\AHK\\Gdip_All_2.ahk");
         }
 
 

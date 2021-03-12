@@ -76,7 +76,7 @@ namespace BotTibia.Actions.Cavebot
             foreach(var item in andares)
             {
                 encontrado = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._andarDoMap, 
-                                                                    Global._caminho + "\\Images\\MapAndar\\floor-" +
+                                                                    Global._path + "\\Images\\MapAndar\\floor-" +
                                                                     item.ToString() + ".png");
                 if (encontrado != null)
                 {

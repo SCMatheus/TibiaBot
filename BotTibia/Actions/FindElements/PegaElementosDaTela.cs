@@ -123,7 +123,7 @@ namespace BotTibia
             var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var _ahkEngine = AutoHotkeyEngine.Instance;
             var retorno = _ahkEngine.ExecFunction("PegaCoordenadasDoPersonagemAhk", miniMap.X.ToString(), miniMap.Y.ToString(), miniMap.Width.ToString(),
-                                                  miniMap.Height.ToString(), Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
+                                                  miniMap.Height.ToString(), Global._path + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
             var parametros = retorno.Split(',');
             _ahkEngine = null;
             if (parametros[0] == "1")
@@ -151,7 +151,7 @@ namespace BotTibia
             var retorno = _ahkEngine.ExecFunction("PegaCoordenadasDoPersonagemNoCaveBotAhk", miniMap.X.ToString(), miniMap.Y.ToString(), miniMap.Width.ToString(),
                                                   miniMap.Height.ToString(),((ultimaCoordenadaDoPersonagem.X - 31744) - 163).ToString(), ((ultimaCoordenadaDoPersonagem.Y - 30976) - 166).ToString(),
                                                   (miniMap.Width + 263).ToString(), (miniMap.Height + 266).ToString(),
-                                                  Global._caminho + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
+                                                  Global._path + "\\Images\\Map\\floor-" + andar.ToString() + ".png", hwnd.ToString());
             var parametros = retorno.Split(',');
             _ahkEngine = null;
             if (parametros[0] == "1")

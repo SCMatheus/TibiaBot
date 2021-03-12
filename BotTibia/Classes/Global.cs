@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 
 namespace BotTibia.Classes
@@ -18,6 +19,9 @@ namespace BotTibia.Classes
         public static CoordenadasDeElementos _miniMap = new CoordenadasDeElementos();
         public static CoordenadasDeElementos _andarDoMap = new CoordenadasDeElementos();
         public static Coordenada _ultimaCoordenadaDoPersonagem = new Coordenada();
-        public static string _caminho;
+        public static string _path;
+        public static bool _isTarget;
+        public static bool _isLoot;
+        public static List<Variavel> _variaveisGlobais = new List<Variavel>();
     }
 }

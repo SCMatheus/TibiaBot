@@ -116,6 +116,7 @@
     <Compile Include="Classes\ManaBar.cs" />
     <Compile Include="Classes\PersonagemStatus.cs" />
     <Compile Include="Classes\Range.cs" />
+    <Compile Include="Classes\Variavel.cs" />
     <Compile Include="Classes\VidaBar.cs" />
     <Compile Include="Classes\CoordenadasXeY.cs" />
     <Compile Include="Classes\Waypoint.cs" />

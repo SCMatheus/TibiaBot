@@ -34,7 +34,7 @@ namespace BotTibia
         public MainWindow()
         {
              
-            Global._caminho = Environment.CurrentDirectory;
+            Global._path = Environment.CurrentDirectory;
             try
             {
                 AhkFunctions.LoadScripts();
@@ -73,7 +73,7 @@ namespace BotTibia
             foreach (var item in andares)
             {
                 Global._andarDoMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
-                                                                    Global._caminho + "\\Images\\MapAndar\\floor-" +
+                                                                    Global._path + "\\Images\\MapAndar\\floor-" +
                                                                     item.ToString() + ".png");
                 if (Global._andarDoMap != null)
                 {
@@ -93,7 +93,7 @@ namespace BotTibia
             while (Global._mainWindow == null)
             {
                 Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
-                                                                            Global._caminho + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
+                                                                            Global._path + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
                 count++;
                 if (count >= 3)
                     break;
@@ -103,7 +103,7 @@ namespace BotTibia
 
             //Captura Dados do mini map
             Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
-                                                                    Global._caminho + $"\\Images\\Global\\Configs\\miniMap.png");
+                                                                    Global._path + $"\\Images\\Global\\Configs\\miniMap.png");
 
             if (Global._miniMap == null)
                 throw new Exception("Não foi possivel identificar o Mini Map do personagem.");
@@ -120,7 +120,7 @@ namespace BotTibia
             //Captura Dados da vida
             var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
                                                                                                 0, Global._tela.Width,
-                                                                                    Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\coracao.png");
+                                                                                    Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\coracao.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
 
@@ -136,7 +136,7 @@ namespace BotTibia
             //Captura Dados da mana
             var coordenadasRaio = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
                                                                                                 0, Global._tela.Width,
-                                                                                                Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\raio.png");
+                                                                                                Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\raio.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
             Dispatcher.Invoke((Action)(() =>
@@ -152,7 +152,7 @@ namespace BotTibia
             //Captura Dados da paralize
             var coordenadasStatusBar = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
                                                             0, Global._tela.Width,
-                                                            Global._tela.Height, Global._caminho + "\\Images\\Global\\Configs\\statusBar.png");
+                                                            Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\statusBar.png");
             if (coordenadasStatusBar == null)
                 throw new Exception("Não foi possivel identificar a status bar do personagem.");
             Dispatcher.Invoke((Action)(() =>
@@ -531,7 +531,8 @@ namespace BotTibia
                 ManaHeal = new Heal() { Percent = ManaHealPercent.Text, Hotkey = ManaHealHotkey.Text },
                 ParaHeal = ParalizeHealHotkey.Text,
                 Firetimer = int.Parse(FireTimer.Text),
-                Waypoints = Cavebot.Waypoints
+                Waypoints = Cavebot.Waypoints,
+                VariaveisGlobais = Global._variaveisGlobais
             };
             // Create a new XmlSerializer instance with the type of the test class
             XmlSerializer SerializerObj = new XmlSerializer(typeof(ConfigScripts));
@@ -578,8 +579,21 @@ namespace BotTibia
             //Cavebot
             Cavebot.Waypoints = LoadedConfigs.Waypoints;
             GridView.ItemsSource = Cavebot.Waypoints;
+            //Variaveis Globais
+            Global._variaveisGlobais = LoadedConfigs.VariaveisGlobais;
+            SetaVariaveisGlobaisNoTextBox();
 
             AtualizaVariaveisGlobais();
+        }
+
+        private void SetaVariaveisGlobaisNoTextBox()
+        {
+            string variaveis = "";
+            foreach(var item in Global._variaveisGlobais)
+            {
+                variaveis += $"{item.Chave}={item.Valor};\r\n";
+            }
+            variaveisGlobais.Text = variaveis;
         }
         #endregion
         #region Atualizacao de variaveis
@@ -925,5 +939,42 @@ namespace BotTibia
 }
         #endregion
 
+        #region Tools
+        private void AtualizaVariaveisGlobais(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(variaveisGlobais.Text))
+                {
+                    Global._variaveisGlobais.Clear();
+                    var texto = variaveisGlobais.Text;
+                    texto = texto.Replace(" ", "");
+                    texto = texto.Replace("\r\n", "");
+                    var variaveis = texto.Split(';');
+                    string[] variavel;
+                    foreach (var item in variaveis)
+                    {
+                        if (!string.IsNullOrWhiteSpace(item))
+                        {
+                            variavel = item.Split('=');
+                            if (!Global._variaveisGlobais.Any(x => x.Chave == variavel[0].ToLower()) && variavel.Length == 2)
+                            {
+                                Global._variaveisGlobais.Add(new Variavel() {Chave = variavel[0].ToLower(), Valor = variavel[1].ToLower() });
+                            }
+                            else
+                            {
+                                MessageBox.Show("Existe alguma inconsistência nas variáveis");
+                                Global._variaveisGlobais.Clear();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
     }
 }

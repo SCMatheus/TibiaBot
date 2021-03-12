@@ -16,5 +16,6 @@ namespace BotTibia.Persistencia
         public string ParaHeal { get; set; }
         public int Firetimer { get; set; }
         public List<Waypoint> Waypoints { get; set; }
+        public List<Variavel> VariaveisGlobais { get; set; }
     }
 }
