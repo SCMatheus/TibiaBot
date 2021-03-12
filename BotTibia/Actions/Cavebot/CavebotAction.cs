@@ -63,7 +63,10 @@ namespace BotTibia.Actions.Cavebot
                         ClickEvent.Click(Global._tibiaProcessName, coordUseItem, EnumMouseEvent.Left);
                     break;
                 case EnumAction.Deposit:
-                        
+                    EncontraEVaiAteDepot();
+                    break;
+                case EnumAction.GotoLabel:
+
                     break;
             }
         }
@@ -79,13 +82,9 @@ namespace BotTibia.Actions.Cavebot
         }
         private static void EncontraEVaiAteDepot()
         {
-            string variavel = chave.Replace("$", "");
-            variavel = Global._variaveisGlobais.FirstOrDefault(x => x.Chave.Equals(variavel.ToLower()))?.Valor;
-            if (string.IsNullOrWhiteSpace(variavel) && variavel == null)
-            {
-                throw new Exception($"Não foi possivel encontrar a variável {chave}");
-            }
-            return variavel;
+            var depot = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName,Global._mainWindow, Global._path+ "\\Images\\ConfigsGerais\\Depot.png");
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point(depot.X + depot.Width / 2, depot.Y + depot.Height / 2), EnumMouseEvent.Left);
+            Thread.Sleep(500);
         }
     }
 }

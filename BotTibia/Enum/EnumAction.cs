@@ -21,5 +21,7 @@ namespace BotTibia.Enum
         Wait,
         [XmlEnum(Name = "Deposit")]
         Deposit,
+        [XmlEnum(Name = "GotoLabel")]
+        GotoLabel
     }
 }

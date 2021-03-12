@@ -62,3 +62,4 @@ D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CopyComplete
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.pdb
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\Depot.png

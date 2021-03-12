@@ -205,7 +205,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Images\ConfigsGerais\Depot.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Include="Images\Map\floor-0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
