@@ -23,5 +23,6 @@ namespace BotTibia.Classes
         public static bool _isTarget;
         public static bool _isLoot;
         public static List<Variavel> _variaveisGlobais = new List<Variavel>();
+        public static Backpacks _backpacks = new Backpacks();
     }
 }

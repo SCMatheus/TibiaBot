@@ -4,6 +4,7 @@ D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\coracao.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\raio.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\miniMap.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\statusBar.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\Depot.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Map\floor-0.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Map\floor-1.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Map\floor-10.png
@@ -61,5 +62,13 @@ D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CoreCompileInputs.cache
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CopyComplete
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.pdb
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\Close.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Corpo\backpack.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Corpo\blue.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Corpo\brocade.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Corpo\dragon.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Nome\backpack.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Nome\blue.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Nome\brocade.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Backpacks\Nome\dragon.png
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
-D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\Depot.png

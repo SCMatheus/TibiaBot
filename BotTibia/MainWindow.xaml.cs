@@ -1068,6 +1068,137 @@ namespace BotTibia
                 MessageBox.Show(ex.Message);
             }
         }
+        private void MainBP_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(!string.IsNullOrWhiteSpace(e.AddedItems[0].ToString()) && e.AddedItems[0].ToString() != "none")
+            {
+                Global._backpacks.MainBackpack = (EnumBackpacks)e.AddedItems[0];
+            }
+            else
+            {
+                MainBP.SelectedIndex = 0;
+            }
+            SupplyBP.SelectedIndex = 0;
+            LootBP.SelectedIndex = 0;
+            GoldBP.SelectedIndex = 0;
+            AmmoBP.SelectedIndex = 0;
+        }
+        private void SupplyBP_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var mainbp = MainBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)MainBP.SelectedItem;
+            var lootbp = LootBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)LootBP.SelectedItem;
+            var goldbp = GoldBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)GoldBP.SelectedItem;
+            var ammobp = AmmoBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)AmmoBP.SelectedItem;
+
+            if (!string.IsNullOrWhiteSpace(e.AddedItems[0].ToString()) 
+                && e.AddedItems[0].ToString() != "none" 
+                && mainbp != EnumBackpacks.none)
+            {
+                if ( mainbp != (EnumBackpacks)e.AddedItems[0]
+                    && lootbp != (EnumBackpacks)e.AddedItems[0]
+                    && goldbp != (EnumBackpacks)e.AddedItems[0]
+                    && ammobp != (EnumBackpacks)e.AddedItems[0])
+                {
+                    Global._backpacks.SupplyBackpack = (EnumBackpacks)e.AddedItems[0];
+                }
+                else
+                {
+                    MessageBox.Show("Você não pode repetir as Backpacks!");
+                    SupplyBP.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                SupplyBP.SelectedIndex = 0;
+            }
+        }
+        private void LootBP_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var mainbp = MainBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)MainBP.SelectedItem;
+            var supplybp = SupplyBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)SupplyBP.SelectedItem;
+            var goldbp = GoldBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)GoldBP.SelectedItem;
+            var ammobp = AmmoBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)AmmoBP.SelectedItem;
+            if (!string.IsNullOrWhiteSpace(e.AddedItems[0].ToString())
+                && e.AddedItems[0].ToString() != "none"
+                && mainbp != EnumBackpacks.none)
+            {
+
+                if (supplybp != (EnumBackpacks)e.AddedItems[0]
+                    && mainbp != (EnumBackpacks)e.AddedItems[0]
+                    && goldbp != (EnumBackpacks)e.AddedItems[0]
+                    && ammobp != (EnumBackpacks)e.AddedItems[0])
+                {
+                    Global._backpacks.LootBackpack = (EnumBackpacks)e.AddedItems[0];
+                }
+                else
+                {
+                    MessageBox.Show("Você não pode repetir as Backpacks!");
+                    LootBP.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                LootBP.SelectedIndex = 0;
+            }
+        }
+        private void GoldBP_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var mainbp = MainBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)MainBP.SelectedItem;
+            var supplybp = SupplyBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)SupplyBP.SelectedItem;
+            var lootbp = LootBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)LootBP.SelectedItem;
+            var ammobp = AmmoBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)AmmoBP.SelectedItem;
+            if (!string.IsNullOrWhiteSpace(e.AddedItems[0].ToString())
+                && e.AddedItems[0].ToString() != "none"
+                && mainbp != EnumBackpacks.none)
+            {
+                if (mainbp != (EnumBackpacks)e.AddedItems[0]
+                    && supplybp != (EnumBackpacks)e.AddedItems[0]
+                    && lootbp != (EnumBackpacks)e.AddedItems[0]
+                    && ammobp != (EnumBackpacks)e.AddedItems[0])
+                {
+                    Global._backpacks.GoldBackpack = (EnumBackpacks)e.AddedItems[0];
+                }
+                else
+                {
+                    MessageBox.Show("Você não pode repetir as Backpacks!");
+                    GoldBP.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                GoldBP.SelectedIndex = 0;
+            }
+        }
+        private void AmmoBP_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var mainbp = MainBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)MainBP.SelectedItem;
+            var supplybp = SupplyBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)SupplyBP.SelectedItem;
+            var lootbp = LootBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)LootBP.SelectedItem;
+            var goldbp = GoldBP.SelectedItem == null ? EnumBackpacks.none : (EnumBackpacks)GoldBP.SelectedItem;
+            if (!string.IsNullOrWhiteSpace(e.AddedItems[0].ToString())
+                && e.AddedItems[0].ToString() != "none"
+                && mainbp != EnumBackpacks.none)
+            {
+                if (supplybp != (EnumBackpacks)e.AddedItems[0]
+                    && mainbp != (EnumBackpacks)e.AddedItems[0]
+                    && lootbp != (EnumBackpacks)e.AddedItems[0]
+                    && goldbp != (EnumBackpacks)e.AddedItems[0])
+                {
+                    Global._backpacks.AmmoBackpack = (EnumBackpacks)e.AddedItems[0];
+                }
+                else
+                {
+                    MessageBox.Show("Você não pode repetir as Backpacks!");
+                    AmmoBP.SelectedIndex = 0;
+                }
+
+            }
+            else
+            {
+                AmmoBP.SelectedIndex = 0;
+            }
+        }
         #endregion
+
     }
 }
