@@ -38,12 +38,12 @@ namespace BotTibia
                 return null;
             }
         }
-        public static CoordenadasDeElementos PegaElementosAhk(string process, CoordenadasDeElementos coordenadas, string elemento)
+        public static CoordenadasDeElementos PegaElementosAhk(string process, CoordenadasDeElementos coordenadas, string elemento, int varicao = 0)
         {
             var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var _ahkEngine = AutoHotkeyEngine.Instance;
             var retorno = _ahkEngine.ExecFunction("PegaElementosAhk", coordenadas.X.ToString(), coordenadas.Y.ToString(), coordenadas.Width.ToString(),
-                                                  coordenadas.Height.ToString(), elemento, hwnd.ToString());
+                                                  coordenadas.Height.ToString(), elemento, hwnd.ToString(), varicao.ToString());
             var parametros = retorno.Split(',');
             _ahkEngine = null;
             if (parametros[0] == "1")
@@ -69,12 +69,12 @@ namespace BotTibia
                 return null;
             }
         }
-        public static CoordenadasDeElementos PegaElementosAhk(string process,int x, int y, int width, int height, string elemento)
+        public static CoordenadasDeElementos PegaElementosAhk(string process,int x, int y, int width, int height, string elemento, int varicao = 0)
         {
             var hwnd = Process.GetProcesses().ToList().First(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var _ahkEngine = AutoHotkeyEngine.Instance;
             var retorno = _ahkEngine.ExecFunction("PegaElementosAhk",x.ToString(), y.ToString(),width.ToString(),
-                                                  height.ToString(), elemento, hwnd.ToString());
+                                                  height.ToString(), elemento, hwnd.ToString(), varicao.ToString());
             var parametros = retorno.Split(',');
             _ahkEngine = null;
             if (parametros[0] == "1")

@@ -36,7 +36,7 @@ namespace BotTibia.Actions.AHK
         private static void PegaElementosDaTela()
         {
             var _ahkEngine = AutoHotkeyEngine.Instance;
-            string Function = "PegaElementosAhk(x, y, largura, altura,item, hwnd){"
+            string Function = "PegaElementosAhk(x, y, largura, altura,item, hwnd, variation){"
                             + "\r\n If !pToken:= Gdip_Startup()                                                                          "
                             + "\r\n {                                                                                                   "
                             + "\r\n   MsgBox, 48, gdiplus error!, Gdiplus failed to start. Please ensure you have gdiplus on your system"
@@ -46,7 +46,7 @@ namespace BotTibia.Actions.AHK
                             + "\r\n bmpNeedle:= Gdip_CreateBitmapFromFile(item)                                                     "
                             + "\r\n bmpHaystack := Gdip_CropImage(tela, x, y, largura, altura) "
                             + "\r\n width:= Gdip_GetImageWidth(bmpNeedle), height:= Gdip_GetImageHeight(bmpNeedle)                      "
-                            + "\r\n RET:= Gdip_ImageSearch(bmpHaystack, bmpNeedle, OutputList, 0, 0, 0, 0, 0, 0xFFFFFF)                 "
+                            + "\r\n RET:= Gdip_ImageSearch(bmpHaystack, bmpNeedle, OutputList, 0, 0, 0, 0, variation, 0xFFFFFF)                 "
                             + "\r\n Gdip_DisposeImage(bmpHaystack)                                                                      "
                             + "\r\n Gdip_DisposeImage(tela)                                                                      "
                             + "\r\n Gdip_DisposeImage(bmpNeedle)                                                                        "

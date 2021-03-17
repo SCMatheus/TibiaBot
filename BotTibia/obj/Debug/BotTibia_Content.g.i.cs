@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/corpo/backpack.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/corpo/blue.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/corpo/brocade.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/corpo/dragon.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/nome/backpack.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/nome/blue.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/nome/brocade.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/backpacks/nome/dragon.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/configsgerais/setadown.png")]
 
 

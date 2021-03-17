@@ -182,7 +182,5 @@ namespace BotTibia.Actions.Cavebot
             return true;
         }
         #endregion
-        #region Stand
-        #endregion
     }
 }

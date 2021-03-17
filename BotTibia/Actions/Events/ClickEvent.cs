@@ -38,6 +38,22 @@ namespace BotTibia.Actions.Events
                 SendMessage(hwnd, WM_RBUTTONDOWN, IntPtr.Zero, pointPtr);
                 SendMessage(hwnd, WM_RBUTTONUP, IntPtr.Zero, pointPtr);
             }
+            else if (EnumMouseEvent.LeftDown == evento)
+            {
+                SendMessage(hwnd, WM_LBUTTONDOWN, IntPtr.Zero, pointPtr);
+            }
+            else if (EnumMouseEvent.LeftUp == evento)
+            {
+                SendMessage(hwnd, WM_LBUTTONUP, IntPtr.Zero, pointPtr);
+            }
+            else if (EnumMouseEvent.RightDown == evento)
+            {
+                SendMessage(hwnd, WM_RBUTTONDOWN, IntPtr.Zero, pointPtr);
+            }
+            else if (EnumMouseEvent.RightUp == evento)
+            {
+                SendMessage(hwnd, WM_RBUTTONUP, IntPtr.Zero, pointPtr);
+            }
         }
     }
 }

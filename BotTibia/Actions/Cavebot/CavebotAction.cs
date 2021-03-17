@@ -82,12 +82,24 @@ namespace BotTibia.Actions.Cavebot
         }
         private static void EncontraEVaiAteDepot()
         {
-            var depot = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName,Global._mainWindow, Global._path+ "\\Images\\ConfigsGerais\\Depot.png");
+            if (Global._backpacks.LootBackpack == EnumBackpacks.none)
+                return;
+            var count = 0;
+            CoordenadasDeElementos depot = null;
+            while (count <= 3)
+            {
+                depot = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._mainWindow, Global._path + $"\\Images\\ConfigsGerais\\Depot_{count}.png");
+                count++;
+            }
             if (depot != null)
             {
-                ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point(depot.X + depot.Width / 2, depot.Y + depot.Height / 2), EnumMouseEvent.Left);
-                Thread.Sleep(500);
+                ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((depot.X + depot.Width / 2)-8, (depot.Y + depot.Height / 2)-31), EnumMouseEvent.Left);
+                Thread.Sleep(5000);
                 CloseAllBackpacks();
+                Thread.Sleep(500);
+                OpenMainBackpack();
+                Thread.Sleep(500);
+                OpenBackpack(Global._backpacks.LootBackpack);
             }
             else
             {
@@ -118,21 +130,21 @@ namespace BotTibia.Actions.Cavebot
             if (Global._backpacks.GoldBackpack != EnumBackpacks.none)
             {
                 goldBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height,
-                                                              Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.LootBackpack.ToString() + ".png");
+                                                              Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.GoldBackpack.ToString() + ".png");
                 if (goldBP != null)
                     CloseBackpack(goldBP);
             }
             if (Global._backpacks.SupplyBackpack != EnumBackpacks.none)
             {
                 supplyBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height,
-                                                                Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.LootBackpack.ToString() + ".png");
+                                                                Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.SupplyBackpack.ToString() + ".png");
                 if (supplyBP != null)
                     CloseBackpack(supplyBP);
             }
             if (Global._backpacks.AmmoBackpack != EnumBackpacks.none)
             {
                 ammoBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height,
-                                                              Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.LootBackpack.ToString() + ".png");
+                                                              Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.AmmoBackpack.ToString() + ".png");
                 if(ammoBP != null)
                     CloseBackpack(ammoBP);
             }
@@ -141,7 +153,59 @@ namespace BotTibia.Actions.Cavebot
         {
             backpack.Width = 180;
             var close = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, backpack, Global._path + "\\Images\\ConfigsGerais\\Close.png");
-            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point(close.X + close.Width / 2, close.Y + close.Height / 2), EnumMouseEvent.Left);
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((close.X + close.Width / 2)-8, (close.Y + close.Height / 2) - 31), EnumMouseEvent.Left);
+        }
+        private static void OpenMainBackpack()
+        {
+            var mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.MainBackpack.ToString() + ".png");
+            if (mainBP != null)
+                return;
+            var coorMain = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Corpo\\" + Global._backpacks.MainBackpack.ToString() + ".png");
+            if (coorMain == null)
+                throw new Exception("Não foi possível encontrar a Main Backpack");
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((coorMain.X + coorMain.Width / 2) - 8, (coorMain.Y + coorMain.Height / 2) - 31), EnumMouseEvent.Right);
+        }
+        private static void OpenBackpack(EnumBackpacks backpack)
+        {
+            var mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.MainBackpack.ToString() + ".png");
+            if (mainBP == null)
+            {
+                OpenMainBackpack();
+                Thread.Sleep(500);
+                mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.MainBackpack.ToString() + ".png");
+            }
+            mainBP.Height = mainBP.Height + 270;
+            mainBP.Width = Global._tela.Width;
+            var pushBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, mainBP, Global._path + "\\Images\\ConfigsGerais\\setaDown.png");
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((pushBP.X + pushBP.Width / 2) - 8, (pushBP.Y + pushBP.Height + 3) - 31), EnumMouseEvent.LeftDown);
+            Thread.Sleep(500);
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((pushBP.X - pushBP.Width / 2) - 8,Global._tela.Height), EnumMouseEvent.LeftUp);
+            Thread.Sleep(500);
+            var backpackToOpen = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Corpo\\" + backpack.ToString() + ".png");
+            if (backpackToOpen == null)
+                throw new Exception($"Não foi possível encontrar a {backpack.ToString()}");
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((backpackToOpen.X + backpackToOpen.Width / 2) - 8, (backpackToOpen.Y + backpackToOpen.Height / 2) - 31), EnumMouseEvent.Right);
+        }
+        private static void OpenBackpackInNewTab(EnumBackpacks backpack)
+        {
+            var mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.MainBackpack.ToString() + ".png");
+            if (mainBP == null)
+            {
+                OpenMainBackpack();
+                Thread.Sleep(500);
+                mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.MainBackpack.ToString() + ".png");
+            }
+            mainBP.Height = mainBP.Height + 270;
+            mainBP.Width = Global._tela.Width;
+            var pushBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, mainBP, Global._path + "\\Images\\ConfigsGerais\\setaDown.png");
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((pushBP.X + pushBP.Width / 2) - 8, (pushBP.Y + pushBP.Height + 3) - 31), EnumMouseEvent.LeftDown);
+            Thread.Sleep(500);
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((pushBP.X - pushBP.Width / 2) - 8, Global._tela.Height), EnumMouseEvent.LeftUp);
+            Thread.Sleep(500);
+            var backpackToOpen = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Corpo\\" + backpack.ToString() + ".png");
+            if (backpackToOpen == null)
+                throw new Exception($"Não foi possível encontrar a {backpack.ToString()}");
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((backpackToOpen.X + backpackToOpen.Width / 2) - 8, (backpackToOpen.Y + backpackToOpen.Height / 2) - 31), EnumMouseEvent.Right);
         }
     }
 }
