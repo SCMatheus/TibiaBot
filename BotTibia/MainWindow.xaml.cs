@@ -93,7 +93,7 @@ namespace BotTibia
             while (Global._mainWindow == null)
             {
                 Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
-                                                                            Global._path + $"\\Images\\Global\\Configs\\characterWindow_{count}.png");
+                                                                            Global._path + $"\\Images\\Global\\Configs\\characterWindow_{count}.png",25);
                 count++;
                 if (count >= 3)
                     break;
@@ -668,6 +668,10 @@ namespace BotTibia
                     }));
                     Cavebot.ExecutaWaypoint();
                 }
+            }
+            catch (ThreadAbortException ex)
+            {
+
             }
             catch (Exception ex)
             {

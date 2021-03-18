@@ -8,6 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/configsgerais/setadown.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/depot_in_browse_0.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/depot_in_browse_1.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/depot_in_browse_2.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/global/configs/depot_in_browse_3.png")]
 
 

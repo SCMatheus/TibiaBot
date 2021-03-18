@@ -123,10 +123,10 @@ namespace BotTibia.Actions.Cavebot
                 {
                     var click = new Point()
                     {
-                        X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X) - 8,
-                        Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y) - 31,
+                        X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X),
+                        Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y),
                     };
-                    ClickEvent.Click(Global._tibiaProcessName, click, EnumMouseEvent.Left);
+                    ClickEvent.ClickOnElement(Global._tibiaProcessName, click, EnumMouseEvent.Left);
                 }
                 Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
                 return false;
@@ -170,10 +170,10 @@ namespace BotTibia.Actions.Cavebot
                 {
                     var click = new Point()
                     {
-                        X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X) - 8,
-                        Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y) - 31,
+                        X = Global._miniMap.X + Global._miniMap.Width / 2 + (coordenadaFinal.X - coordenadasAtuais.X),
+                        Y = Global._miniMap.Y + Global._miniMap.Height / 2 + (coordenadaFinal.Y - coordenadasAtuais.Y),
                     };
-                    ClickEvent.Click(Global._tibiaProcessName, click, EnumMouseEvent.Left);
+                    ClickEvent.ClickOnElement(Global._tibiaProcessName, click, EnumMouseEvent.Left);
                 }
                 Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
                 return false;

@@ -52,6 +52,11 @@ D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\Depot_0.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\Depot_2.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\Depot_3.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\push.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\setaDown.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\depot_box_0.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\depot_box_1.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\depot_box_2.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\depot_box_3.png
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.exe.config
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\bin\Debug\BotTibia.pdb
@@ -75,4 +80,12 @@ D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CoreCompileInputs.cache
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csproj.CopyComplete
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.exe
 D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.pdb
-D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\ConfigsGerais\setaDown.png
+D:\GitHub\BotTibia\BotTibia\obj\Debug\BotTibia.csprojAssemblyReference.cache
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\browse_field.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\depot_to_open.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\depot_spot_to_deposit.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\spot_bp_vazia.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\depot_in_browse_0.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\depot_in_browse_1.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\depot_in_browse_2.png
+D:\GitHub\BotTibia\BotTibia\bin\Debug\Images\Global\Configs\depot_in_browse_3.png

@@ -45,6 +45,8 @@ namespace BotTibia.Actions.AHK
                             + "\r\n tela := Gdip_BitmapFromHWND(hwnd)                                                     "
                             + "\r\n bmpNeedle:= Gdip_CreateBitmapFromFile(item)                                                     "
                             + "\r\n bmpHaystack := Gdip_CropImage(tela, x, y, largura, altura) "
+                            + "\r\n Gdip_SaveBitmapToFile(bmpHaystack,\"teste1.png\") "
+                            + "\r\n Gdip_SaveBitmapToFile(bmpNeedle,\"teste2.png\") "
                             + "\r\n width:= Gdip_GetImageWidth(bmpNeedle), height:= Gdip_GetImageHeight(bmpNeedle)                      "
                             + "\r\n RET:= Gdip_ImageSearch(bmpHaystack, bmpNeedle, OutputList, 0, 0, 0, 0, variation, 0xFFFFFF)                 "
                             + "\r\n Gdip_DisposeImage(bmpHaystack)                                                                      "
