@@ -47,6 +47,11 @@ namespace BotTibia
                 MessageBox.Show("Erro: "+e.Message);
                 Environment.Exit(1);
             }
+            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Main, EnumBackpacks.none));
+            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Supply, EnumBackpacks.none));
+            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Loot, EnumBackpacks.none));
+            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Gold, EnumBackpacks.none));
+            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Ammo, EnumBackpacks.none));
             InitializeComponent();
         }
         #region Configuracao na selecao de personagem
@@ -143,7 +148,7 @@ namespace BotTibia
                 throw new Exception("Não foi possivel identificar a life do personagem.");
             Dispatcher.Invoke((Action)(() =>
             {
-                progress.Report(70);
+                progress.Report(65);
             }));
             Global._mana.SetCoordenadasPorImagemDoRaio(coordenadasRaio);
             Dispatcher.Invoke((Action)(() =>
@@ -157,10 +162,12 @@ namespace BotTibia
                                                             Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\statusBar.png");
             if (coordenadasStatusBar == null)
                 throw new Exception("Não foi possivel identificar a status bar do personagem.");
+
             Dispatcher.Invoke((Action)(() =>
             {
-                progress.Report(90);
+                progress.Report(80);
             }));
+            Targeting.AjustaBattle();
             Global._status.Coordenadas = coordenadasStatusBar;
 
             Dispatcher.Invoke((Action)(() =>
@@ -662,7 +669,6 @@ namespace BotTibia
         {
             try
             {
-                Targeting.AjustaBattle();
                 while (true)
                 {
                     Dispatcher.Invoke((Action)(() =>
@@ -1080,7 +1086,7 @@ namespace BotTibia
         {
             if(!string.IsNullOrWhiteSpace(e.AddedItems[0].ToString()) && e.AddedItems[0].ToString() != "none")
             {
-                Global._backpacks.MainBackpack = (EnumBackpacks)e.AddedItems[0];
+                Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Bp = (EnumBackpacks)e.AddedItems[0];
             }
             else
             {
@@ -1107,7 +1113,7 @@ namespace BotTibia
                     && goldbp != (EnumBackpacks)e.AddedItems[0]
                     && ammobp != (EnumBackpacks)e.AddedItems[0])
                 {
-                    Global._backpacks.SupplyBackpack = (EnumBackpacks)e.AddedItems[0];
+                    Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Supply).Bp = (EnumBackpacks)e.AddedItems[0];
                 }
                 else
                 {
@@ -1136,7 +1142,7 @@ namespace BotTibia
                     && goldbp != (EnumBackpacks)e.AddedItems[0]
                     && ammobp != (EnumBackpacks)e.AddedItems[0])
                 {
-                    Global._backpacks.LootBackpack = (EnumBackpacks)e.AddedItems[0];
+                    Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Loot).Bp = (EnumBackpacks)e.AddedItems[0];
                 }
                 else
                 {
@@ -1164,7 +1170,7 @@ namespace BotTibia
                     && lootbp != (EnumBackpacks)e.AddedItems[0]
                     && ammobp != (EnumBackpacks)e.AddedItems[0])
                 {
-                    Global._backpacks.GoldBackpack = (EnumBackpacks)e.AddedItems[0];
+                    Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Gold).Bp = (EnumBackpacks)e.AddedItems[0];
                 }
                 else
                 {
@@ -1192,7 +1198,7 @@ namespace BotTibia
                     && lootbp != (EnumBackpacks)e.AddedItems[0]
                     && goldbp != (EnumBackpacks)e.AddedItems[0])
                 {
-                    Global._backpacks.AmmoBackpack = (EnumBackpacks)e.AddedItems[0];
+                    Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Ammo).Bp = (EnumBackpacks)e.AddedItems[0];
                 }
                 else
                 {

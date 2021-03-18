@@ -4,12 +4,16 @@ using BotTibia.Enum;
 namespace BotTibia.Classes
 {
     [Serializable()]
-    public class Backpacks
+    public class Backpack
     {
-        public EnumBackpacks MainBackpack { get; set; }
-        public EnumBackpacks SupplyBackpack { get; set; }
-        public EnumBackpacks LootBackpack { get; set; }
-        public EnumBackpacks GoldBackpack { get; set; }
-        public EnumBackpacks AmmoBackpack { get; set; }
+        public EnumTipoBackpack Tipo { get; set; }
+        public EnumBackpacks Bp { get; set; }
+        public CoordenadasDeElementos Coordenadas {get; set;}
+
+        public Backpack(EnumTipoBackpack tipo, EnumBackpacks bp)
+        {
+            Tipo = tipo;
+            Bp = bp;
+        }
     }
 }

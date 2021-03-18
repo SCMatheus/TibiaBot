@@ -123,6 +123,7 @@
     <Compile Include="Classes\VidaBar.cs" />
     <Compile Include="Classes\CoordenadasXeY.cs" />
     <Compile Include="Classes\Waypoint.cs" />
+    <Compile Include="Enum\EnumTipoBackpack.cs" />
     <Compile Include="Enum\EnumAction.cs" />
     <Compile Include="Enum\EnumBackpacks.cs" />
     <Compile Include="Enum\EnumDirecao.cs" />
@@ -434,6 +435,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\ConfigsGerais\targetado.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Global\Configs\open_new_window.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BotTibia.Enum;
 
@@ -64,7 +65,7 @@ namespace BotTibia.Actions.Events
             SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, pointPtr);
             if (EnumMouseEvent.Left == evento)
             {
-                SendMessage(hwnd, WM_LBUTTONDOWN, IntPtr.Zero, pointPtr);
+                SendMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, pointPtr);
                 SendMessage(hwnd, WM_LBUTTONUP, IntPtr.Zero, pointPtr);
             }
             else if (EnumMouseEvent.Right == evento)
@@ -88,6 +89,9 @@ namespace BotTibia.Actions.Events
             {
                 SendMessage(hwnd, WM_RBUTTONUP, IntPtr.Zero, pointPtr);
             }
+            Thread.Sleep(200);
+            SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, MakeLParam(30, 30));
+            Thread.Sleep(300);
         }
         public static void ItemMove(string process, Point point,Point move)
         {
