@@ -89,9 +89,6 @@ namespace BotTibia.Actions.Events
             {
                 SendMessage(hwnd, WM_RBUTTONUP, IntPtr.Zero, pointPtr);
             }
-            Thread.Sleep(200);
-            SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, MakeLParam(30, 30));
-            Thread.Sleep(300);
         }
         public static void ItemMove(string process, Point point,Point move)
         {

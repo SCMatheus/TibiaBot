@@ -23,6 +23,7 @@ namespace BotTibia.Classes
         public static string _path;
         public static bool _isTarget;
         public static bool _isLoot;
+        public static bool _isCavebot;
         public static List<Variavel> _variaveisGlobais = new List<Variavel>();
         public static List<Backpack> _backpacks = new List<Backpack>();
         public static List<CoordenadasDeElementos> _backpacksCoord = new List<CoordenadasDeElementos>(); //TODO CLASS COORDENADAS E BACKPACK

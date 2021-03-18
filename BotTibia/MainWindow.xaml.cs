@@ -47,11 +47,11 @@ namespace BotTibia
                 MessageBox.Show("Erro: "+e.Message);
                 Environment.Exit(1);
             }
-            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Main, EnumBackpacks.none));
-            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Supply, EnumBackpacks.none));
-            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Loot, EnumBackpacks.none));
-            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Gold, EnumBackpacks.none));
-            Global._backpacks.Add(new Backpack(EnumTipoBackpack.Ammo, EnumBackpacks.none));
+            Global._backpacks.Add(new Backpack() { Tipo = EnumTipoBackpack.Main, Bp = EnumBackpacks.none, Coordenadas = null });
+            Global._backpacks.Add(new Backpack() { Tipo = EnumTipoBackpack.Supply, Bp = EnumBackpacks.none, Coordenadas = null });
+            Global._backpacks.Add(new Backpack() { Tipo = EnumTipoBackpack.Loot, Bp = EnumBackpacks.none, Coordenadas = null });
+            Global._backpacks.Add(new Backpack() { Tipo = EnumTipoBackpack.Gold, Bp = EnumBackpacks.none, Coordenadas = null });
+            Global._backpacks.Add(new Backpack() { Tipo = EnumTipoBackpack.Ammo, Bp = EnumBackpacks.none, Coordenadas = null });
             InitializeComponent();
         }
         #region Configuracao na selecao de personagem
@@ -541,7 +541,8 @@ namespace BotTibia
                 ParaHeal = ParalizeHealHotkey.Text,
                 Firetimer = int.Parse(FireTimer.Text),
                 Waypoints = Cavebot.Waypoints,
-                VariaveisGlobais = Global._variaveisGlobais
+                VariaveisGlobais = Global._variaveisGlobais,
+                backpacks = Global._backpacks
             };
             // Create a new XmlSerializer instance with the type of the test class
             XmlSerializer SerializerObj = new XmlSerializer(typeof(ConfigScripts));
@@ -591,8 +592,36 @@ namespace BotTibia
             //Variaveis Globais
             Global._variaveisGlobais = LoadedConfigs.VariaveisGlobais;
             SetaVariaveisGlobaisNoTextBox();
+            // Backpacks
+            Global._backpacks = LoadedConfigs.backpacks;
+            AtualizaBpsNaView();
 
             AtualizaVariaveisGlobais();
+        }
+        private void AtualizaBpsNaView()
+        {
+            Global._backpacks.ForEach( backpack => { 
+                if(backpack.Tipo == EnumTipoBackpack.Main)
+                {
+                    MainBP.SelectedItem = backpack.Bp;
+                }
+                else if(backpack.Tipo == EnumTipoBackpack.Loot)
+                {
+                    LootBP.SelectedItem = backpack.Bp;
+                }
+                else if (backpack.Tipo == EnumTipoBackpack.Gold)
+                {
+                    GoldBP.SelectedItem = backpack.Bp;
+                }
+                else if (backpack.Tipo == EnumTipoBackpack.Supply)
+                {
+                    SupplyBP.SelectedItem = backpack.Bp;
+                }
+                else
+                {
+                    AmmoBP.SelectedItem = backpack.Bp;
+                }
+            });
         }
 
         private void SetaVariaveisGlobaisNoTextBox()
@@ -631,12 +660,16 @@ namespace BotTibia
                     CavebotCheckBox.IsChecked = false;
                     return;
                 }
-                Global._threadCavebot = new Thread(() =>
+                if (Global._threadCavebot != null)
                 {
-                    Hunting();
-                });
+                    Global._threadCavebot = new Thread(() =>
+                    {
+                        Hunting();
+                    });
+                    Global._threadCavebot.Start();
+                }
                 GridView.IsEnabled = false;
-                Global._threadCavebot.Start();
+                Global._isCavebot = true;
             }
             catch (Exception ex)
             {
@@ -663,8 +696,6 @@ namespace BotTibia
             }
 
         }
-        
-
         private void Hunting()
         {
             try
@@ -676,7 +707,10 @@ namespace BotTibia
                         if (GridView.HasItems)
                             ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
                     }));
-                    Cavebot.ExecutaWaypoint();
+                    if(Global._isTarget)
+                        Targeting.AttackAndLooting();
+                    if(Global._isCavebot)
+                        Cavebot.ExecutaWaypoint();
                 }
             }
             catch (ThreadAbortException ex)

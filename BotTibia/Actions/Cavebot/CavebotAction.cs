@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Windows.Controls;
+using System.Windows.Threading;
 using BotTibia.Actions.AHK;
 using BotTibia.Actions.Events;
 using BotTibia.Classes;
@@ -67,8 +69,14 @@ namespace BotTibia.Actions.Cavebot
                 case EnumAction.Deposit:
                     EncontraEVaiAteDepot();
                     break;
+                case EnumAction.OpenBackpacks:
+                    OpenAllBackpacks();
+                    break;
+                case EnumAction.CloseBackpacks:
+                    CloseAllBackpacks();
+                    break;
                 case EnumAction.GotoLabel:
-
+                    GotoLabel(parametros[0]);
                     break;
             }
         }
@@ -240,6 +248,12 @@ namespace BotTibia.Actions.Cavebot
             var pushBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, mainBP, Global._path + "\\Images\\ConfigsGerais\\setaDown.png");
             ClickEvent.ItemMove(Global._tibiaProcessName, new Point((pushBP.X + pushBP.Width / 2), (pushBP.Y + pushBP.Height + 3)), new Point((pushBP.X + pushBP.Width / 2) - 8, Global._tela.Height+31));
             Thread.Sleep(500);
+            var isOpened = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + backpack.Bp.ToString() + ".png");
+            if (isOpened != null)
+            {
+                backpack.Coordenadas = isOpened;
+                return;
+            }
             var backpackToOpen = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Corpo\\" + backpack.Bp.ToString() + ".png");
             if (backpackToOpen == null)
                 throw new Exception($"Não foi possível encontrar a {backpack.Bp}");
@@ -268,10 +282,28 @@ namespace BotTibia.Actions.Cavebot
             ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(backpackToOpen.X + backpackToOpen.Width / 2, backpackToOpen.Y + backpackToOpen.Height / 2), EnumMouseEvent.Right);
             AhkFunctions.SendKey("Ctrl Up", Global._tibiaProcessName);
             Thread.Sleep(500);
-            var openNewWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._mainWindow.X, Global._mainWindow.Y, Global._mainWindow.Width, Global._mainWindow.Height, Global._path + "\\Images\\Global\\Configs\\open_new_window.png");
+            var openNewWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\open_new_window.png");
             ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(openNewWindow.X + openNewWindow.Width / 2, openNewWindow.Y + openNewWindow.Height / 2), EnumMouseEvent.Left);
             Thread.Sleep(300);
             backpack.Coordenadas = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + backpack.Bp.ToString() + ".png");
+        }
+        public static void OpenAllBackpacks()
+        {
+            var mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Bp.ToString() + ".png");
+            if (mainBP == null)
+                OpenMainBackpack();
+                Global._backpacks.ForEach(backpack => { 
+                if(backpack.Tipo != EnumTipoBackpack.Main && backpack.Bp != EnumBackpacks.none)
+                {
+                    OpenBackpackInNewTab(backpack);
+                    Thread.Sleep(300);
+                }
+            });
+        }
+
+        public static void GotoLabel(string label)
+        {
+            Cavebot.Index = Cavebot.Waypoints.FirstOrDefault(waypoint => waypoint.TypeAction == EnumAction.Label && waypoint.Parametros.ToLower() == label.ToLower()).Index - 1;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 using BotTibia.Enum;
 
 namespace BotTibia.Classes
@@ -8,12 +9,7 @@ namespace BotTibia.Classes
     {
         public EnumTipoBackpack Tipo { get; set; }
         public EnumBackpacks Bp { get; set; }
+        [XmlIgnore]
         public CoordenadasDeElementos Coordenadas {get; set;}
-
-        public Backpack(EnumTipoBackpack tipo, EnumBackpacks bp)
-        {
-            Tipo = tipo;
-            Bp = bp;
-        }
     }
 }

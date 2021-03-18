@@ -22,6 +22,10 @@ namespace BotTibia.Enum
         [XmlEnum(Name = "Deposit")]
         Deposit,
         [XmlEnum(Name = "GotoLabel")]
-        GotoLabel
+        GotoLabel,
+        [XmlEnum(Name = "OpenBackpacks")]
+        OpenBackpacks,
+        [XmlEnum(Name = "CloseBackpacks")]
+        CloseBackpacks
     }
 }

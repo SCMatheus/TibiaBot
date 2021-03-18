@@ -19,19 +19,20 @@ namespace BotTibia.Actions.Target
         {
             bool target = true;
             AhkFunctions.SendKey("PgUp", Global._tibiaProcessName);
-            Thread.Sleep(300);
-            CoordenadasDeElementos isTarget;
+            Thread.Sleep(100);
+            CoordenadasDeElementos isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
+            if (isTarget == null)
+                return;
             int contTempo = 0;
             while (target)
             {
-                isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
                 if (isTarget == null)
                 {
                     if (Global._isLoot)
                         Looting.Lootear();
                     AhkFunctions.SendKey("PgUp", Global._tibiaProcessName);
                     Thread.Sleep(300);
-                    isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
+                    isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
                     if (isTarget == null)
                         break;
                 }
@@ -45,6 +46,7 @@ namespace BotTibia.Actions.Target
                         break;
                     }
                 }
+                isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
             }
         }
         public static void AjustaBattle()

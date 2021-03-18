@@ -17,5 +17,6 @@ namespace BotTibia.Persistencia
         public int Firetimer { get; set; }
         public List<Waypoint> Waypoints { get; set; }
         public List<Variavel> VariaveisGlobais { get; set; }
+        public List<Backpack> backpacks { get; set; }
     }
 }

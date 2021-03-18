@@ -51,7 +51,8 @@ namespace BotTibia.Actions.Cavebot
                     break;
                 case EnumWaypoints.Action:
                     CavebotAction.ExecAction(waypoint.TypeAction, waypoint.Coordenada, waypoint.Parametros);
-                    IndexAdd();
+                    if(waypoint.TypeAction != EnumAction.GotoLabel)
+                        IndexAdd();
                     break;
             }
         }
