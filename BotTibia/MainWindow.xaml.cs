@@ -22,6 +22,8 @@ using BotTibia.Enum;
 using Point = System.Drawing.Point;
 using ListViewItem = System.Windows.Controls.ListViewItem;
 using System.Windows.Controls;
+using BotTibia.Actions.Events;
+using BotTibia.Actions.Target;
 
 namespace BotTibia
 {
@@ -654,11 +656,13 @@ namespace BotTibia
             }
 
         }
+        
 
         private void Hunting()
         {
             try
             {
+                Targeting.AjustaBattle();
                 while (true)
                 {
                     Dispatcher.Invoke((Action)(() =>

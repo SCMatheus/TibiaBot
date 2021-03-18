@@ -97,9 +97,11 @@
     <Compile Include="Actions\AHK\AhkFunctions.cs" />
     <Compile Include="Actions\Cavebot\CavebotAction.cs" />
     <Compile Include="Actions\Cavebot\Cavebot.cs" />
+    <Compile Include="Actions\Loot\Looting.cs" />
     <Compile Include="Actions\Print\CapturaTela.cs" />
     <Compile Include="Actions\Events\ClickEvent.cs" />
     <Compile Include="Actions\Heal\Healer.cs" />
+    <Compile Include="Actions\Target\Targeting.cs" />
     <Compile Include="Classes\Backpacks.cs" />
     <Compile Include="Classes\Coordenada.cs" />
     <Compile Include="Classes\Global.cs" />
@@ -419,6 +421,19 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Images\Global\Configs\depot_in_browse_3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Global\Configs\battle_name.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Images\Global\Configs\battle_to_open.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\ConfigsGerais\targetado.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

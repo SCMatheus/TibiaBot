@@ -18,6 +18,7 @@ namespace BotTibia.Classes
         public static CoordenadasDeElementos _mainWindow = new CoordenadasDeElementos();
         public static CoordenadasDeElementos _miniMap = new CoordenadasDeElementos();
         public static CoordenadasDeElementos _andarDoMap = new CoordenadasDeElementos();
+        public static CoordenadasDeElementos _battle = new CoordenadasDeElementos();
         public static Coordenada _ultimaCoordenadaDoPersonagem = new Coordenada();
         public static string _path;
         public static bool _isTarget;
