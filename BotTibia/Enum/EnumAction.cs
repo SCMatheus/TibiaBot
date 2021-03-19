@@ -26,6 +26,10 @@ namespace BotTibia.Enum
         [XmlEnum(Name = "OpenBackpacks")]
         OpenBackpacks,
         [XmlEnum(Name = "CloseBackpacks")]
-        CloseBackpacks
+        CloseBackpacks,
+        [XmlEnum(Name = "TargetOn")]
+        TargetOn,
+        [XmlEnum(Name = "TargetOff")]
+        TargetOff
     }
 }

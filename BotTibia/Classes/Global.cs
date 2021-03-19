@@ -21,9 +21,9 @@ namespace BotTibia.Classes
         public static CoordenadasDeElementos _battle = new CoordenadasDeElementos();
         public static Coordenada _ultimaCoordenadaDoPersonagem = new Coordenada();
         public static string _path;
-        public static bool _isTarget;
-        public static bool _isLoot;
-        public static bool _isCavebot;
+        public static bool _isTarget = false;
+        public static bool _isLoot = false;
+        public static bool _isCavebot = false;
         public static List<Variavel> _variaveisGlobais = new List<Variavel>();
         public static List<Backpack> _backpacks = new List<Backpack>();
         public static List<CoordenadasDeElementos> _backpacksCoord = new List<CoordenadasDeElementos>(); //TODO CLASS COORDENADAS E BACKPACK

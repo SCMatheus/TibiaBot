@@ -31,16 +31,16 @@ namespace BotTibia.Actions.Target
                     if (Global._isLoot)
                         Looting.Lootear();
                     AhkFunctions.SendKey("PgUp", Global._tibiaProcessName);
-                    Thread.Sleep(300);
+                    Thread.Sleep(100);
                     isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
                     if (isTarget == null)
                         break;
                 }
                 else
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(200);
                     contTempo++;
-                    if(contTempo > 60)
+                    if(contTempo > 150)
                     {
                         ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(isTarget.X + isTarget.Width / 2, isTarget.Y + isTarget.Height / 2), EnumMouseEvent.Left);
                         break;

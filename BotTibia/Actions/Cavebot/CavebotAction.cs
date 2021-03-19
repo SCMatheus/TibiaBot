@@ -78,6 +78,12 @@ namespace BotTibia.Actions.Cavebot
                 case EnumAction.GotoLabel:
                     GotoLabel(parametros[0]);
                     break;
+                case EnumAction.TargetOn:
+                    Global._isTarget = true;
+                    break;
+                case EnumAction.TargetOff:
+                    Global._isTarget = false;
+                    break;
             }
         }
         public static string PegaVariavelPorChave(string chave)

@@ -46,7 +46,7 @@
                     <TranslateTransform/>
                 </TransformGroup>
             </TabControl.RenderTransform>
-            <TabItem Header="Healing" Margin="-2,-2,-29,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
+            <TabItem Header="Healing" Margin="-2,-2,-20,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0*"/>
@@ -100,7 +100,7 @@
                     <Label x:Name="HeallingLabel" Content="HEALING" HorizontalAlignment="Left" Margin="356,4,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="88" Grid.Column="2"/>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="32,-2,-60,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
+            <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="23,-2,-42,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Margin="-5,10,9,0" VerticalAlignment="Top" Height="535" Background="#FFDADADA">
                     <DataGrid x:Name="GridView" Margin="13,34,134,12" ItemsSource="{Binding Waypoints}" SelectionMode="Single" AutoGenerateColumns="false" CanUserAddRows="false" >
                         <DataGrid.ItemContainerStyle>
@@ -157,10 +157,17 @@
 
                 </Grid>
             </TabItem>
-            <TabItem x:Name="Target" Header="Target" Margin="63,-2,-102,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
-                <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535"/>
+            <TabItem x:Name="Target" Header="Target" Margin="45,-2,-75,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
+                <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535">
+                    <CheckBox x:Name="TargetCheckBox" Checked="AtivarTarget" Unchecked="DesativarTarget" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="13,9,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
+                </Grid>
             </TabItem>
-            <TabItem x:Name="Tools" Header="Tools" Margin="105,-3,-144,1" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
+            <TabItem x:Name="Loot" Header="Loot" Margin="78,-2,-114,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
+                <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535">
+                    <CheckBox x:Name="LootCheckBox" Checked="AtivarLoot" Unchecked="DesativarLoot" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="13,9,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="Tools" Header="Tools" Margin="117,-3,-153,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Background="#FFDADADA" Margin="-5,35,1,0" VerticalAlignment="Top" Height="510">
                     <GroupBox Header="Variáveis Globais" Margin="458,28,4,5" BorderBrush="Black">
                         <TextBox x:Name="variaveisGlobais" HorizontalAlignment="Left" Height="397" Margin="23,13,0,0" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" VerticalAlignment="Top" Width="253"/>

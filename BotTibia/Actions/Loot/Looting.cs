@@ -12,19 +12,19 @@ namespace BotTibia.Actions.Loot
         public static void Lootear()
         {
             LootOnDirection(EnumDirecao.NORTH);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             LootOnDirection(EnumDirecao.NORTHEAST);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             LootOnDirection(EnumDirecao.EAST);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             LootOnDirection(EnumDirecao.SOUTHEAST);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             LootOnDirection(EnumDirecao.SOUTH);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             LootOnDirection(EnumDirecao.SOUTHWEST);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             LootOnDirection(EnumDirecao.WEST);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             LootOnDirection(EnumDirecao.NORTHWEST);
         }
         private static void LootOnDirection(EnumDirecao direcao)

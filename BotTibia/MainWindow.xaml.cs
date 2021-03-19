@@ -62,6 +62,8 @@ namespace BotTibia
                 CavebotCheckBox.IsEnabled = false;
                 HealcheckBox.IsEnabled = false;
                 ParalizecheckBox.IsEnabled = false;
+                TargetCheckBox.IsEnabled = false;
+                LootCheckBox.IsEnabled = false;
                 //inicialização dos dados
                 AtualizaVariaveisGlobais();
             }));
@@ -175,6 +177,8 @@ namespace BotTibia
                 CavebotCheckBox.IsEnabled = true;
                 HealcheckBox.IsEnabled = true;
                 ParalizecheckBox.IsEnabled = true;
+                TargetCheckBox.IsEnabled = true;
+                LootCheckBox.IsEnabled = true;
 
                 progress.Report(100);
             }));
@@ -289,6 +293,7 @@ namespace BotTibia
             {
                 Global._threadHeal = new Thread(() => Healer.Healar(Global._vida, Global._mana, Global._status, Global._fireTimer, Global._tibiaProcessName));
                 FireTimer.IsEnabled = false;
+                Global._threadHeal.IsBackground = true;
                 Global._threadHeal.Start();
             }
             catch(Exception ex)
@@ -660,12 +665,13 @@ namespace BotTibia
                     CavebotCheckBox.IsChecked = false;
                     return;
                 }
-                if (Global._threadCavebot != null)
+                if (Global._threadCavebot == null)
                 {
                     Global._threadCavebot = new Thread(() =>
                     {
                         Hunting();
                     });
+                    Global._threadCavebot.IsBackground = true;
                     Global._threadCavebot.Start();
                 }
                 GridView.IsEnabled = false;
@@ -683,12 +689,8 @@ namespace BotTibia
         {
             try
             {
-                if (Global._threadCavebot != null && Global._threadCavebot.IsAlive)
-                {
-                    GridView.IsEnabled = true;
-                    Global._threadCavebot.Interrupt();
-                    Global._threadCavebot.Abort();
-                }
+                Global._isCavebot = false;
+                GridView.IsEnabled = true;
             }
             catch (Exception ex)
             {
@@ -702,15 +704,22 @@ namespace BotTibia
             {
                 while (true)
                 {
-                    Dispatcher.Invoke((Action)(() =>
-                    {
-                        if (GridView.HasItems)
-                            ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
-                    }));
+
                     if(Global._isTarget)
                         Targeting.AttackAndLooting();
-                    if(Global._isCavebot)
+                    if (Global._isCavebot)
+                    {
+                        Dispatcher.Invoke((Action)(() =>
+                        {
+                            if (GridView.HasItems)
+                                ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
+                        }));
                         Cavebot.ExecutaWaypoint();
+                    }
+                    if (!(Global._isCavebot || Global._isTarget))
+                    {
+                        Thread.Sleep(1000);
+                    }
                 }
             }
             catch (ThreadAbortException ex)
@@ -728,6 +737,71 @@ namespace BotTibia
                     }));
                 }
             }
+        }
+        #endregion
+        #region Target
+        private void AtivarTarget(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (Global._threadCavebot == null)
+                {
+                    Global._threadCavebot = new Thread(() =>
+                    {
+                        Hunting();
+                    });
+                    Global._threadCavebot.IsBackground = true;
+                    Global._threadCavebot.Start();
+                }
+                Global._isTarget = true;
+                TargetCheckBox.IsChecked = true;
+            }
+            catch (Exception ex)
+            {
+                Global._threadCavebot.Interrupt();
+                Global._threadCavebot.Abort();
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void DesativarTarget(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Global._isTarget = false;
+                TargetCheckBox.IsChecked = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        #endregion
+        #region Loot
+        private void AtivarLoot(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Global._isLoot = true;
+                LootCheckBox.IsChecked = true;
+            }
+            catch (Exception ex)
+            { 
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void DesativarLoot(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Global._isLoot = false;
+                LootCheckBox.IsChecked = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
         #endregion
         #region number input validate
@@ -1247,6 +1321,5 @@ namespace BotTibia
             }
         }
         #endregion
-
     }
 }
