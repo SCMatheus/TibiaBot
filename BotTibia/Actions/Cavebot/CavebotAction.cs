@@ -308,6 +308,10 @@ namespace BotTibia.Actions.Cavebot
             backpack.Coordenadas = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + backpack.Bp.ToString() + ".png");
             backpack.Coordenadas.Width = 175;
             ExpandeBackpack(backpack);
+            if(backpack.Tipo == EnumTipoBackpack.Gold || backpack.Tipo == EnumTipoBackpack.Loot)
+            {
+                MoveParaOFimDaBackpack(backpack);
+            }
         }
         public static void OpenAllBackpacks()
         {
