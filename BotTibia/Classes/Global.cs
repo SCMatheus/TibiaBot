@@ -27,5 +27,7 @@ namespace BotTibia.Classes
         public static List<Variavel> _variaveisGlobais = new List<Variavel>();
         public static List<Backpack> _backpacks = new List<Backpack>();
         public static List<CoordenadasDeElementos> _backpacksCoord = new List<CoordenadasDeElementos>(); //TODO CLASS COORDENADAS E BACKPACK
+        public static List<string> _dropItens = new List<string>();
+        public static List<string> _moveLootItens = new List<string>();
     }
 }

@@ -95,7 +95,6 @@ namespace BotTibia.Actions.Events
             var hwnd = Process.GetProcesses().ToList().FirstOrDefault(p => p.MainWindowTitle.Equals(process)).MainWindowHandle;
             var pointPtr = MakeLParam(point.X - 8, point.Y - 31);
             SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, pointPtr);
-
             SendMessage(hwnd, WM_LBUTTONDOWN, MK_LBUTTON, pointPtr);
             SendMessage(hwnd, WM_MOUSEMOVE, IntPtr.Zero, MakeLParam(move.X - 8, move.Y - 31));
             SendMessage(hwnd, WM_LBUTTONUP, IntPtr.Zero, pointPtr);

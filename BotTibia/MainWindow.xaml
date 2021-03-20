@@ -47,58 +47,48 @@
                 </TransformGroup>
             </TabControl.RenderTransform>
             <TabItem Header="Healing" Margin="-2,-2,-20,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
-                <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0*"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0*"/>
-                        <ColumnDefinition Width="0*"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="0*"/>
-                    </Grid.ColumnDefinitions>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="478" Margin="132,33,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="482" Grid.Column="2"/>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="274" Margin="259,66,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="235" Grid.Column="2"/>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="69" Margin="270,262,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="211" Grid.Column="2"/>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="145" Margin="270,92,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="211" Grid.Column="2"/>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="83" Margin="256,374,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="230" Grid.Column="2"/>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="273,397,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="201" Grid.Column="2">
-                        <TextBox x:Name="ParalizeHealHotkey"  KeyUp="SetaParalizeManaHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Text="F5" Margin="105,9,0,0"/>
-                    </Border>
-                    <TextBox x:Name="PrimeiroHealHotkey"  KeyUp="SetaHotkeyPrimeiroHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="347,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Grid.Column="2" Grid.RowSpan="2" Text="F1"/>
-                    <TextBox x:Name="PrimeiroHealPercent" TextAlignment="Center" TextChanged="SetaPercentPrimeiroHeal" HorizontalAlignment="Left" Height="23" Margin="425,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Grid.Column="2" Grid.RowSpan="2" Text="90"/>
-                    <Label x:Name="label" Content="Hotkey" HorizontalAlignment="Left" Margin="347,92,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="48" Grid.RowSpan="2"/>
-                    <Label x:Name="Percent" Content="Percent" HorizontalAlignment="Left" Margin="425,92,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="52" Grid.RowSpan="2"/>
-                    <Label x:Name="PrimeiroPercent" Content="%" HorizontalAlignment="Left" Margin="400,123,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20" Grid.Column="2"/>
-                    <Label x:Name="Hotkey" Content="Hotkey" HorizontalAlignment="Left" Margin="347,92,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="48" Grid.RowSpan="2"/>
-                    <TextBox x:Name="SegundoHealHotkey" TextAlignment="Center" KeyUp="SetaHotkeySegundoHeal" HorizontalAlignment="Left" Height="23" Margin="347,154,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Grid.Column="2" Grid.RowSpan="2" Text="F2"/>
-                    <TextBox x:Name="SegundoHealPercent" TextAlignment="Center" TextChanged="SetaPercentSegundoHeal" HorizontalAlignment="Left" Height="23" Margin="425,154,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Grid.Column="2" Grid.RowSpan="2" Text="60"/>
-                    <Label x:Name="SegundoPercent" Content="%" HorizontalAlignment="Left" Margin="400,154,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20" Grid.Column="2"/>
-                    <TextBox x:Name="TerceiroHealHotkey" TextAlignment="Center" KeyUp="SetaHotkeyTerceiroHeal" HorizontalAlignment="Left" Height="23" Margin="347,185,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Grid.Column="2" Grid.RowSpan="2" Text="F3"/>
-                    <TextBox x:Name="TerceiroHealPercent" TextAlignment="Center" TextChanged="SetaPercentTerceiroHeal" HorizontalAlignment="Left" Height="23" Margin="425,185,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Grid.Column="2" Grid.RowSpan="2" Text="40"/>
-                    <Label x:Name="TerceiroPercent" Content="%" HorizontalAlignment="Left" Margin="400,185,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20" Grid.Column="2" />
-                    <CheckBox x:Name="HealcheckBox" Checked="AtivarCura" Unchecked="DesativarCura" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="131,9,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51" Grid.Column="2"/>
-                    <Label x:Name="VidaGroup" Content="Vida:" HorizontalAlignment="Left" Margin="363,66,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="36" Grid.Column="2"/>
-                    <TextBox x:Name="ManaHealHotkey"  KeyUp="SetaHotkeyManaHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="346,293,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Grid.Column="2" Grid.RowSpan="2" Text="F5"/>
-                    <TextBox x:Name="ManaHealPercent" TextChanged="SetaPercentManaHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="424,293,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Grid.Column="2" Grid.RowSpan="2" Text="50"/>
-                    <Label x:Name="label_Copy" Content="Hotkey" HorizontalAlignment="Left" Margin="346,265,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="48" Grid.RowSpan="2"/>
-                    <Label x:Name="Percent_Copy" Content="Percent." HorizontalAlignment="Left" Margin="424,262,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="52" Grid.RowSpan="2"/>
-                    <Label x:Name="LabelManaHealPercent" Content="%" HorizontalAlignment="Left" Margin="399,293,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20" Grid.Column="2"/>
-                    <Label x:Name="label1" Content="Mana:" HorizontalAlignment="Left" Margin="357,233,0,0" Foreground="#FF000000" Grid.RowSpan="2" VerticalAlignment="Top" Height="23" Width="42" Grid.Column="2"/>
-                    <Label x:Name="PrimeiroHeal" Content="Primeiro:" Margin="273,123,423,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
-                    <Label x:Name="SegundoHeal" Content="Segundo:" Margin="272,154,426,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
-                    <Label x:Name="TerceiroHeal" Content="Terceiro:" Margin="272,185,432,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
-                    <Label x:Name="Potion" Content="Potion:" Margin="280,291,108,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" Grid.Column="2"/>
-                    <Label x:Name="label2" Content="Paralize:" HorizontalAlignment="Left" Margin="354,372,0,0" Grid.RowSpan="2" Foreground="#FF000000" VerticalAlignment="Top" Height="26" Width="53" Grid.Column="2"/>
-                    <Label x:Name="Hotkey_Copy1" Content="Hotkey:" HorizontalAlignment="Left" Margin="326,405,0,0" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="51" Grid.RowSpan="2"/>
-                    <CheckBox x:Name="ParalizecheckBox" Checked="AtivarParalizeCura" Unchecked="DesativarParalizeCura" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="256,354,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51" Grid.Column="2"/>
-                    <TextBox x:Name="FireTimer" TextAlignment="Center" HorizontalAlignment="Left" Height="19" Margin="338,476,0,0" Grid.RowSpan="2" TextWrapping="Wrap" Text="300" VerticalAlignment="Top" Width="61" TextChanged="FireTimer_TextChanged" Grid.Column="2"/>
-                    <Label x:Name="label3" Content="FireTimer:" HorizontalAlignment="Left" Margin="271,471,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="62" Grid.Column="2"/>
-                    <Label x:Name="label4" Content="ms" HorizontalAlignment="Left" Margin="399,471,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="2" Height="26" Width="25"/>
-                    <CheckBox x:Name="EhEK" Content="Knight/Paladin" HorizontalAlignment="Left" Margin="356,216,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Checked="EhEk_Checked" Unchecked="EhEk_Unchecked" Width="103" Foreground="#FF000000" Grid.Column="2" Height="15"/>
-                    <Label x:Name="HeallingLabel" Content="HEALING" HorizontalAlignment="Left" Margin="356,4,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="88" Grid.Column="2"/>
-                </Grid>
+                <GroupBox Header="Healing" Margin="12,28,24,7" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <Grid Background="#FFDADADA" Margin="6,6,9,0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="482">
+                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="274" Margin="245,38,0,0" VerticalAlignment="Top" Width="235"/>
+                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="69" Margin="256,234,0,0" VerticalAlignment="Top" Width="211"/>
+                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="145" Margin="256,64,0,0" VerticalAlignment="Top" Width="211"/>
+                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="83" Margin="242,346,0,0" VerticalAlignment="Top" Width="230"/>
+                        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="45" Margin="259,369,0,0" VerticalAlignment="Top" Width="201">
+                            <TextBox x:Name="ParalizeHealHotkey"  KeyUp="SetaParalizeManaHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Text="F5" Margin="105,9,0,0"/>
+                        </Border>
+                        <TextBox x:Name="PrimeiroHealHotkey"  KeyUp="SetaHotkeyPrimeiroHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="333,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Text="F1"/>
+                        <TextBox x:Name="PrimeiroHealPercent" TextAlignment="Center" TextChanged="SetaPercentPrimeiroHeal" HorizontalAlignment="Left" Height="23" Margin="411,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Text="90"/>
+                        <Label x:Name="label" Content="Hotkey" HorizontalAlignment="Left" Margin="333,64,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="48"/>
+                        <Label x:Name="Percent" Content="Percent" HorizontalAlignment="Left" Margin="411,64,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="52"/>
+                        <Label x:Name="PrimeiroPercent" Content="%" HorizontalAlignment="Left" Margin="386,95,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20"/>
+                        <Label x:Name="Hotkey" Content="Hotkey" HorizontalAlignment="Left" Margin="333,64,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="48"/>
+                        <TextBox x:Name="SegundoHealHotkey" TextAlignment="Center" KeyUp="SetaHotkeySegundoHeal" HorizontalAlignment="Left" Height="23" Margin="333,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Text="F2"/>
+                        <TextBox x:Name="SegundoHealPercent" TextAlignment="Center" TextChanged="SetaPercentSegundoHeal" HorizontalAlignment="Left" Height="23" Margin="411,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Text="60"/>
+                        <Label x:Name="SegundoPercent" Content="%" HorizontalAlignment="Left" Margin="386,126,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20"/>
+                        <TextBox x:Name="TerceiroHealHotkey" TextAlignment="Center" KeyUp="SetaHotkeyTerceiroHeal" HorizontalAlignment="Left" Height="23" Margin="333,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Text="F3"/>
+                        <TextBox x:Name="TerceiroHealPercent" TextAlignment="Center" TextChanged="SetaPercentTerceiroHeal" HorizontalAlignment="Left" Height="23" Margin="411,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Text="40"/>
+                        <Label x:Name="TerceiroPercent" Content="%" HorizontalAlignment="Left" Margin="386,157,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20" />
+                        <CheckBox x:Name="HealcheckBox" Checked="AtivarCura" Unchecked="DesativarCura" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="246,16,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
+                        <Label x:Name="VidaGroup" Content="Vida:" HorizontalAlignment="Left" Margin="349,38,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="36"/>
+                        <TextBox x:Name="ManaHealHotkey"  KeyUp="SetaHotkeyManaHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="332,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Text="F5"/>
+                        <TextBox x:Name="ManaHealPercent" TextChanged="SetaPercentManaHeal" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="410,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" Text="50"/>
+                        <Label x:Name="label_Copy" Content="Hotkey" HorizontalAlignment="Left" Margin="332,237,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="48"/>
+                        <Label x:Name="Percent_Copy" Content="Percent." HorizontalAlignment="Left" Margin="410,234,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="52"/>
+                        <Label x:Name="LabelManaHealPercent" Content="%" HorizontalAlignment="Left" Margin="385,265,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="20"/>
+                        <Label x:Name="label1" Content="Mana:" HorizontalAlignment="Left" Margin="343,205,0,0" Foreground="#FF000000" VerticalAlignment="Top" Height="23" Width="42"/>
+                        <Label x:Name="PrimeiroHeal" Content="Primeiro:" Margin="259,95,386,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                        <Label x:Name="SegundoHeal" Content="Segundo:" Margin="258,126,386,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                        <Label x:Name="TerceiroHeal" Content="Terceiro:" Margin="258,157,384,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                        <Label x:Name="Potion" Content="Potion:" Margin="266,263,387,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                        <Label x:Name="label2" Content="Paralize:" HorizontalAlignment="Left" Margin="340,344,0,0" Foreground="#FF000000" VerticalAlignment="Top" Height="26" Width="53"/>
+                        <Label x:Name="Hotkey_Copy1" Content="Hotkey:" HorizontalAlignment="Left" Margin="312,377,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="51"/>
+                        <CheckBox x:Name="ParalizecheckBox" Checked="AtivarParalizeCura" Unchecked="DesativarParalizeCura" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="242,326,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
+                        <TextBox x:Name="FireTimer" TextAlignment="Center" HorizontalAlignment="Left" Height="19" Margin="334,448,0,0" TextWrapping="Wrap" Text="300" VerticalAlignment="Top" Width="61" TextChanged="FireTimer_TextChanged"/>
+                        <Label x:Name="label3" Content="FireTimer:" HorizontalAlignment="Left" Margin="267,443,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="62"/>
+                        <Label x:Name="label4" Content="ms" HorizontalAlignment="Left" Margin="395,443,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="25"/>
+                        <CheckBox x:Name="EhEK" Content="Knight/Paladin" HorizontalAlignment="Left" Margin="342,188,0,0" VerticalAlignment="Top" Checked="EhEk_Checked" Unchecked="EhEk_Unchecked" Width="103" Foreground="#FF000000" Height="15"/>
+                    </Grid>
+                </GroupBox>
             </TabItem>
             <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="23,-2,-42,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Margin="-5,10,9,0" VerticalAlignment="Top" Height="535" Background="#FFDADADA">
@@ -165,6 +155,15 @@
             <TabItem x:Name="Loot" Header="Loot" Margin="78,-2,-114,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535">
                     <CheckBox x:Name="LootCheckBox" Checked="AtivarLoot" Unchecked="DesativarLoot" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="13,9,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
+                    <GroupBox Header="Drop/Move Loot" Margin="12,28,355,391" BorderBrush="Black" >
+                        <Grid>
+                            <TextBox x:Name="DropItensTextBox" HorizontalAlignment="Left" Height="23" Margin="50,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="324"/>
+                            <Label x:Name="DropLabel" Content="Drop:" HorizontalAlignment="Left" Margin="4,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.887,-0.561" Width="44"/>
+                            <TextBox x:Name="MoveItensTextBox" HorizontalAlignment="Left" Height="23" Margin="50,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="324"/>
+                            <Label x:Name="MoveLabel" Content="Move:" HorizontalAlignment="Left" Margin="4,38,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.887,-0.561" Width="44"/>
+                            <Button x:Name="SaveDropMoveButton" Content="Save" HorizontalAlignment="Left" Margin="139,67,0,0" VerticalAlignment="Top" Width="99" RenderTransformOrigin="0.483,0.261" Click="SaveDropMoveButton_Click"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="Tools" Header="Tools" Margin="117,-3,-153,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
@@ -173,8 +172,8 @@
                         <TextBox x:Name="variaveisGlobais" HorizontalAlignment="Left" Height="397" Margin="23,13,0,0" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" VerticalAlignment="Top" Width="253"/>
                     </GroupBox>
                     <Button x:Name="buttonSalvarVariaveis" Content="Salvar" HorizontalAlignment="Left" Margin="579,463,0,17" Width="75" Click="AtualizaVariaveisGlobais"/>
-                    <GroupBox Header="Backpacks" Margin="12,28,548,288" BorderBrush="Black" >
-                        <Grid  HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="160" Margin="0,6,-1,5">
+                    <GroupBox Header="Backpacks" Margin="12,28,548,264" BorderBrush="Black" >
+                        <Grid  HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="186" Margin="0,9,-1,0">
                             <Label x:Name="MainBPLabel" Content="Main:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="1.135,2.208" Width="47" Margin="1,1,0,0"/>
                             <ComboBox x:Name="MainBP" HorizontalAlignment="Left" Margin="64,4,0,0" VerticalAlignment="Top" Width="126" ItemsSource="{Binding Source={StaticResource GetEnumValuesBackpacks}}" SelectionChanged="MainBP_SelectionChanged"/>
                             <Label x:Name="SupplyBPLabel" Content="Supply:" HorizontalAlignment="Left" Margin="1,31,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.135,2.208" Width="59" />
@@ -185,6 +184,7 @@
                             <ComboBox x:Name="GoldBP" HorizontalAlignment="Left" Margin="64,94,0,0" VerticalAlignment="Top" Width="126" ItemsSource="{Binding Source={StaticResource GetEnumValuesBackpacks}}" SelectionChanged="GoldBP_SelectionChanged"/>
                             <Label x:Name="AmmoBPLabel" Content="Ammo:" HorizontalAlignment="Left" Margin="1,121,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.135,2.208" Width="47"/>
                             <ComboBox x:Name="AmmoBP" HorizontalAlignment="Left" Margin="64,124,0,0" VerticalAlignment="Top" Width="126" ItemsSource="{Binding Source={StaticResource GetEnumValuesBackpacks}}" SelectionChanged="AmmoBP_SelectionChanged"/>
+                            <Button x:Name="OpenBackpacksbutton" Content="Open Backpacks" HorizontalAlignment="Left" Margin="50,156,0,0" VerticalAlignment="Top" Width="97" Click="OpenBackpacksbutton_Click"/>
                         </Grid>
                     </GroupBox>
 

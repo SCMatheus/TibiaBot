@@ -66,25 +66,32 @@ namespace BotTibia.Actions.Heal
 
         public static void Healar(VidaBar vida,  ManaBar mana, PersonagemStatus status, int fireTimer, string processName)
         {
-
-            while (true)
+            try
             {
-                if(!Process.GetProcesses().ToList().Any(p => p.MainWindowTitle.Equals(processName)))
+
+                while (true)
                 {
-                    Thread.Sleep(1000);
-                    continue;
+                    if (!Process.GetProcesses().ToList().Any(p => p.MainWindowTitle.Equals(processName)))
+                    {
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+                    var tela = CapturaTela.CaptureWindow(processName);
+
+                    HealDeVida(tela, vida, processName, status.EhEk);
+
+                    HealDeMana(tela, mana, vida, processName, status.EhEk);
+
+                    if (status.ParaStatus)
+                    {
+                        HealPara(tela, status, processName);
+                    }
+                    Thread.Sleep(fireTimer);
+
                 }
-                var tela = CapturaTela.CaptureWindow(processName);
-
-                HealDeVida(tela, vida, processName, status.EhEk);
-
-                HealDeMana(tela, mana, vida, processName, status.EhEk);
-
-                if (status.ParaStatus)
-                {
-                    HealPara(tela, status, processName);
-                }
-                Thread.Sleep(fireTimer);
+            }
+            catch (ThreadAbortException ex)
+            {
 
             }
         }

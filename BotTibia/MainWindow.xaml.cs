@@ -296,7 +296,11 @@ namespace BotTibia
                 Global._threadHeal.IsBackground = true;
                 Global._threadHeal.Start();
             }
-            catch(Exception ex)
+            catch (ThreadAbortException ex)
+            {
+
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -665,7 +669,16 @@ namespace BotTibia
                     CavebotCheckBox.IsChecked = false;
                     return;
                 }
-                if (Global._threadCavebot == null)
+                if (Global._threadCavebot == null && !Global._threadCavebot.IsAlive)
+                {
+                    Global._threadCavebot = new Thread(() =>
+                    {
+                        Hunting();
+                    });
+                    Global._threadCavebot.IsBackground = true;
+                    Global._threadCavebot.Start();
+                }
+                else if (!Global._threadCavebot.IsAlive)
                 {
                     Global._threadCavebot = new Thread(() =>
                     {
@@ -681,6 +694,7 @@ namespace BotTibia
             {
                 Global._threadCavebot.Interrupt();
                 Global._threadCavebot.Abort();
+                Global._threadCavebot = null;
                 MessageBox.Show(ex.Message);
             }
 
@@ -752,6 +766,14 @@ namespace BotTibia
                     });
                     Global._threadCavebot.IsBackground = true;
                     Global._threadCavebot.Start();
+                }else if (!Global._threadCavebot.IsAlive)
+                {
+                    Global._threadCavebot = new Thread(() =>
+                    {
+                        Hunting();
+                    });
+                    Global._threadCavebot.IsBackground = true;
+                    Global._threadCavebot.Start();
                 }
                 Global._isTarget = true;
                 TargetCheckBox.IsChecked = true;
@@ -760,6 +782,7 @@ namespace BotTibia
             {
                 Global._threadCavebot.Interrupt();
                 Global._threadCavebot.Abort();
+                Global._threadCavebot = null;
                 MessageBox.Show(ex.Message);
             }
         }
@@ -1321,5 +1344,24 @@ namespace BotTibia
             }
         }
         #endregion
+
+        private void OpenBackpacksbutton_Click(object sender, RoutedEventArgs e)
+        {
+            CavebotAction.CloseAllBackpacks();
+            CavebotAction.OpenAllBackpacks();
+        }
+
+        private void SaveDropMoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var moveItens = MoveItensTextBox.Text.Replace(" ", "").ToLower().Split(',');
+            foreach (var item in moveItens) {
+                Global._moveLootItens.Add(item);
+            }
+            var dropItens = DropItensTextBox.Text.Replace(" ", "").ToLower().Split(',');
+            foreach (var item in dropItens)
+            {
+                Global._dropItens.Add(item);
+            }
+        }
     }
 }
