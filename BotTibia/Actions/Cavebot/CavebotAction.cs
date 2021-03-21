@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using BotTibia.Actions.AHK;
 using BotTibia.Actions.Events;
+using BotTibia.Actions.Print;
+using BotTibia.Actions.Scan;
 using BotTibia.Classes;
 using BotTibia.Enum;
 
@@ -84,7 +86,25 @@ namespace BotTibia.Actions.Cavebot
                 case EnumAction.TargetOff:
                     Global._isTarget = false;
                     break;
+                case EnumAction.CheckSupply:
+                    Global._isTarget = false;
+                    break;
+                case EnumAction.CheckCap:
+                    var isLowCap = CheckCap(int.Parse(parametros[0]));
+                    if(isLowCap)
+                        GotoLabel(parametros[1]);
+                    break;
             }
+        }
+        private static bool CheckCap(int cap)
+        {
+            var tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
+            var capImg = CapturaTela.CortaTela(tela, Global._cap.X, Global._cap.Y, Global._cap.Width, Global._cap.Height);
+            capImg.Save("cap.png");
+            var valorCap = Ocr.IdentificaNumeroEmImg(capImg);
+            if(valorCap == -1)
+                throw new Exception("Não foi possível encontrar a cap");
+            return valorCap <= cap;
         }
         public static string PegaVariavelPorChave(string chave)
         {

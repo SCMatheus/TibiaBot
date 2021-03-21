@@ -29,5 +29,7 @@ namespace BotTibia.Classes
         public static List<CoordenadasDeElementos> _backpacksCoord = new List<CoordenadasDeElementos>(); //TODO CLASS COORDENADAS E BACKPACK
         public static List<string> _dropItens = new List<string>();
         public static List<string> _moveLootItens = new List<string>();
+        public static Point _coordenadaDoPersonagem = new Point();
+        public static CoordenadasDeElementos _cap = new CoordenadasDeElementos();
     }
 }

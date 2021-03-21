@@ -30,6 +30,10 @@ namespace BotTibia.Enum
         [XmlEnum(Name = "TargetOn")]
         TargetOn,
         [XmlEnum(Name = "TargetOff")]
-        TargetOff
+        TargetOff,
+        [XmlEnum(Name = "CheckSupply")]
+        CheckSupply,
+        [XmlEnum(Name = "CheckCap")]
+        CheckCap
     }
 }

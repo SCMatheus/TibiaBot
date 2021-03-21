@@ -133,6 +133,14 @@ namespace BotTibia
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
 
+            var cap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
+                                                                                                0, Global._tela.Width,
+                                                                                    Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\cap.png");
+            if(cap == null)
+                throw new Exception("Não foi possivel identificar a cap do personagem.");
+
+            Global._cap = new CoordenadasDeElementos() { X = cap.X, Y = cap.Y + cap.Height, Width = cap.Width, Height = cap.Height };
+
             Dispatcher.Invoke((Action)(() =>
             {
                 progress.Report(50);
@@ -148,6 +156,10 @@ namespace BotTibia
                                                                                                 Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\raio.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
+
+            //Calcula posição do personagem
+            Global._coordenadaDoPersonagem = PegaElementosDaTela.PegaPosicaoDoPersonagem();
+
             Dispatcher.Invoke((Action)(() =>
             {
                 progress.Report(65);
@@ -669,7 +681,7 @@ namespace BotTibia
                     CavebotCheckBox.IsChecked = false;
                     return;
                 }
-                if (Global._threadCavebot == null && !Global._threadCavebot.IsAlive)
+                if (Global._threadCavebot == null)
                 {
                     Global._threadCavebot = new Thread(() =>
                     {

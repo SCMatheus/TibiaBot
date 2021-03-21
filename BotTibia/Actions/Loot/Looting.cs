@@ -14,6 +14,7 @@ namespace BotTibia.Actions.Loot
     {
         public static void Lootear()
         {
+            AhkFunctions.SendKey("Shift down", Global._tibiaProcessName);
             LootOnDirection(EnumDirecao.NORTH);
             LootOnDirection(EnumDirecao.NORTHEAST);
             LootOnDirection(EnumDirecao.EAST);
@@ -22,6 +23,7 @@ namespace BotTibia.Actions.Loot
             LootOnDirection(EnumDirecao.SOUTHWEST);
             LootOnDirection(EnumDirecao.WEST);
             LootOnDirection(EnumDirecao.NORTHWEST);
+            AhkFunctions.SendKey("Shift up", Global._tibiaProcessName);
             if (Global._moveLootItens.Count > 0)
             {
                 MoveLootItens();
@@ -34,10 +36,10 @@ namespace BotTibia.Actions.Loot
         }
         private static void LootOnDirection(EnumDirecao direcao)
         {
-            AhkFunctions.SendKey("Shift down", Global._tibiaProcessName);
+            
             var posicao = PegaElementosDaTela.PegaVisinhosDaPosicaoDoPersonagem(direcao);
             ClickEvent.ClickOnElement(Global._tibiaProcessName, posicao, EnumMouseEvent.Right);
-            AhkFunctions.SendKey("Shift up", Global._tibiaProcessName);
+            
         }
         private static void MoveGold()
         {
@@ -81,7 +83,7 @@ namespace BotTibia.Actions.Loot
                     }
                     ClickEvent.ItemMove(Global._tibiaProcessName, new Point(item.X + item.Width / 2, item.Y + item.Height / 2),
                                         new Point(GoldBp.X + GoldBp.Width - 25, GoldBp.Y + GoldBp.Height - 20));
-                    Thread.Sleep(150);
+                    Thread.Sleep(300);
                 }
             });
         }
@@ -100,7 +102,7 @@ namespace BotTibia.Actions.Loot
                     if (item == null)
                         break;
                     ClickEvent.ItemMove(Global._tibiaProcessName, new Point(item.X + item.Width / 2, item.Y + item.Height / 2), PegaElementosDaTela.PegaPosicaoDoPersonagem());
-                    Thread.Sleep(100);
+                    Thread.Sleep(300);
                 }
             });
         }
@@ -140,7 +142,7 @@ namespace BotTibia.Actions.Loot
                     }
                     ClickEvent.ItemMove(Global._tibiaProcessName, new Point(item.X + item.Width / 2, item.Y + item.Height / 2),
                                         new Point(lootBp.X + lootBp.Width - 25, lootBp.Y + lootBp.Height - 20));
-                    Thread.Sleep(100);
+                    Thread.Sleep(300);
                 }
             });
         }

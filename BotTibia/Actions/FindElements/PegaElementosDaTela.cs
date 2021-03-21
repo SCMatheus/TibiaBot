@@ -182,7 +182,7 @@ namespace BotTibia
         }
         public static Point PegaVisinhosDaPosicaoDoPersonagem(EnumDirecao direcao)
         {
-            var posicaoDoPersonagem = PegaPosicaoDoPersonagem();
+            var posicaoDoPersonagem = Global._coordenadaDoPersonagem;
             if (Global._mainWindow.Width > 600)
             {
                 if(direcao == EnumDirecao.NORTH) 
