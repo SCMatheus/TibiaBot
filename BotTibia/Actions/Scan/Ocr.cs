@@ -11,6 +11,7 @@ namespace BotTibia.Actions.Scan
         public static int IdentificaNumeroEmImg(Bitmap img)
         {
             var Ocr = new IronTesseract();
+            IronOcr.Installation.LicenseKey = "IRONOCR.MATHEUSOUZACARDOSO2016.18259-3755AD03FE-HPVE5P-YPGVIBVJUBU5-NZM52ZVSOFQU-RXUJUA27S43K-FFADYK2HER26-KWJAGRZ3H2DT-VKASHY-T7BX5MZHB2B6UA-DEPLOYMENT.TRIAL-UJRH3U.TRIAL.EXPIRES.22.APR.2021";
             Ocr.Configuration.TesseractVersion = TesseractVersion.Tesseract5;
             Ocr.Configuration.WhiteListCharacters = "0123456789O";
             Ocr.Configuration.EngineMode = TesseractEngineMode.TesseractAndLstm;

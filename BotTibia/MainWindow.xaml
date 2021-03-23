@@ -92,7 +92,7 @@
             </TabItem>
             <TabItem x:Name="CavebotTab" Header="Cavebot" Margin="23,-2,-42,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Margin="-5,10,9,0" VerticalAlignment="Top" Height="535" Background="#FFDADADA">
-                    <DataGrid x:Name="GridView" Margin="13,34,134,12" ItemsSource="{Binding Waypoints}" SelectionMode="Single" AutoGenerateColumns="false" CanUserAddRows="false" >
+                    <DataGrid x:Name="GridView" Margin="13,34,134,12" ItemsSource="{Binding Waypoints}" SelectionMode="Single" AutoGenerateColumns="false" CanUserAddRows="false" VirtualizingStackPanel.IsVirtualizing="False" >
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

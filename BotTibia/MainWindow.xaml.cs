@@ -563,7 +563,9 @@ namespace BotTibia
                 Firetimer = int.Parse(FireTimer.Text),
                 Waypoints = Cavebot.Waypoints,
                 VariaveisGlobais = Global._variaveisGlobais,
-                backpacks = Global._backpacks
+                Backpacks = Global._backpacks,
+                Drops = Global._dropItens,
+                Loots = Global._moveLootItens
             };
             // Create a new XmlSerializer instance with the type of the test class
             XmlSerializer SerializerObj = new XmlSerializer(typeof(ConfigScripts));
@@ -586,7 +588,6 @@ namespace BotTibia
             // Create a new file stream for reading the XML file
             using (FileStream ReadFileStream = new FileStream(@file, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-
                 // Load the object saved above by using the Deserialize function
                 LoadedConfigs = (ConfigScripts)SerializerObj.Deserialize(ReadFileStream);
 
@@ -610,12 +611,30 @@ namespace BotTibia
             //Cavebot
             Cavebot.Waypoints = LoadedConfigs.Waypoints;
             GridView.ItemsSource = Cavebot.Waypoints;
+            GridView.UpdateLayout();
             //Variaveis Globais
             Global._variaveisGlobais = LoadedConfigs.VariaveisGlobais;
             SetaVariaveisGlobaisNoTextBox();
             // Backpacks
-            Global._backpacks = LoadedConfigs.backpacks;
+            Global._backpacks = LoadedConfigs.Backpacks;
             AtualizaBpsNaView();
+            //drops
+            Global._dropItens = LoadedConfigs.Drops;
+            Global._moveLootItens = LoadedConfigs.Loots;
+            var drops = "";
+            if (LoadedConfigs.Drops.Count > 0) {
+                LoadedConfigs.Drops.ForEach(drop => drops += drop + ',');
+                drops.Remove(drops.Length - 1, 1);
+            }
+            var loots = "";
+            if (LoadedConfigs.Loots.Count > 0)
+            {
+                LoadedConfigs.Loots.ForEach(loot => loots += loot + ',');
+                loots.Remove(loots.Length - 1, 1);
+            }
+
+            MoveItensTextBox.Text = loots;
+            DropItensTextBox.Text = drops;
 
             AtualizaVariaveisGlobais();
         }
@@ -737,8 +756,13 @@ namespace BotTibia
                     {
                         Dispatcher.Invoke((Action)(() =>
                         {
+
                             if (GridView.HasItems)
+                            {
+                                GridView.UpdateLayout();
+                                GridView.ScrollIntoView(GridView.Items[Cavebot.Index]);
                                 ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
+                            }
                         }));
                         Cavebot.ExecutaWaypoint();
                     }
@@ -758,7 +782,7 @@ namespace BotTibia
                 {
                     Dispatcher.Invoke((Action)(() =>
                     {
-                        MessageBox.Show("Ocorreu um erro no cavebot.");
+                        MessageBox.Show(ex.Message);
                         GridView.IsEnabled = true;
                     }));
                 }
@@ -1359,20 +1383,24 @@ namespace BotTibia
 
         private void OpenBackpacksbutton_Click(object sender, RoutedEventArgs e)
         {
-            CavebotAction.CloseAllBackpacks();
-            CavebotAction.OpenAllBackpacks();
+            CavebotAction.InvokeMethod(new Func<bool>(CavebotAction.CloseAllBackpacks));
+            CavebotAction.InvokeMethod(new Func<bool>(CavebotAction.OpenAllBackpacks));
         }
 
         private void SaveDropMoveButton_Click(object sender, RoutedEventArgs e)
         {
+            Global._moveLootItens.Clear();
+            Global._dropItens.Clear();
             var moveItens = MoveItensTextBox.Text.Replace(" ", "").ToLower().Split(',');
             foreach (var item in moveItens) {
-                Global._moveLootItens.Add(item);
+                if (!string.IsNullOrWhiteSpace(item))
+                    Global._moveLootItens.Add(item);
             }
             var dropItens = DropItensTextBox.Text.Replace(" ", "").ToLower().Split(',');
             foreach (var item in dropItens)
             {
-                Global._dropItens.Add(item);
+                if(!string.IsNullOrWhiteSpace(item))
+                    Global._dropItens.Add(item);
             }
         }
     }

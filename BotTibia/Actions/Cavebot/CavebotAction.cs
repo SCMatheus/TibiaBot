@@ -18,8 +18,11 @@ namespace BotTibia.Actions.Cavebot
     {
         public static void ExecAction(EnumAction action,Coordenada coordenada, string parans)
         {
-            parans = parans.Replace(" ", "");
-            var parametros = parans.Split(',');
+            if (action != EnumAction.Say)
+            {
+                parans = parans.Replace(" ", "");
+            }
+                var parametros = parans.Split(',');
                 switch (action)
             {
                 case EnumAction.Say:
@@ -52,7 +55,7 @@ namespace BotTibia.Actions.Cavebot
                     break;
                 case EnumAction.Use:
                         var coordUse = PegaElementosDaTela.PegaVisinhosDaPosicaoDoPersonagem((EnumDirecao)System.Enum.Parse(typeof(EnumDirecao),parametros[0].ToUpper()));
-                        ClickEvent.Click(Global._tibiaProcessName, coordUse, EnumMouseEvent.Right);
+                        ClickEvent.ClickOnElement(Global._tibiaProcessName, coordUse, EnumMouseEvent.Right);
                     break;
                 case EnumAction.UseItem:
                     string variavel;
@@ -66,16 +69,16 @@ namespace BotTibia.Actions.Cavebot
                         }
                         AhkFunctions.SendKey(variavel.ToUpper(),Global._tibiaProcessName);
                         var coordUseItem = PegaElementosDaTela.PegaVisinhosDaPosicaoDoPersonagem((EnumDirecao)System.Enum.Parse(typeof(EnumDirecao), parametros[1].ToUpper()));
-                        ClickEvent.Click(Global._tibiaProcessName, coordUseItem, EnumMouseEvent.Left);
+                        ClickEvent.ClickOnElement(Global._tibiaProcessName, coordUseItem, EnumMouseEvent.Left);
                     break;
                 case EnumAction.Deposit:
-                    EncontraEVaiAteDepot();
+                    InvokeMethod(new Func<bool>(EncontraEVaiAteDepot));
                     break;
                 case EnumAction.OpenBackpacks:
-                    OpenAllBackpacks();
+                    InvokeMethod(new Func<bool>(OpenAllBackpacks));
                     break;
                 case EnumAction.CloseBackpacks:
-                    CloseAllBackpacks();
+                    InvokeMethod(new Func<bool>(CloseAllBackpacks));
                     break;
                 case EnumAction.GotoLabel:
                     GotoLabel(parametros[0]);
@@ -116,10 +119,10 @@ namespace BotTibia.Actions.Cavebot
             }
             return variavel;
         }
-        private static void EncontraEVaiAteDepot()
+        private static bool EncontraEVaiAteDepot()
         {
             if (Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Loot).Bp == EnumBackpacks.none)
-                return;
+                return true;
             var count = 0;
             CoordenadasDeElementos depot = null;
             while (count <= 3)
@@ -127,25 +130,30 @@ namespace BotTibia.Actions.Cavebot
                 depot = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._mainWindow, Global._path + $"\\Images\\ConfigsGerais\\Depot_{count}.png");
                 count++;
             }
-            if (depot != null)
-            {
-                ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((depot.X + depot.Width / 2)-8, (depot.Y + depot.Height / 2)-31), EnumMouseEvent.Left);
-                Thread.Sleep(5000);
-                CloseAllBackpacks();
-                Thread.Sleep(500);
-                OpenMainBackpack();
-                Thread.Sleep(500);
-                OpenBackpack(Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Loot));
-                Thread.Sleep(500);
-                OpenDepot();
-                Thread.Sleep(500);
-                DepositItens();
+            if (depot == null)
+                return false;
+            bool result = true;
+            ClickEvent.Click(Global._tibiaProcessName, new System.Drawing.Point((depot.X + depot.Width / 2)-8, (depot.Y + depot.Height / 2)-31), EnumMouseEvent.Left);
+            Thread.Sleep(5000);
+            result = CloseAllBackpacks();
+            if (!result)
+                return false;
+            Thread.Sleep(500);
+            result = OpenMainBackpack();
+            if (!result)
+                return false;
+            Thread.Sleep(500);
+            result = OpenBackpack(Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Loot));
+            if (!result)
+                return false;
+            Thread.Sleep(500);
+            result = OpenDepot();
+            if (!result)
+                return false;
+            Thread.Sleep(500);
+            DepositItens();
 
-            }
-            else
-            {
-                throw new Exception("Nenhum depot foi encontrado!");
-            }
+            return true;
         }
         private static void DepositItens()
         {
@@ -171,7 +179,7 @@ namespace BotTibia.Actions.Cavebot
             }
 
         }
-        private static void OpenDepot()
+        private static bool OpenDepot()
         {
             var coordPersonagem = PegaElementosDaTela.PegaPosicaoDoPersonagem();
             CoordenadasDeElementos Depot = null;
@@ -217,50 +225,73 @@ namespace BotTibia.Actions.Cavebot
                     count++;
                 }
                 if (depotBrowse == null)
-                    throw new Exception("Não foi possível encontrar o Depot para depositar");
+                    return false;
                 ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(depotBrowse.X + depotBrowse.Width / 2, depotBrowse.Y + depotBrowse.Height / 2), EnumMouseEvent.Right);
                 Thread.Sleep(500);
                 var depotOpen = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, depotBrowse.X-50, depotBrowse.Y-50, depotBrowse.Width+100, depotBrowse.Height+100, Global._path + "\\Images\\Global\\Configs\\depot_to_open.png");
                 ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(depotOpen.X + depotOpen.Width / 2, depotOpen.Y + depotOpen.Height / 2), EnumMouseEvent.Right);
             }
+            else
+            {
+                return false;
+            }
+            return true;
 
         }
-        public static void CloseAllBackpacks()
+        public static bool CloseAllBackpacks()
         {
-            CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Main));
-            CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Loot));
-            CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Supply));
-            CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Gold));
-            CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Ammo));
+            bool result = true;
+            result = CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Main));
+            if (!result)
+                return false;
+            result = CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Loot));
+            if (!result)
+                return false;
+            result = CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Supply));
+            if (!result)
+                return false;
+            result = CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Gold));
+            if (!result)
+                return false;
+            result = CloseBackpack(Global._backpacks.FirstOrDefault(backpack => backpack.Tipo == EnumTipoBackpack.Ammo));
+            if (!result)
+                return false;
+            return true;
         }
-        private static void CloseBackpack(Backpack backpack)
+        private static bool CloseBackpack(Backpack backpack)
         {
             CoordenadasDeElementos coordBP = null;
             if (backpack.Bp != EnumBackpacks.none)
             {
                 coordBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height,
                                                                 Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + backpack.Bp.ToString() + ".png");
-                if (coordBP != null)
-                {
-                    coordBP.Width = 180;
-                    var close = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, coordBP, Global._path + "\\Images\\ConfigsGerais\\Close.png");
-                    ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(close.X + close.Width / 2, close.Y + close.Height / 2), EnumMouseEvent.Left);
-                    backpack.Coordenadas = null;
-                }
+                if (coordBP == null)
+                    return true;
+
+                coordBP.Width = 180;
+                var close = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, coordBP, Global._path + "\\Images\\ConfigsGerais\\Close.png");
+                ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(close.X + close.Width / 2, close.Y + close.Height / 2), EnumMouseEvent.Left);
+                backpack.Coordenadas = null;
             }
+            return true;
         }
-        private static void OpenMainBackpack()
+        private static bool OpenMainBackpack()
         {
             var mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Bp.ToString() + ".png");
             if (mainBP != null)
-                return;
+            {
+                ExpandeBackpack(Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main));
+                return true;
+            }
             var coorMain = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Corpo\\" + Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Bp.ToString() + ".png");
             if (coorMain == null)
-                throw new Exception("Não foi possível encontrar a Main Backpack");
+                return false;
             ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point((coorMain.X + coorMain.Width / 2), coorMain.Y + coorMain.Height / 2), EnumMouseEvent.Right);
-            Thread.Sleep(300);
+            Thread.Sleep(500);
             Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Coordenadas = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Bp.ToString() + ".png");
             Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Coordenadas.Width = 175;
+            ExpandeBackpack(Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main));
+            return true;
         }
         private static void ExpandeBackpack(Backpack backpack)
         {
@@ -274,7 +305,21 @@ namespace BotTibia.Actions.Cavebot
             backpack.Coordenadas.Width = pushBP.X+pushBP.Width + 3 - backpack.Coordenadas.X;
 
         }
-        private static void OpenBackpack(Backpack backpack)
+        public static void InvokeMethod(Delegate method, params object[] args)
+        {
+            var result = (bool)method.DynamicInvoke(args);
+            if (result)
+                return;
+            else
+            {
+                result = (bool)method.DynamicInvoke(args);
+                if (result)
+                    return;
+            }
+            throw new Exception("Ocorreu um erro.");           
+
+        }
+        private static bool OpenBackpack(Backpack backpack)
         {
             if (Global._backpacks.SingleOrDefault(bp => bp.Tipo == EnumTipoBackpack.Main ).Coordenadas == null)
             {
@@ -288,36 +333,36 @@ namespace BotTibia.Actions.Cavebot
             {
                 backpack.Coordenadas.Width = 175;
                 ExpandeBackpack(backpack);
-                return;
+                return true;
             }
             var backpackToOpen = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._backpacks.SingleOrDefault(bp => bp.Tipo == EnumTipoBackpack.Main).Coordenadas, Global._path + "\\Images\\Global\\Backpacks\\Corpo\\" + backpack.Bp.ToString() + ".png");
             if (backpackToOpen == null)
-                throw new Exception($"Não foi possível encontrar a {backpack.Bp}");
+                return false;
             ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point((backpackToOpen.X + backpackToOpen.Width / 2), backpackToOpen.Y + backpackToOpen.Height / 2), EnumMouseEvent.Right);
             Thread.Sleep(300);
             backpack.Coordenadas = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + backpack.Bp.ToString() + ".png");
             backpack.Coordenadas.Width = 175;
             ExpandeBackpack(backpack);
+            return true;
         }
-        private static void OpenBackpackInNewTab(Backpack backpack)
+        private static bool OpenBackpackInNewTab(Backpack backpack)
         {
             if (Global._backpacks.SingleOrDefault(bp => bp.Tipo == EnumTipoBackpack.Main).Coordenadas == null)
             {
                 OpenMainBackpack();
                 Thread.Sleep(500);
             }
-            ExpandeBackpack(Global._backpacks.FirstOrDefault(bp => bp.Tipo == EnumTipoBackpack.Main));
             Thread.Sleep(500);
             backpack.Coordenadas = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + backpack.Bp.ToString() + ".png");
             if (backpack.Coordenadas != null)
             {
                 backpack.Coordenadas.Width = 175;
                 ExpandeBackpack(backpack);
-                return;
+                return true;
             }
             var backpackToOpen = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._backpacks.SingleOrDefault(bp => bp.Tipo == EnumTipoBackpack.Main).Coordenadas, Global._path + "\\Images\\Global\\Backpacks\\Corpo\\" + backpack.Bp.ToString() + ".png");
             if (backpackToOpen == null)
-                throw new Exception($"Não foi possível encontrar a {backpack.Bp}");
+                return false;
             AhkFunctions.SendKey("Ctrl Down", Global._tibiaProcessName);
             ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(backpackToOpen.X + backpackToOpen.Width / 2, backpackToOpen.Y + backpackToOpen.Height / 2), EnumMouseEvent.Right);
             AhkFunctions.SendKey("Ctrl Up", Global._tibiaProcessName);
@@ -332,19 +377,27 @@ namespace BotTibia.Actions.Cavebot
             {
                 MoveParaOFimDaBackpack(backpack);
             }
+            return true;
         }
-        public static void OpenAllBackpacks()
+        public static bool OpenAllBackpacks()
         {
             var mainBP = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, 0, 0, Global._tela.Width, Global._tela.Height, Global._path + "\\Images\\Global\\Backpacks\\Nome\\" + Global._backpacks.FirstOrDefault(x => x.Tipo == EnumTipoBackpack.Main).Bp.ToString() + ".png");
             if (mainBP == null)
                 OpenMainBackpack();
-                Global._backpacks.ForEach(backpack => { 
+            if (Global._backpacks.Count <= 0)
+                return true;
+            bool result = true;
+            Global._backpacks.ForEach(backpack => { 
                 if(backpack.Tipo != EnumTipoBackpack.Main && backpack.Bp != EnumBackpacks.none)
                 {
-                    OpenBackpackInNewTab(backpack);
+                    if (!result)
+                        return;
+                    result = OpenBackpackInNewTab(backpack);
                     Thread.Sleep(300);
+                    
                 }
             });
+            return true;
         }
 
         public static void MoveParaOFimDaBackpack(Backpack backpack)

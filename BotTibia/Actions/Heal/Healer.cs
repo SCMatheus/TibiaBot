@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using BotTibia.Classes;
 using BotTibia.Actions.AHK;
+using System;
 
 namespace BotTibia.Actions.Heal
 {
@@ -91,6 +92,10 @@ namespace BotTibia.Actions.Heal
                 }
             }
             catch (ThreadAbortException ex)
+            {
+
+            }
+            catch (Exception ex)
             {
 
             }

@@ -23,11 +23,12 @@ namespace BotTibia.Actions.Target
             Thread.Sleep(150);
             CoordenadasDeElementos isTarget;
             int contTempo = 0;
-            while (target)
+            while (target && Global._isTarget)
             {
                 isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
                 if (isTarget == null)
                 {
+                    contTempo = 0;
                     if (loot && Global._isLoot)
                         Looting.Lootear();
                     AhkFunctions.SendKey("PgUp", Global._tibiaProcessName);
@@ -61,6 +62,10 @@ namespace BotTibia.Actions.Target
             if (battle == null)
             {
                 var openBattle = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, Global._path + "\\Images\\Global\\Configs\\battle_to_open.png");
+                if (openBattle == null)
+                {
+                    throw new Exception("Não foi possível encontrar o battle");
+                }
                 ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(openBattle.X + openBattle.Width / 2, openBattle.Y + openBattle.Height / 2), EnumMouseEvent.Left);
                 Thread.Sleep(300);
                 battle = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, Global._path + "\\Images\\Global\\Configs\\battle_name.png");
