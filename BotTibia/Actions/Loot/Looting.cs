@@ -23,6 +23,7 @@ namespace BotTibia.Actions.Loot
             LootOnDirection(EnumDirecao.SOUTHWEST);
             LootOnDirection(EnumDirecao.WEST);
             LootOnDirection(EnumDirecao.NORTHWEST);
+            LootOnDirection(EnumDirecao.CENTER);
             AhkFunctions.SendKey("Shift up", Global._tibiaProcessName);
             if (Global._moveLootItens.Count > 0)
             {

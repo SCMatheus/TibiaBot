@@ -778,14 +778,11 @@ namespace BotTibia
             }
             catch (Exception ex)
             {
-                if (ex.Message != "O thread estava sendo anulado.")
+                Dispatcher.Invoke((Action)(() =>
                 {
-                    Dispatcher.Invoke((Action)(() =>
-                    {
-                        MessageBox.Show(ex.Message);
-                        GridView.IsEnabled = true;
-                    }));
-                }
+                    MessageBox.Show(ex.Message);
+                    GridView.IsEnabled = true;
+                }));
             }
         }
         #endregion
@@ -1403,5 +1400,28 @@ namespace BotTibia
                     Global._dropItens.Add(item);
             }
         }
+        #region Food
+        private void FoodCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            Global._isEatFood = true;
+        }
+        private void FoodCheckBox_UnChecked(object sender, RoutedEventArgs e)
+        {
+            Global._isEatFood = false;
+        }
+        private void SetaHotkeyFood(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            try
+            {
+                Global._FoodKey = SetaHotkey(e.Key, FoodHotkey);
+            }
+            catch (Exception ex)
+            {
+                Global._vida.HighHeal.Key = "F1";
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
+
     }
 }

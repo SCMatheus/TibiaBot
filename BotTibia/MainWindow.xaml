@@ -187,7 +187,13 @@
                             <Button x:Name="OpenBackpacksbutton" Content="Open Backpacks" HorizontalAlignment="Left" Margin="50,156,0,0" VerticalAlignment="Top" Width="97" Click="OpenBackpacksbutton_Click"/>
                         </Grid>
                     </GroupBox>
-
+                    <GroupBox Header="Tools" Margin="12,247,548,45" BorderBrush="Black" >
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="186" Margin="0,9,-1,0">
+                            <TextBox x:Name="FoodHotkey"  KeyUp="SetaHotkeyFood" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="58,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" Text="F1"/>
+                            <Label x:Name="FoodLabel" Content="Food:" Margin="8,11,147,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <CheckBox x:Name="FoodCheckBox" Content="Ativar" HorizontalAlignment="Left" Margin="122,18,0,0" VerticalAlignment="Top" Checked="FoodCheckBox_Checked" Unchecked="FoodCheckBox_UnChecked"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>

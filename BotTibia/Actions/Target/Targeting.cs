@@ -51,6 +51,7 @@ namespace BotTibia.Actions.Target
                     if (contTempo > 150)
                     {
                         ClickEvent.ClickOnElement(Global._tibiaProcessName, new Point(isTarget.X + isTarget.Width / 2, isTarget.Y + isTarget.Height / 2), EnumMouseEvent.Left);
+                        ClickEvent.MouseMove(Global._tibiaProcessName, new Point(0,0));
                         break;
                     }
                 }

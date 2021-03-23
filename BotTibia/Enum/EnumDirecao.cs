@@ -10,5 +10,6 @@
         NORTHEAST,
         SOUTHEAST,
         SOUTHWEST,
+        CENTER
     }
 }

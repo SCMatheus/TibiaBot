@@ -56,7 +56,15 @@ namespace BotTibia.Actions.Heal
                 }
             }
         }
-
+        public static void EatFood()
+        {
+            var food = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName,Global._status.Coordenadas, Global._path + "\\Images\\ConfigsGerais\\food.png");
+            if (food == null)
+                return;
+            AhkFunctions.SendKey(Global._FoodKey, Global._tibiaProcessName);
+            AhkFunctions.SendKey(Global._FoodKey, Global._tibiaProcessName);
+            AhkFunctions.SendKey(Global._FoodKey, Global._tibiaProcessName);
+        }
         public static void HealPara(Bitmap tela, PersonagemStatus status,string processName)
         {
             if (PegaElementosDaTela.PegaParalize(CapturaTela.CortaStatusBar(tela, status)))
@@ -87,6 +95,8 @@ namespace BotTibia.Actions.Heal
                     {
                         HealPara(tela, status, processName);
                     }
+                    if (Global._isEatFood)
+                        EatFood();
                     Thread.Sleep(fireTimer);
 
                 }

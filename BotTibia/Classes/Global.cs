@@ -31,5 +31,7 @@ namespace BotTibia.Classes
         public static List<string> _moveLootItens = new List<string>();
         public static Point _coordenadaDoPersonagem = new Point();
         public static CoordenadasDeElementos _cap = new CoordenadasDeElementos();
+        public static bool _isEatFood = false;
+        public static string _FoodKey = "F1";
     }
 }
