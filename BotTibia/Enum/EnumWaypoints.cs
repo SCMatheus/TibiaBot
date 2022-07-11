@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace BotTibia.Enum
+namespace BotTibia.Enums
 {
     public enum EnumWaypoints
     {
@@ -11,5 +11,7 @@ namespace BotTibia.Enum
         Stand,
         [XmlEnum(Name = "Action")]
         Action,
+        [XmlEnum(Name = "Mark")]
+        Mark,
     }
 }

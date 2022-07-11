@@ -1,4 +1,4 @@
-﻿namespace BotTibia.Enum
+﻿namespace BotTibia.Enums
 {
     public enum EnumDirecao
     {

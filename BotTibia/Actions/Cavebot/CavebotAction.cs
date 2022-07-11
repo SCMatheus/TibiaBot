@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using BotTibia.Actions.AHK;
+﻿using BotTibia.Actions.AHK;
 using BotTibia.Actions.Events;
 using BotTibia.Actions.Print;
 using BotTibia.Actions.Scan;
 using BotTibia.Classes;
-using BotTibia.Enum;
+using BotTibia.Enums;
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Threading;
 
-namespace BotTibia.Actions.Cavebot
-{
+namespace BotTibia.Actions.Cavebot {
     public static class CavebotAction
     {
         public static void ExecAction(EnumAction action,Coordenada coordenada, string parans)

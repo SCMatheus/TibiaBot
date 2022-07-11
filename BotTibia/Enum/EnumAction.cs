@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace BotTibia.Enum
+namespace BotTibia.Enums
 {
     public enum EnumAction
     {

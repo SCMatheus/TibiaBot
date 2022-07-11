@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using BotTibia.Enum;
+using BotTibia.Enums;
 
 namespace BotTibia.Classes
 { 
@@ -17,6 +17,7 @@ namespace BotTibia.Classes
         [XmlElement()]
         public EnumAction TypeAction { get; set; }
         public Coordenada Coordenada { get; set; }
+        public EnumMarks Mark { get; set; }
         public Range Range { get; set; }
         public string Parametros { get; set; }
     }

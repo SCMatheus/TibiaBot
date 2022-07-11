@@ -1,9 +1,7 @@
-﻿using System.IO;
-using AutoHotkey.Interop;
+﻿using AutoHotkey.Interop;
 using BotTibia.Classes;
 
-namespace BotTibia.Actions.AHK
-{
+namespace BotTibia.Actions.AHK {
     public static class AhkFunctions
     {
         public static void SendMessage(string message, string processName)
@@ -11,7 +9,6 @@ namespace BotTibia.Actions.AHK
             var _ahkEngine = AutoHotkeyEngine.Instance;
             var script = $"ControlSend,, {message}, " + processName;
             _ahkEngine.ExecRaw(script);
-            
         }
         public static void SendKey(string key, string processName)
         {

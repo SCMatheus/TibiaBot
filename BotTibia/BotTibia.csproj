@@ -171,6 +171,8 @@
     <Compile Include="Classes\VidaBar.cs" />
     <Compile Include="Classes\CoordenadasXeY.cs" />
     <Compile Include="Classes\Waypoint.cs" />
+    <Compile Include="Enum\EnumMarks.cs" />
+    <Compile Include="Enum\EnumSuportedClients.cs" />
     <Compile Include="Enum\EnumTipoBackpack.cs" />
     <Compile Include="Enum\EnumAction.cs" />
     <Compile Include="Enum\EnumBackpacks.cs" />
@@ -659,6 +661,21 @@
     <None Include="Images\Itens\white_mushroom.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Marks\question.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ArchLight\Configs\miniMap.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Marks\checked.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

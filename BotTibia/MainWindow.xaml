@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:BotTibia.Enum"
+        xmlns:local="clr-namespace:BotTibia.Enums"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
@@ -11,6 +11,11 @@
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="GetEnumValues">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="local:EnumAction"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="GetEnumMarks">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:EnumMarks"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="GetEnumValuesBackpacks">
@@ -108,6 +113,13 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Width="40" Binding="{Binding Index}" />
                             <DataGridTextColumn Header="Type" Width="70" Binding="{Binding Type}"  />
+                            <DataGridComboBoxColumn Header="Mark" Width="100" ItemsSource="{Binding Source={StaticResource GetEnumMarks}}" SelectedValueBinding="{Binding Mark}" >
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <EventSetter Event="SelectionChanged" Handler="SomeDataMarkGridComboBoxChanged" />
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
                             <DataGridComboBoxColumn Header="TypeAction" Width="100" ItemsSource="{Binding Source={StaticResource GetEnumValues}}" SelectedValueBinding="{Binding TypeAction}" >
                                 <DataGridComboBoxColumn.EditingElementStyle>
                                     <Style TargetType="{x:Type ComboBox}">
@@ -128,6 +140,7 @@
                         <Button x:Name="ButtonNode" Content="Node" VerticalAlignment="Top" Margin="10,56,-9,0" Click="ButtonNode_Click" Width="113" Height="25"/>
                         <Button x:Name="ButtonStand" Content="Stand" HorizontalAlignment="Left" Margin="10,26,-8,0" Click="ButtonStand_Click" VerticalAlignment="Top" Width="113" Height="25"/>
                         <Button x:Name="ButtonUp" Content="Up" HorizontalAlignment="Left" Margin="10,191,-8,-45" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonUpListItem_Click"/>
+                        <Button x:Name="ButtonMark" Content="Mark" HorizontalAlignment="Left" Margin="10,-3,-8,0" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonMark_Click"/>
                         <Button x:Name="ButtonDown" Content="Down" HorizontalAlignment="Left" Margin="10,221,-8,-75" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonDownListItem_Click"/>
                         <Button x:Name="ButtonAction" Content="Action" HorizontalAlignment="Left" Margin="10,86,-8,0" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonAction_Click"/>
                     </Grid>

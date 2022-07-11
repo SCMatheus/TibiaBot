@@ -1,18 +1,13 @@
-﻿using System;
+﻿using BotTibia.Actions.Events;
+using BotTibia.Classes;
+using BotTibia.Enums;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using BotTibia.Actions.Events;
-using BotTibia.Actions.Print;
-using BotTibia.Classes;
-using BotTibia.Enum;
 
-namespace BotTibia.Actions.Cavebot
-{
+namespace BotTibia.Actions.Cavebot {
     public static class Cavebot
     {
         public static List<Waypoint> Waypoints = new List<Waypoint>();
@@ -53,6 +48,12 @@ namespace BotTibia.Actions.Cavebot
                     CavebotAction.ExecAction(waypoint.TypeAction, waypoint.Coordenada, waypoint.Parametros);
                     if(waypoint.TypeAction != EnumAction.GotoLabel)
                         IndexAdd();
+                    break;
+                case EnumWaypoints.Mark:
+                    chegou = Mark(waypoint.Mark);
+                    if (chegou) {
+                        IndexAdd();
+                    }
                     break;
             }
         }
@@ -133,6 +134,24 @@ namespace BotTibia.Actions.Cavebot
                 return false;
             }
             Global._ultimaCoordenadaDoPersonagem = coordenadasAtuais;
+            return true;
+        }
+        #endregion
+        #region Mark
+        public static bool Mark(EnumMarks mark) {
+            var coordenadas = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._miniMap, Global._path + $"\\Images\\Marks\\{mark.ToString().ToLower()}.png");
+            if (coordenadas != null) {
+                if (coordenadas.Equals(Global._ultimoMark) || Global._ultimoMark == null) {
+                    var click = new Point() {
+                        X = coordenadas.X + 4,
+                        Y = coordenadas.Y + 2,
+                    };
+                    ClickEvent.ClickOnElement(Global._tibiaProcessName, click, EnumMouseEvent.Left);
+                }
+                Global._ultimoMark = coordenadas;
+                return false;
+            }
+            Global._ultimoMark = null;
             return true;
         }
         #endregion

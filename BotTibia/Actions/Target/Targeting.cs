@@ -9,7 +9,7 @@ using BotTibia.Actions.AHK;
 using BotTibia.Actions.Events;
 using BotTibia.Actions.Loot;
 using BotTibia.Classes;
-using BotTibia.Enum;
+using BotTibia.Enums;
 
 namespace BotTibia.Actions.Target
 {
@@ -19,12 +19,24 @@ namespace BotTibia.Actions.Target
         {
             bool target = true;
             bool loot = false;
-            AhkFunctions.SendKey("PgUp", Global._tibiaProcessName);
-            Thread.Sleep(150);
+            if (Global.SelectedClient == EnumSuportedClients.Global) {
+                AhkFunctions.SendKey("PgUp", Global._tibiaProcessName);
+                Thread.Sleep(150);
+            }
             CoordenadasDeElementos isTarget;
             int contTempo = 0;
             while (target && Global._isTarget)
             {
+                if (Global.SelectedClient == EnumSuportedClients.ArchLight) {
+                    isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
+                    if (isTarget != null)
+                        Thread.Sleep(150);
+                    else {
+                        Thread.Sleep(300);
+                        isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
+                        if (isTarget == null) break;
+                    };
+                }
                 isTarget = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._battle, Global._path + "\\Images\\ConfigsGerais\\targetado.png");
                 if (isTarget == null)
                 {

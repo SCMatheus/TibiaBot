@@ -6,7 +6,7 @@ using BotTibia.Actions.AHK;
 using BotTibia.Actions.Cavebot;
 using BotTibia.Actions.Events;
 using BotTibia.Classes;
-using BotTibia.Enum;
+using BotTibia.Enums;
 
 namespace BotTibia.Actions.Loot
 {

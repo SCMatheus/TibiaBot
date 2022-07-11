@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
-using BotTibia.Enum;
+using BotTibia.Enums;
 
 namespace BotTibia.Classes
 {

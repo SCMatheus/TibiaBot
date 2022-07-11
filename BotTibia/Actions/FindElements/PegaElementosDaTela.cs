@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using AForge.Imaging;
 using AutoHotkey.Interop;
 using BotTibia.Classes;
-using BotTibia.Enum;
+using BotTibia.Enums;
 using Image = System.Drawing.Image;
 
 namespace BotTibia

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BotTibia.Enums;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 
@@ -20,6 +21,7 @@ namespace BotTibia.Classes
         public static CoordenadasDeElementos _andarDoMap = new CoordenadasDeElementos();
         public static CoordenadasDeElementos _battle = new CoordenadasDeElementos();
         public static Coordenada _ultimaCoordenadaDoPersonagem = new Coordenada();
+        public static CoordenadasDeElementos _ultimoMark = null;
         public static string _path;
         public static bool _isTarget = false;
         public static bool _isLoot = false;
@@ -33,5 +35,7 @@ namespace BotTibia.Classes
         public static CoordenadasDeElementos _cap = new CoordenadasDeElementos();
         public static bool _isEatFood = false;
         public static string _FoodKey = "F1";
+        public static EnumSuportedClients SelectedClient { get; set; }
+        public static Dictionary<EnumMarks, Image> MarksMap = new Dictionary<EnumMarks, Image>();
     }
 }

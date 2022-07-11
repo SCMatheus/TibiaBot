@@ -1,46 +1,52 @@
-﻿using System.Windows;
-using MessageBox = System.Windows.MessageBox;
-using System.Threading;
-using System.Drawing;
-using BotTibia.Actions.Print;
-using System;
-using System.Windows.Input;
-using System.Linq;
-using System.Diagnostics;
-using BotTibia.Classes;
-using BotTibia.Actions.AHK;
-using BotTibia.Actions.Heal;
-using System.Windows.Forms;
-using System.IO;
-using System.Xml.Serialization;
-using BotTibia.Persistencia;
-using System.Collections.Generic;
+﻿using BotTibia.Actions.AHK;
 using BotTibia.Actions.Cavebot;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using BotTibia.Enum;
-using Point = System.Drawing.Point;
-using ListViewItem = System.Windows.Controls.ListViewItem;
-using System.Windows.Controls;
-using BotTibia.Actions.Events;
+using BotTibia.Actions.Heal;
+using BotTibia.Actions.Print;
 using BotTibia.Actions.Target;
+using BotTibia.Classes;
+using BotTibia.Enums;
+using BotTibia.Persistencia;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Xml.Serialization;
+using MessageBox = System.Windows.MessageBox;
+using Point = System.Drawing.Point;
 
-namespace BotTibia
-{
+namespace BotTibia {
     /// <summary>
     /// Interação lógica para MainWindow.xam
     /// </summary>
-    public partial class MainWindow : Window
-    {
+    public partial class MainWindow : Window {
+        private readonly Dictionary<EnumSuportedClients, string> _suportedClients = 
+            new Dictionary<EnumSuportedClients, string>() { 
+                { EnumSuportedClients.Global, "Tibia - " }, 
+                { EnumSuportedClients.ArchLight, "Legacy - " } 
+            };
 
         public MainWindow()
         {
-             
             Global._path = Environment.CurrentDirectory;
             try
             {
                 AhkFunctions.LoadScripts();
-            }catch(Exception e)
+                
+                Enum.GetValues(typeof(EnumMarks))
+                    .Cast<EnumMarks>()
+                    .ToList()
+                    .ForEach(prop =>
+                        Global.MarksMap.Add(prop, System.Drawing.Image.FromFile(Global._path + $"\\Images\\Marks\\{prop.ToString().ToLower()}.png")));
+            } catch(Exception e)
             {
                 MessageBox.Show("Ocorreu um erro ao carregar as funções AHK.\n" +
                                 " Por favor verifique se o AHK está instalado e se as bibliotecas AHK estão na pasta do Bot.");
@@ -57,8 +63,7 @@ namespace BotTibia
         #region Configuracao na selecao de personagem
         private void ConfigureBot(IProgress<int> progress)
         {
-            Dispatcher.Invoke((Action)(() =>
-            {
+            Dispatcher.Invoke(() => {
                 CavebotCheckBox.IsEnabled = false;
                 HealcheckBox.IsEnabled = false;
                 ParalizecheckBox.IsEnabled = false;
@@ -66,7 +71,7 @@ namespace BotTibia
                 LootCheckBox.IsEnabled = false;
                 //inicialização dos dados
                 AtualizaVariaveisGlobais();
-            }));
+            });
 
             Bitmap tela = CapturaTela.CaptureWindow(Global._tibiaProcessName);
             Global._tela.X = 0;
@@ -74,35 +79,57 @@ namespace BotTibia
             Global._tela.Width = tela.Width;
             Global._tela.Height = tela.Height;
 
+            //Captura Dados do mini map
+            Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
+                                                                        Global._path + $"\\Images\\{Global.SelectedClient}\\Configs\\miniMap.png");
+
+            if (Global._miniMap == null)
+                throw new Exception("Não foi possivel identificar o Mini Map do personagem.");
+
+            Dispatcher.Invoke(() => {
+                progress.Report(30);
+            });
+
+            Global._miniMap.X += 3;
+            Global._miniMap.Y += 3;
+            Global._miniMap.Width -= 7;
+            Global._miniMap.Height -= 7;
+
+            if (Global.SelectedClient == EnumSuportedClients.ArchLight) {
+                Global._battle = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
+                                                            Global._path + $"\\Images\\{Global.SelectedClient}\\Configs\\battle.png");
+                Dispatcher.Invoke(() => {
+                    CavebotCheckBox.IsEnabled = true;
+                    TargetCheckBox.IsEnabled = true;
+                    progress.Report(100);
+                });
+                return;
+            }
+
             Global._andarDoMap = null;
-            List<int> andares = new List<int>()
-        {
-            7, 6, 8, 5, 9, 4, 10, 3, 11, 2, 12, 1, 13, 0, 14
-        };
-            foreach (var item in andares)
-            {
+            List<int> andares = new List<int>() { 7, 6, 8, 5, 9, 4, 10, 3, 11, 2, 12, 1, 13, 0, 14 };
+            foreach (var item in andares) {
                 Global._andarDoMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
                                                                     Global._path + "\\Images\\MapAndar\\floor-" +
                                                                     item.ToString() + ".png");
-                if (Global._andarDoMap != null)
-                {
+                if (Global._andarDoMap != null) {
                     break;
                 }
             }
             if (Global._andarDoMap == null)
                 throw new Exception("Não foi possivel identificar a barra dos andares do personagem.");
-            Dispatcher.Invoke((Action)(() =>
-            {
+
+
+            Dispatcher.Invoke(() => {
                 progress.Report(10);
-            }));
-            
+            });
+
             //Captura dados da Character Window
             var count = 0;
             Global._mainWindow = null;
-            while (Global._mainWindow == null)
-            {
+            while (Global._mainWindow == null) {
                 Global._mainWindow = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
-                                                                            Global._path + $"\\Images\\Global\\Configs\\characterWindow_{count}.png",25);
+                                                                            Global._path + $"\\Images\\Global\\Configs\\characterWindow_{count}.png", 25);
                 count++;
                 if (count >= 3)
                     break;
@@ -110,22 +137,6 @@ namespace BotTibia
             if (Global._mainWindow == null)
                 throw new Exception("Não foi possivel identificar a window do personagem.");
 
-            //Captura Dados do mini map
-            Global._miniMap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela,
-                                                                    Global._path + $"\\Images\\Global\\Configs\\miniMap.png");
-
-            if (Global._miniMap == null)
-                throw new Exception("Não foi possivel identificar o Mini Map do personagem.");
-
-            Dispatcher.Invoke((Action)(() =>
-            {
-                progress.Report(30);
-            }));
-
-            Global._miniMap.X += 3;
-            Global._miniMap.Y += 3;
-            Global._miniMap.Width -= 7;
-            Global._miniMap.Height -= 7;
             //Captura Dados da vida
             var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
                                                                                                 0, Global._tela.Width,
@@ -449,7 +460,7 @@ namespace BotTibia
         #endregion
         #region Select Character
 
-        private async void ClientComboBox_SelectedIndexChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private async void ClientComboBox_SelectedIndexChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
@@ -463,11 +474,10 @@ namespace BotTibia
                         ProgressConfig.Value = value;
                     });
 
-                    await Task.Run(() => {
+                    var selected = _suportedClients.FirstOrDefault(sc => Global._tibiaProcessName.Contains(sc.Value));
+                    Global.SelectedClient = selected.Key;
 
-                            ConfigureBot(progress);
-                        
-                    });
+                    await Task.Run(() => ConfigureBot(progress));
                     LabelCalibrado.Content = "Calibrado!";
                 }
                 else
@@ -487,13 +497,14 @@ namespace BotTibia
         {
             ClientComboBox.Items.Clear();
             Process[] processlist = Process.GetProcesses();
-            processlist.ToList().ForEach(process => 
-                { 
-                    if(process.MainWindowTitle.StartsWith("Tibia - "))
-                    {
-                        ClientComboBox.Items.Add(process.MainWindowTitle);
-                    }
-                });
+            var electedPages = _suportedClients.Values.SelectMany(sc =>
+                    processlist
+                        .Where(pl => pl.MainWindowTitle.StartsWith(sc))
+                        .Select(pl => pl.MainWindowTitle)
+                ).ToArray();
+
+            foreach (var item in electedPages)
+                ClientComboBox.Items.Add(item);
         }
         #endregion
         #region MenuSuperior
@@ -690,15 +701,16 @@ namespace BotTibia
         {
             try
             {
-                var andar = Cavebot.PegaAndarDoMap();
-                Global._ultimaCoordenadaDoPersonagem = PegaElementosDaTela
-                                                       .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
-                                                                                    Global._miniMap, andar);
-                if(Global._ultimaCoordenadaDoPersonagem == null || !(Cavebot.Waypoints.Count > 0))
-                {
-                    MessageBox.Show("Não foi possível ativar o cavebot!");
-                    CavebotCheckBox.IsChecked = false;
-                    return;
+                if (Global.SelectedClient == EnumSuportedClients.Global) {
+                    var andar = Cavebot.PegaAndarDoMap();
+                    Global._ultimaCoordenadaDoPersonagem = PegaElementosDaTela
+                                                           .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
+                                                                                        Global._miniMap, andar);
+                    if (Global._ultimaCoordenadaDoPersonagem == null || !(Cavebot.Waypoints.Count > 0)) {
+                        MessageBox.Show("Não foi possível ativar o cavebot!");
+                        CavebotCheckBox.IsChecked = false;
+                        return;
+                    }
                 }
                 if (Global._threadCavebot == null)
                 {
@@ -936,32 +948,41 @@ namespace BotTibia
                 MessageBox.Show(ex.Message);
             }
         }
+        private void ButtonMark_Click(object sender, RoutedEventArgs e) {
+            try {
+                var waypoint = new Waypoint() { Mark = EnumMarks.Checked, Type = EnumWaypoints.Mark };
+                Cavebot.AddWaypoint(waypoint);
+                GridView.ItemsSource = null;
+                GridView.ItemsSource = Cavebot.Waypoints;
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
+        }
         private Waypoint CriaWaypoint(int index, EnumWaypoints type, Range range, EnumAction typeAction, string parametros)
         {
-            var andar = Cavebot.PegaAndarDoMap();
-            var coordenada = PegaElementosDaTela
-                                   .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
-                                                                Global._miniMap, andar);
-            if (coordenada == null)
-            {
-               throw new Exception("Não foi possível encontrar a coordenada do personagem");
-
-            }
-            var direcao = DirecaoDoWaypoint();
-            var waypoint = new Waypoint()
-            {
+            var waypoint = new Waypoint() {
                 Index = index,
                 Type = type,
-                Coordenada = new Coordenada()
-                {
-                    X = coordenada.X + direcao.X,
-                    Y = coordenada.Y + direcao.Y,
-                    Z = coordenada.Z
-                },
                 Range = range,
                 TypeAction = typeAction,
                 Parametros = parametros
             };
+            if (Global.SelectedClient == EnumSuportedClients.Global) {
+                var andar = Cavebot.PegaAndarDoMap();
+                var coordenada = PegaElementosDaTela
+                                       .PegaCoordenadasDoPersonagem(Global._tibiaProcessName,
+                                                                    Global._miniMap, andar);
+                if (coordenada == null) {
+                    throw new Exception("Não foi possível encontrar a coordenada do personagem");
+
+                }
+                var direcao = DirecaoDoWaypoint();
+                waypoint.Coordenada = new Coordenada() {
+                    X = coordenada.X + direcao.X,
+                    Y = coordenada.Y + direcao.Y,
+                    Z = coordenada.Z
+                };
+            }
             radioButtonC.IsChecked = true;
             return waypoint;
         }
@@ -1130,7 +1151,26 @@ namespace BotTibia
             {
                 MessageBox.Show(ex.Message);
             }
-}
+        }
+
+        private void SomeDataMarkGridComboBoxChanged(object sender, SelectionChangedEventArgs e) {
+            var index = ((Waypoint)GridView.SelectedItem).Index - 1;
+            index = index < 0 ? 0 : index;
+            Waypoint waypoint;
+            var selectedMark = Enum.TryParse<EnumMarks>(e.AddedItems[0].ToString(), out var mark) ? mark : EnumMarks.Checked;
+            var selected = ((Waypoint)GridView.SelectedItem);
+            if (selected.Type == EnumWaypoints.Mark && selected.Mark != selectedMark) {
+                GridView.ItemsSource = null;
+                waypoint = Cavebot.Waypoints.ElementAt(index < 0 ? 0 : index);
+                Cavebot.Waypoints[index] = waypoint;
+                waypoint.Mark = selectedMark;
+                Cavebot.AtualizaIndex();
+                GridView.ItemsSource = Cavebot.Waypoints;
+                GridView.UpdateLayout();
+                ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(index)).IsSelected = true;
+            }
+        }
+
         private void SomeDataGridComboBoxChanged(object sender, SelectionChangedEventArgs e)
         {
             var index = (int)((Waypoint)GridView.SelectedItem).Index - 1;
