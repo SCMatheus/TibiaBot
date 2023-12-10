@@ -45,7 +45,7 @@ namespace BotTibia {
                     .Cast<EnumMarks>()
                     .ToList()
                     .ForEach(prop =>
-                        Global.MarksMap.Add(prop, System.Drawing.Image.FromFile(Global._path + $"\\Images\\Marks\\{prop.ToString().ToLower()}.png")));
+                        Global._marksMap.Add(prop, System.Drawing.Image.FromFile(Global._path + $"\\Images\\Marks\\{prop.ToString().ToLower()}.png")));
             } catch(Exception e)
             {
                 MessageBox.Show("Ocorreu um erro ao carregar as funções AHK.\n" +
@@ -138,15 +138,11 @@ namespace BotTibia {
                 throw new Exception("Não foi possivel identificar a window do personagem.");
 
             //Captura Dados da vida
-            var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
-                                                                                                0, Global._tela.Width,
-                                                                                    Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\coracao.png");
+            var coordenadasCoracao = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, Global._path + "\\Images\\Global\\Configs\\coracao.png");
             if (coordenadasCoracao == null)
                 throw new Exception("Não foi possivel identificar a life do personagem.");
 
-            var cap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela.X / 2,
-                                                                                                0, Global._tela.Width,
-                                                                                    Global._tela.Height, Global._path + "\\Images\\Global\\Configs\\cap.png");
+            var cap = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName, Global._tela, Global._path + "\\Images\\Global\\Configs\\cap.png", 30);
             if(cap == null)
                 throw new Exception("Não foi possivel identificar a cap do personagem.");
 
@@ -409,7 +405,6 @@ namespace BotTibia {
             }
             else
             {
-
                 int resultado;
                 if (int.TryParse(textBox.Text, out resultado))
                 {
@@ -442,6 +437,19 @@ namespace BotTibia {
             }
             else
             {
+                textBox.Text = "";
+                throw new Exception("Por favor digite uma Hotkey válida");
+            }
+        }
+
+        public string SetaHotkeyNullable(Key e, System.Windows.Controls.TextBox textBox) {
+            if (e >= Key.F1 && e <= Key.F12) {
+                textBox.Text = e.ToString();
+                return textBox.Text;
+            } else if (e == Key.Delete) {
+                textBox.Text = "";
+                return null;
+            } else {
                 textBox.Text = "";
                 throw new Exception("Por favor digite uma Hotkey válida");
             }
@@ -766,16 +774,15 @@ namespace BotTibia {
                         Targeting.AttackAndLooting();
                     if (Global._isCavebot)
                     {
-                        Dispatcher.Invoke((Action)(() =>
+                        Dispatcher.Invoke(() =>
                         {
-
                             if (GridView.HasItems)
                             {
                                 GridView.UpdateLayout();
                                 GridView.ScrollIntoView(GridView.Items[Cavebot.Index]);
                                 ((DataGridRow)GridView.ItemContainerGenerator.ContainerFromIndex(Cavebot.Index)).IsSelected = true;
                             }
-                        }));
+                        });
                         Cavebot.ExecutaWaypoint();
                     }
                     if (!(Global._isCavebot || Global._isTarget))
@@ -811,7 +818,7 @@ namespace BotTibia {
                     });
                     Global._threadCavebot.IsBackground = true;
                     Global._threadCavebot.Start();
-                }else if (!Global._threadCavebot.IsAlive)
+                } else if (!Global._threadCavebot.IsAlive)
                 {
                     Global._threadCavebot = new Thread(() =>
                     {
@@ -879,31 +886,27 @@ namespace BotTibia {
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void SetaValorDoRange(System.Windows.Controls.TextBox textBox)
+        private int? SetaValorDoRange(System.Windows.Controls.TextBox textBox, int maxRange)
         {
             if (textBox.Text == "")
             {
-                return;
+                return null;
             }
             else
             {
 
-                int resultado;
-                if (int.TryParse(textBox.Text, out resultado))
-                {
-                    if (!(resultado >= 0 && resultado < 10))
-                    {
+                if (int.TryParse(textBox.Text, out int resultado)) {
+                    if (!(resultado >= 0 && resultado < maxRange + 1)) {
                         textBox.Text = "";
                         throw new Exception("Por favor digite um valor valido! \n" +
-                                                "O valor deve ser um numero entre 0 e 9!");
+                                                "O valor deve ser um numero entre 0 e " + maxRange.ToString() + "!");
                     }
-                }
-                else
-                {
+                } else {
                     textBox.Text = "";
                     throw new Exception("Por favor digite um valor valido! \n" +
-                                            "O valor deve ser um numero entre 0 e 9!");
+                                            "O valor deve ser um numero entre 0 e e " + maxRange.ToString() + "!");
                 }
+                return resultado;
             }
         }
 
@@ -911,7 +914,7 @@ namespace BotTibia {
         {
             try
             {
-                SetaValorDoRange(textBoxRange1);
+                SetaValorDoRange(textBoxRange1, 9);
             }
             catch (Exception ex)
             {
@@ -922,7 +925,7 @@ namespace BotTibia {
         {
             try
             {
-                SetaValorDoRange(textBoxRange2);
+                SetaValorDoRange(textBoxRange2, 9);
             }
             catch (Exception ex)
             {
@@ -1453,7 +1456,7 @@ namespace BotTibia {
         {
             try
             {
-                Global._FoodKey = SetaHotkey(e.Key, FoodHotkey);
+                Global._foodKey = SetaHotkey(e.Key, FoodHotkey);
             }
             catch (Exception ex)
             {
@@ -1463,5 +1466,139 @@ namespace BotTibia {
         }
         #endregion
 
+        private void SetSpellHotkey(object sender, System.Windows.Input.KeyEventArgs e) {
+            switch (((FrameworkElement)sender).Name) {
+                case "PrimeiraSpellHotkey":
+                    if (Targeting.Combos[0] == null)
+                        Targeting.Combos[0] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, PrimeiraSpellHotkey) };
+                    else
+                        Targeting.Combos[0].Hotkey = SetaHotkeyNullable(e.Key, PrimeiraSpellHotkey);
+                    break;
+                case "SegundaSpellHotkey":
+                    if (Targeting.Combos[1] == null)
+                        Targeting.Combos[1] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, SegundaSpellHotkey) };
+                    else
+                        Targeting.Combos[1].Hotkey = SetaHotkeyNullable(e.Key, SegundaSpellHotkey);
+                    break;
+                case "TerceiraSpellHotkey":
+                    if (Targeting.Combos[2] == null)
+                        Targeting.Combos[2] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, TerceiraSpellHotkey) };
+                    else
+                        Targeting.Combos[2].Hotkey = SetaHotkeyNullable(e.Key, TerceiraSpellHotkey);
+                    break;
+                case "QuartaSpellHotkey":
+                    if (Targeting.Combos[3] == null)
+                        Targeting.Combos[3] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, QuartaSpellHotkey) };
+                    else
+                        Targeting.Combos[3].Hotkey = SetaHotkeyNullable(e.Key, QuartaSpellHotkey);
+                    break;
+                case "PrimeiraSupportSpellHotkey":
+                    if (Targeting.Combos[0] == null)
+                        Targeting.Combos[0] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, PrimeiraSupportSpellHotkey) };
+                    else
+                        Targeting.Combos[0].Hotkey = SetaHotkeyNullable(e.Key, PrimeiraSupportSpellHotkey);
+                    break;
+                case "SegundaSupportSpellHotkey":
+                    if (Targeting.Combos[1] == null)
+                        Targeting.Combos[1] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, SegundaSupportSpellHotkey) };
+                    else
+                        Targeting.Combos[1].Hotkey = SetaHotkeyNullable(e.Key, SegundaSupportSpellHotkey);
+                    break;
+                case "TerceiraSupportSpellHotkey":
+                    if (Targeting.Combos[2] == null)
+                        Targeting.Combos[2] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, TerceiraSupportSpellHotkey) };
+                    else
+                        Targeting.Combos[2].Hotkey = SetaHotkeyNullable(e.Key, TerceiraSupportSpellHotkey);
+                    break;
+                case "QuartaSupportSpellHotkey":
+                    if (Targeting.Combos[3] == null)
+                        Targeting.Combos[3] = new Targeting.Combo() { Hotkey = SetaHotkeyNullable(e.Key, QuartaSupportSpellHotkey) };
+                    else
+                        Targeting.Combos[3].Hotkey = SetaHotkeyNullable(e.Key, QuartaSupportSpellHotkey);
+                    break;
+            }
+        }
+
+        private void SetSpellCooldownTime(object sender, TextChangedEventArgs e) {
+            switch (((FrameworkElement)sender).Name) {
+                case "PrimeiraSpellCooldownTime":
+                    if (Targeting.Combos[0] == null)
+                        Targeting.Combos[0] = new Targeting.Combo() { Cooldown = SetaValorDoRange(PrimeiraSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[0].Cooldown = SetaValorDoRange(PrimeiraSpellCooldownTime, 20);
+                    break;
+                case "SegundaSpellCooldownTime":
+                    if (Targeting.Combos[1] == null)
+                        Targeting.Combos[1] = new Targeting.Combo() { Cooldown = SetaValorDoRange(SegundaSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[1].Cooldown = SetaValorDoRange(SegundaSpellCooldownTime, 20);
+                    break;
+                case "TerceiraSpellCooldownTime":
+                    if (Targeting.Combos[2] == null)
+                        Targeting.Combos[2] = new Targeting.Combo() { Cooldown = SetaValorDoRange(TerceiraSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[2].Cooldown = SetaValorDoRange(TerceiraSpellCooldownTime, 20);
+                    break;
+                case "QuartaSpellCooldownTime":
+                    if (Targeting.Combos[3] == null)
+                        Targeting.Combos[3] = new Targeting.Combo() { Cooldown = SetaValorDoRange(QuartaSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[3].Cooldown = SetaValorDoRange(QuartaSpellCooldownTime, 20);
+                    break;
+                case "PrimeiraSupportSpellCooldownTime":
+                    if (Targeting.Combos[0] == null)
+                        Targeting.Combos[0] = new Targeting.Combo() { Cooldown = SetaValorDoRange(PrimeiraSupportSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[0].Cooldown = SetaValorDoRange(PrimeiraSupportSpellCooldownTime, 20);
+                    break;
+                case "SegundaSupportSpellCooldownTime":
+                    if (Targeting.Combos[1] == null)
+                        Targeting.Combos[1] = new Targeting.Combo() { Cooldown = SetaValorDoRange(SegundaSupportSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[1].Cooldown = SetaValorDoRange(SegundaSupportSpellCooldownTime, 20);
+                    break;
+                case "TerceiraSupportSpellCooldownTime":
+                    if (Targeting.Combos[2] == null)
+                        Targeting.Combos[2] = new Targeting.Combo() { Cooldown = SetaValorDoRange(TerceiraSupportSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[2].Cooldown = SetaValorDoRange(TerceiraSupportSpellCooldownTime, 20);
+                    break;
+                case "QuartaSupportSpellCooldownTime":
+                    if (Targeting.Combos[3] == null)
+                        Targeting.Combos[3] = new Targeting.Combo() { Cooldown = SetaValorDoRange(QuartaSupportSpellCooldownTime, 20) };
+                    else
+                        Targeting.Combos[3].Cooldown = SetaValorDoRange(QuartaSupportSpellCooldownTime, 20);
+                    break;
+            }
+        }
+
+        private void SetSpellTempoParaProxima(object sender, TextChangedEventArgs e) {
+            switch (((FrameworkElement)sender).Name) {
+                case "PrimeiraSpellTempoParaProxima":
+                    if (Targeting.Combos[0] == null)
+                        Targeting.Combos[0] = new Targeting.Combo() { TimeToNextSpell = SetaValorDoRange(PrimeiraSpellTempoParaProxima, 20) };
+                    else
+                        Targeting.Combos[0].TimeToNextSpell = SetaValorDoRange(PrimeiraSpellTempoParaProxima, 20);
+                    break;
+                case "SegundaSpellTempoParaProxima":
+                    if (Targeting.Combos[1] == null)
+                        Targeting.Combos[1] = new Targeting.Combo() { TimeToNextSpell = SetaValorDoRange(SegundaSpellTempoParaProxima, 20) };
+                    else
+                        Targeting.Combos[1].TimeToNextSpell = SetaValorDoRange(SegundaSpellTempoParaProxima, 20);
+                    break;
+                case "TerceiraSpellTempoParaProxima":
+                    if (Targeting.Combos[2] == null)
+                        Targeting.Combos[2] = new Targeting.Combo() { TimeToNextSpell = SetaValorDoRange(TerceiraSpellTempoParaProxima, 20) };
+                    else
+                        Targeting.Combos[2].TimeToNextSpell = SetaValorDoRange(TerceiraSpellTempoParaProxima, 20);
+                    break;
+                case "QuartaSpellTempoParaProxima":
+                    if (Targeting.Combos[3] == null)
+                        Targeting.Combos[3] = new Targeting.Combo() { TimeToNextSpell = SetaValorDoRange(QuartaSpellTempoParaProxima, 20) };
+                    else
+                        Targeting.Combos[3].TimeToNextSpell = SetaValorDoRange(QuartaSpellTempoParaProxima, 20);
+                    break;
+            }
+        }
     }
 }

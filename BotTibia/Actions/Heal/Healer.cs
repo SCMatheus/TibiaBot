@@ -61,9 +61,9 @@ namespace BotTibia.Actions.Heal
             var food = PegaElementosDaTela.PegaElementosAhk(Global._tibiaProcessName,Global._status.Coordenadas, Global._path + "\\Images\\ConfigsGerais\\food.png");
             if (food == null)
                 return;
-            AhkFunctions.SendKey(Global._FoodKey, Global._tibiaProcessName);
-            AhkFunctions.SendKey(Global._FoodKey, Global._tibiaProcessName);
-            AhkFunctions.SendKey(Global._FoodKey, Global._tibiaProcessName);
+            AhkFunctions.SendKey(Global._foodKey, Global._tibiaProcessName);
+            AhkFunctions.SendKey(Global._foodKey, Global._tibiaProcessName);
+            AhkFunctions.SendKey(Global._foodKey, Global._tibiaProcessName);
         }
         public static void HealPara(Bitmap tela, PersonagemStatus status,string processName)
         {

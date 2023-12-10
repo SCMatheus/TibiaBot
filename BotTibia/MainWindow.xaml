@@ -31,7 +31,7 @@
                 <MenuItem x:Name="Load" Header="Load script" HorizontalAlignment="Left" Height="25" Width="150" Margin="-20,0,-4,0" Background="#FFDADADA" Foreground="#FF000000" BorderBrush="#FFDADADA" MinWidth="150" MinHeight="25" Click="Load_Click" />
             </MenuItem>
         </Menu>
-        <ComboBox x:Name="ClientComboBox" Margin="497,26,103,0" Grid.RowSpan="1" VerticalAlignment="Top" SelectionChanged="ClientComboBox_SelectedIndexChanged" DropDownOpened="ClientComboBox_DropDownOpened" Grid.Column="0" Panel.ZIndex="999" >
+        <ComboBox x:Name="ClientComboBox" Margin="497,26,110,0" Grid.RowSpan="1" VerticalAlignment="Top" SelectionChanged="ClientComboBox_SelectedIndexChanged" DropDownOpened="ClientComboBox_DropDownOpened" Grid.Column="0" Panel.ZIndex="999" >
             <ComboBox.Background>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                     <GradientStop Color="#FFF0F0F0" Offset="0"/>
@@ -42,7 +42,7 @@
         <Label x:Name="LabelClient" Content="Personagem:" HorizontalAlignment="Left" Margin="417,24,0,0" Grid.RowSpan="1" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="0" Panel.ZIndex="999" Width="81" RenderTransformOrigin="0.391,0.821"/>
         <ProgressBar x:Name="ProgressConfig" Margin="694,27,10,553" RenderTransformOrigin="0.55,0.15" Panel.ZIndex="999"/>
         <Label x:Name="LabelCalibrado" Content="" HorizontalAlignment="Left" Margin="695,43,0,0" Grid.RowSpan="1" VerticalAlignment="Top" Foreground="#FF000000" Grid.Column="0" Panel.ZIndex="999" Width="81" RenderTransformOrigin="0.391,0.821"/>
-        <TabControl x:Name="tabControl" Height="576" Margin="7,0,0,9" Width="772" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="#FFDADADA" RenderTransformOrigin="0.5,0.5" BorderBrush="#FFDADADA" Foreground="#FF000000">
+        <TabControl x:Name="tabControl" Height="576" Margin="7,0,0,10" Width="772" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="#FFDADADA" RenderTransformOrigin="0.5,0.5" BorderBrush="#FFDADADA" Foreground="#FF000000">
             <TabControl.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -136,7 +136,6 @@
                     <CheckBox x:Name="CavebotCheckBox" Checked="AtivarCaveBot" Unchecked="DesativarCaveBot" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="13,9,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
                     <Label x:Name="CaveBotLabel" Content="CAVEBOT" HorizontalAlignment="Left" Margin="252,4,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="26" Width="88"/>
                     <Grid Margin="630,94,17,235" VerticalAlignment="Center">
-
                         <Button x:Name="ButtonNode" Content="Node" VerticalAlignment="Top" Margin="10,56,-9,0" Click="ButtonNode_Click" Width="113" Height="25"/>
                         <Button x:Name="ButtonStand" Content="Stand" HorizontalAlignment="Left" Margin="10,26,-8,0" Click="ButtonStand_Click" VerticalAlignment="Top" Width="113" Height="25"/>
                         <Button x:Name="ButtonUp" Content="Up" HorizontalAlignment="Left" Margin="10,191,-8,-45" VerticalAlignment="Top" Width="113" Height="25" Click="ButtonUpListItem_Click"/>
@@ -163,6 +162,54 @@
             <TabItem x:Name="Target" Header="Target" Margin="45,-2,-75,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">
                 <Grid Background="#FFDADADA" Margin="-5,10,9,0" VerticalAlignment="Top" Height="535">
                     <CheckBox x:Name="TargetCheckBox" Checked="AtivarTarget" Unchecked="DesativarTarget" IsEnabled="False" Content="Ativar" HorizontalAlignment="Left" Margin="13,9,0,0" VerticalAlignment="Top" Foreground="#FF000000" Height="15" Width="51"/>
+                    <GroupBox Header="Combo" Margin="161,84,161,298" BorderBrush="Black">
+                        <Grid Height="132" HorizontalAlignment="Left" Width="441">
+                            <TextBox x:Name="PrimeiraSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="72,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+                            <TextBox x:Name="PrimeiraSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="190,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348"/>
+                            <TextBox x:Name="PrimeiraSpellTempoParaProxima" TextAlignment="Center" TextChanged="SetSpellTempoParaProxima" HorizontalAlignment="Left" Height="23" Margin="359,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348"/>
+                            <Label x:Name="PrimeiraSpellLabel" Content="Ataque 1:" Margin="9,11,366,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="PrimeiraSpellCooldownLabel" Content="Cooldown:" Margin="123,11,245,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="PrimeiraSpellTempoParaProximaLabel" Content="Proximo ataque em:" Margin="244,12,78,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <TextBox x:Name="SegundaSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="72,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+                            <TextBox x:Name="SegundaSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="190,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348"/>
+                            <TextBox x:Name="SegundaSpellTempoParaProxima" TextAlignment="Center" TextChanged="SetSpellTempoParaProxima" HorizontalAlignment="Left" Height="23" Margin="359,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348"/>
+                            <Label x:Name="SegundaSpellLabel" Content="Ataque 2:" Margin="9,38,368,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="SegundaSpellCooldownLabel" Content="Cooldown:" Margin="123,38,249,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="SegundaSpellTempoParaProximaLabel" Content="Proximo ataque em:" Margin="244,39,80,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <TextBox x:Name="TerceiraSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="72,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+                            <TextBox x:Name="TerceiraSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="190,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" />
+                            <TextBox x:Name="TerceiraSpellTempoParaProxima" TextAlignment="Center" TextChanged="SetSpellTempoParaProxima" HorizontalAlignment="Left" Height="23" Margin="359,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348"/>
+                            <Label x:Name="TerceiraSpellLabel" Content="Ataque 3:" Margin="9,65,367,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="TerceiraSpellCooldownLabel" Content="Cooldown:" Margin="123,65,249,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="TerceiraSpellTempoParaProximaLabel" Content="Proximo ataque em:" Margin="244,65,80,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <TextBox x:Name="QuartaSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="72,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+                            <TextBox x:Name="QuartaSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="190,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" />
+                            <TextBox x:Name="QuartaSpellTempoParaProxima" TextAlignment="Center" TextChanged="SetSpellTempoParaProxima" HorizontalAlignment="Left" Height="23" Margin="359,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" />
+                            <Label x:Name="QuartaSpellLabel" Content="Ataque 4:" Margin="9,92,368,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="QuartaSpellCooldownLabel" Content="Cooldown:" Margin="123,92,247,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="QuartaSpellTempoParaProximaLabel" Content="Proximo ataque em:" Margin="244,92,79,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Magias de Suporte" Margin="238,268,239,114" BorderBrush="Black">
+                        <Grid HorizontalAlignment="Left" Width="286" Height="131" Margin="4,0,0,0">
+                            <TextBox x:Name="PrimeiraSupportSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="68,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+                            <TextBox x:Name="PrimeiraSupportSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="186,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348"/>
+                            <Label x:Name="PrimeiraSupportSpellLabel" Content="Magia 1:" Margin="8,10,0,0" VerticalAlignment="Top" Height="27" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" HorizontalAlignment="Left" Width="63"/>
+                            <Label x:Name="PrimeiraSupportSpellCooldownLabel" Content="Cooldown:" Margin="119,10,0,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" HorizontalAlignment="Left" Width="69"/>
+                            <TextBox x:Name="SegundaSupportSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="68,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48" RenderTransformOrigin="0.444,0.243"/>
+                            <TextBox x:Name="SegundaSupportSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="186,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348"/>
+                            <Label x:Name="SegundaSupportSpellLabel" Content="Magia 2:" Margin="8,38,0,0" VerticalAlignment="Top" Height="27" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" HorizontalAlignment="Left" Width="63"/>
+                            <Label x:Name="SegundaSupportSpellCooldownLabel" Content="Cooldown:" Margin="119,38,0,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" HorizontalAlignment="Left" Width="69"/>
+                            <TextBox x:Name="TerceiraSupportSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="68,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+                            <TextBox x:Name="TerceiraSupportSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="186,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" />
+                            <Label x:Name="TerceiraSupportSpellLabel" Content="Magia 3:" Margin="8,65,0,0" VerticalAlignment="Top" Height="28" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" HorizontalAlignment="Left" Width="58"/>
+                            <Label x:Name="TerceiraSupportSpellCooldownLabel" Content="Cooldown:" Margin="119,64,0,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" HorizontalAlignment="Left" Width="70"/>
+                            <TextBox x:Name="QuartaSupportSpellHotkey"  KeyUp="SetSpellHotkey" TextAlignment="Center" HorizontalAlignment="Left" Height="23" Margin="68,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
+                            <TextBox x:Name="QuartaSupportSpellCooldownTime" TextAlignment="Center" TextChanged="SetSpellCooldownTime" HorizontalAlignment="Left" Height="23" Margin="186,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="52" RenderTransformOrigin="-2.842,0.348" />
+                            <Label x:Name="QuartaSupportSpellLabel" Content="Magia 4:" Margin="8,91,219,0" VerticalAlignment="Top" Height="28" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04"/>
+                            <Label x:Name="QuartaSupportSpellCooldownLabel" Content="Cooldown:" Margin="120,90,0,0" VerticalAlignment="Top" Height="25" Foreground="#FF000000" RenderTransformOrigin="0.474,-0.04" HorizontalAlignment="Left" Width="69"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem x:Name="Loot" Header="Loot" Margin="78,-2,-114,0" Background="#FFB2B2B2" BorderBrush="#FFB2B2B2" Foreground="Black">

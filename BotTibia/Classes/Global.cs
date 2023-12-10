@@ -26,6 +26,7 @@ namespace BotTibia.Classes
         public static bool _isTarget = false;
         public static bool _isLoot = false;
         public static bool _isCavebot = false;
+        public static bool _isCombo = false;
         public static List<Variavel> _variaveisGlobais = new List<Variavel>();
         public static List<Backpack> _backpacks = new List<Backpack>();
         public static List<CoordenadasDeElementos> _backpacksCoord = new List<CoordenadasDeElementos>(); //TODO CLASS COORDENADAS E BACKPACK
@@ -34,8 +35,8 @@ namespace BotTibia.Classes
         public static Point _coordenadaDoPersonagem = new Point();
         public static CoordenadasDeElementos _cap = new CoordenadasDeElementos();
         public static bool _isEatFood = false;
-        public static string _FoodKey = "F1";
+        public static string _foodKey = "F1";
         public static EnumSuportedClients SelectedClient { get; set; }
-        public static Dictionary<EnumMarks, Image> MarksMap = new Dictionary<EnumMarks, Image>();
+        public static readonly Dictionary<EnumMarks, Image> _marksMap = new Dictionary<EnumMarks, Image>();
     }
 }
